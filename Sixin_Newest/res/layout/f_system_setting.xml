@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+    
+    <!-- scroll begin-->
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical" 
+    	android:layout_gravity="center_horizontal"
+    	android:layout_marginLeft="10dip"
+    	android:layout_marginRight="10dip">
+    	
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="16dip"
+    		android:orientation="vertical">
+	    	<!-- sound_remind  -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/sound_remind"
+		        style="@style/general_setting_layout_top"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+            
+            <!-- vibration_remind -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/vibration_remind"
+		        style="@style/general_setting_layout_middle"
+	    		android:layout_height="@dimen/setting_layout">
+	    	</com.renren.mobile.chat.view.GeneralSettingLayout>
+            
+            <!-- push_remind -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/push_remind"
+		        style="@style/general_setting_layout_bottom"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+                   
+	    </LinearLayout>
+	    
+	    
+	    <TextView 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="10dip"
+    		android:textSize="14sp"
+    		android:lineSpacingExtra="8dip"
+    		android:textColor="@color/setting_note"
+    		android:text="@string/f_system_setting_1"
+    		android:visibility="gone"/>
+	    
+	    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="16dip"
+    		android:orientation="vertical"
+    		android:visibility="gone">
+	        <!-- language_setting -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/language_setting"
+		        style="@style/general_setting_layout_single"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+	    </LinearLayout>
+	   
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="16dip"
+    		android:orientation="vertical">
+	        <!-- clear_cache -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/clear_cache"
+		        style="@style/general_setting_layout_single"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+	    </LinearLayout>
+	    
+    	
+	    <!-- null layout -->
+	    <LinearLayout 
+        	android:layout_width="fill_parent"
+    		android:layout_height="30dip">
+    </LinearLayout>
+	</LinearLayout>
+    <!-- scroll end-->
+    
+</ScrollView>

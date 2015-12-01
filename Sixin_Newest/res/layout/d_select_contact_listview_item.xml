@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/sms_item_selector" >
+
+    <!-- 影子aleph条 好吧我承认这种做法挺可耻 -->
+
+    <com.renren.mobile.chat.ui.contact.C_AlpheBarView
+        android:id="@+id/cdw_shadow_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="24dip"
+        android:background="@drawable/s_aleph_bg"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/sms_item_selector"
+        android:orientation="vertical" >
+
+        <!-- aleph条 -->
+
+        <com.renren.mobile.chat.ui.contact.C_AlpheBarView
+            android:id="@+id/cdw_alphe_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="24dip"
+            android:background="@drawable/s_aleph_bg"
+            android:clickable="false" />
+
+        <LinearLayout
+            android:id="@+id/content_view"
+            android:layout_width="fill_parent"
+            android:layout_height="54dip"
+            android:gravity="center_vertical" >
+
+            <!-- 头像 -->
+
+            <FrameLayout
+                android:layout_width="48dip"
+                android:layout_height="48dip"
+                android:layout_marginLeft="10dip" >
+
+                <com.renren.mobile.chat.base.views.NotSynImageView
+                    android:id="@+id/cdw_headphoto_remoteview"
+                    android:layout_width="42dip"
+                    android:layout_height="42dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/widget_default_head" />
+
+                <ImageView
+                    android:id="@+id/cdw_is_inblack_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:src="@drawable/userinfo_is_in_blacklist_icon"
+                    android:visibility="gone" />
+            </FrameLayout>
+            <!-- 内容区域 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="25dip"
+                android:layout_weight="1.0" >
+
+                <TextView
+                    android:id="@+id/cdw_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:duplicateParentState="true"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/select_contact_listview_item_layout_1"
+                    android:textColor="@color/setting_text_color"
+                    android:textSize="18sp" />
+                <!-- <ImageView -->
+                <!-- android:id="@+id/cdw_is_attention_view" -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:layout_gravity="center_vertical" -->
+                <!-- android:layout_marginLeft="14dip" -->
+                <!-- android:layout_marginTop="0.7dip" -->
+                <!-- android:src="@drawable/s_contact_attention" -->
+                <!-- android:visibility="gone"/> -->
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/select_contact_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="20dip"
+                android:background="@drawable/setting_checkbox_selector"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contact_divider"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/listview_item_divider" />
+    </LinearLayout>
+
+</FrameLayout>

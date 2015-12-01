@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="14dip"
+    android:paddingRight="14dip"
+    android:paddingTop="16dip" >
+
+    <TextView
+        android:id="@+id/bind_info_type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp" 
+        android:textColor="@color/Color_B"/>
+
+    <EditText
+        android:id="@+id/bind_info_content"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/ykn_common_height_edittext"
+        android:background="@drawable/ykn_edittext_normal"
+        android:enabled="false" 
+        android:layout_marginTop="16dip"/>
+
+    <Button
+        android:id="@+id/bind_info_confirm"
+        android:layout_width="fill_parent"
+        android:layout_height="46dip"
+        android:layout_marginTop="16dip"
+        android:background="@drawable/ykn_button_background_red"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/bind_info_info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dip"
+        android:text=""
+        android:textColor="@color/Color_B"
+        android:textSize="16sp" 
+        android:lineSpacingExtra="3dip"/>
+
+</LinearLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+             android:id="@+id/cdw_search_edittext_layout" 
+             android:layout_width="fill_parent"
+             android:layout_height="44dip"
+             android:background="@drawable/contact_search_layout_bg"
+             android:gravity="center_vertical"
+             android:orientation="horizontal"
+             android:paddingBottom="6dip"
+             android:paddingLeft="10dip"
+             android:paddingRight="10dip"
+             android:paddingTop="6dip">
+  <EditText android:id="@+id/cdw_search_edit" 
+             android:maxLength="20" 
+             android:layout_width="fill_parent"
+             android:layout_height="32dip"
+             android:layout_gravity="center_vertical"
+             android:gravity="center_vertical"
+             android:hint="@string/search_edit_text_layout_1"
+             android:textColor="@color/Color_B"
+             android:textColorHint="@color/Color_D"
+             android:textSize="18sp"
+             android:maxLines="1"
+             android:paddingLeft="38dip"
+             android:paddingRight="5dip"
+             android:singleLine="true"
+             android:background="@drawable/contact_search_edittext_bg"/>
+  <ImageView android:id="@+id/cdw_search_icon" 
+             android:layout_width="38dip"
+             android:layout_height="32dip"
+             android:layout_gravity="center_vertical|left"
+             android:src="@drawable/contact_search" />
+  <ImageView android:id="@+id/cdw_search_del" 
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_vertical|right"
+             android:layout_marginRight="3dip"
+             android:background="@drawable/y_login_cross"
+             android:visibility="gone"/>
+</FrameLayout>

@@ -1,0 +1,268 @@
+package com.renren.mobile.chat.ui.contact;
+import java.util.ArrayList;
+import java.util.List;
+import android.text.TextUtils;
+import com.common.network.DomainUrl;
+import com.common.utils.SearchAble;
+import com.core.json.JsonArray;
+import com.core.json.JsonObject;
+import com.core.orm.ORM;
+import com.renren.mobile.chat.common.PinyinUtils;
+import com.renren.mobile.chat.database.Renren_Contact_Column;
+import com.renren.mobile.chat.ui.contact.utils.ContactResrouceUtils;
+
+public final class ThirdContactModel extends ContactBaseModel{
+	
+	
+	private static final long serialVersionUID = -5995179949242363271L;
+	
+	@ORM(mappingColumn = Renren_Contact_Column.MAIN_PAGE)//主页
+	public String mPage  = "";
+	/**
+	 * 是否是特别关注
+	 * 默认为0 ：表示不是特别关注 当获取特别关注好友的时候才会将其置为1
+	 */
+	@ORM(mappingColumn = Renren_Contact_Column.IS_ATTENTION)
+	public int mIsAttention = 0;
+	/**
+	 * 人人用户的UID
+	 */
+	@ORM(mappingColumn = Renren_Contact_Column.RENREN_ID)
+	public long mRenRenId;
+	
+	@ORM(mappingColumn = Renren_Contact_Column.IS_FRIEND)
+	public int mIsFriend=IS_FRIEND_YES;
+	
+	public static final byte IS_FRIEND_YES = 1;
+	public static final byte IS_FRIEND_NO = 0;
+	
+		
+	public interface ATTENTION{
+		public static final int IS_ATTENTION = 1;
+		public static final int NOT_ATTENTION = 0;
+	}
+	
+	private static final String EXPAND_INFO = "third_party_expand_info";
+	private static final String EXPAND_ID = "third_party_id";
+	private static final String EXPAND_PAGE = "third_party_page";
+	private static final String IS_ATTENTION = "is_focus";
+//	private static final String TRUE = "true";
+//	private static final String FALSE = "false";
+	
+	public ThirdContactModel() {
+		this.setmDomain(DomainUrl.RENREN_SIXIN_DOMAIN);
+		this.setGroupType(Contact_group_type.THIRD);
+	}
+	/**
+	 * "{
+    "count": 301,
+    "profile_info": [
+        {
+            "user_id": 0,
+            "domain_name": "renren.sixin.com",
+            "name": "仲银俏",
+            "first_name": "",
+            "last_name": "",
+            "gender": 0,
+            "birth_display": "2008-1-1",
+            "birth_day": {
+                "year": 2008,
+                "month": 1,
+                "day": 1
+            }, 
+            "profile_image": {
+                "medium_url": "http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg",
+                "large_url": "http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg",
+                "original_url": "http://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg"
+            },
+            "school": [
+                {
+                    "name": "学校"
+                }
+            ],
+            "employer": [
+                {
+                    "name": "公司"
+                }
+            ], 
+            "relationship_type":5,
+            "third_party_expand_info": {
+                "third_party_id": "275061425",
+                "is_focus":"false"
+                "third_party_type": "renren",
+                "third_party_page": "http://www.renren.com/275061425/profile"
+            }
+        }]
+        }
+	 * @param data
+	 * @return
+	 */
+
+	public static List<ThirdContactModel> newParseContactModels(JsonObject obj) {
+		ArrayList<ThirdContactModel> contacts = new ArrayList<ThirdContactModel>();
+		JsonArray array = obj.getJsonArray("profile_info");
+		if (array != null && array.size()>0) {
+			JsonObject[] objs = new JsonObject[array.size()];
+			array.copyInto(objs);
+			for (JsonObject o : objs) {
+				ThirdContactModel c = ThirdContactModel.newParseContactModel(o);
+				if (c != null) {
+					contacts.add(c); 
+				}
+			}
+		}
+		return contacts;
+	}
+	
+	
+	public static ThirdContactModel newParseContactModel(JsonObject obj) {
+		
+		if (obj != null) {
+//			if(SystemUtil.mDebug){
+//				SystemUtil.logd("obj="+obj.toJsonString());
+//			}
+			ThirdContactModel result = new ThirdContactModel();
+			JsonObject tmp =   obj.getJsonObject(EXPAND_INFO);
+			result.setmRenRenId(Long.parseLong(tmp.getString(EXPAND_ID)));
+			result.setmPage(tmp.getString(EXPAND_PAGE));
+			if(tmp.getBool(IS_ATTENTION)){
+				result.setmIsAttention(ATTENTION.IS_ATTENTION);
+			}else{
+				result.setmIsAttention(ATTENTION.NOT_ATTENTION);
+			}
+			
+			String domain = obj.getString(DOMAIN_NAME);
+		    if(!TextUtils.isEmpty(domain)){
+		    	result.setmDomain(domain);	
+		    }
+			    
+			JsonObject headUrlObj = obj.getJsonObject(PROFILE_IMAGE);
+			if(headUrlObj!=null){
+				result.setmLargeHeadUrl(headUrlObj.getString(HEAD_LARGE_URL));
+				result.setmHeadUrl(headUrlObj.getString(HEAD_MEDIUM_URL));
+				result.setmOriginalHeadUrl(headUrlObj.getString(HEAD_ORIGINAL_URL));
+			}
+			
+			String school="";
+			JsonArray schoolArray = obj.getJsonArray(SCHOOL);
+			if (schoolArray != null) {
+				JsonObject[] objs = new JsonObject[schoolArray.size()];
+				schoolArray.copyInto(objs);
+				school = objs[0].getString(NAME);
+			}
+			result.setmSchool(school);
+			
+			String employer="";
+			JsonArray employerArray = obj.getJsonArray(EMPLOYER);
+			if (employerArray != null) {
+				JsonObject[] objs = new JsonObject[employerArray.size()];
+				employerArray.copyInto(objs);
+				employer = objs[0].getString(NAME);
+			}
+			result.setmEmployer(employer);
+			
+			String birth="";
+			JsonObject birthObj = obj.getJsonObject(BIRTHDAY);
+			if (birthObj != null) {
+			//	SystemUtil.mark();
+				birth = birthObj.getNum(YEAR) + LINE_IN + birthObj.getNum(MONTH) + LINE_IN + birthObj.getNum(DAY);
+			}
+			//SystemUtil.logd("birth="+birth);
+			result.setmBirth(birth);
+			
+			int reationShip = (int) obj.getNum(RELATIONSHIP, ContactModel.Relationship.CONTACT);
+			result.setmRelation(reationShip);
+			
+			String contactName = obj.getString(NAME);
+
+			result.setmContactName(contactName);
+			result.setName(contactName);
+			
+			int genderInt = (int) obj.getNum(GENDER, -1);
+			result.setmGender(genderInt);
+			
+			long id=obj.getNum(USER_ID);
+			result.setmUserId(id);
+			
+			char aleph = PinyinUtils.getAleph(contactName);
+			if(aleph == PinyinUtils.default_aleph){
+				aleph=C_LetterBar.CHAR_OTHER;
+			}
+			int nameLength = PinyinUtils.nameLength(contactName);
+			
+			result.initDye(nameLength);
+			result.setAleph(aleph);
+			
+			ContactResrouceUtils.setPinyinIntoItem(result, null, null, nameLength);
+			return result;
+		} else {
+			return null;
+		}
+	}
+	
+	public static void bleachList(List<SearchAble> contactList) {
+		if (contactList != null && contactList.size() != 0) {
+			ThirdContactModel tmp;
+			for (SearchAble item : contactList) {
+				tmp=(ThirdContactModel) item;
+				tmp.setMatched(false);
+				if (tmp.isHaveDyed())
+					tmp.bleach();
+			}
+		}
+	}
+
+
+	public String getmPage() {
+		return mPage;
+	}
+
+	public void setmPage(String mPage) {
+		this.mPage = mPage;
+	}
+
+	public long getmRenRenId() {
+		return mRenRenId;
+	}
+
+	public void setmRenRenId(long Id) {
+		this.mRenRenId = Id;
+	}
+	
+	
+	public long getmUserId() {
+		return mUserId;
+	}
+
+
+	public void setmUserId(long mUserId) {
+		this.mUserId = mUserId;
+	}
+	
+
+	public boolean bindSinxin() {
+		return (mRelation&ContactBaseModel.Relationship.IS_SI_XIN) == ContactBaseModel.Relationship.IS_SI_XIN;
+		
+	}
+	
+	public int getmIsAttention() {
+		return mIsAttention;
+	}
+	public void setmIsAttention(int mIsAttention) {
+		this.mIsAttention = mIsAttention;
+	}
+	
+	public int getmIsFriend() {
+		return mIsFriend;
+	}
+	public void setmIsFriend(int mIsFriend) {
+		this.mIsFriend = mIsFriend;
+	}
+	
+	@Override
+	public String toString() {
+		return "mIsAttention:" + getmIsAttention();
+	}
+	
+
+}

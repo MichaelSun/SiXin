@@ -1,0 +1,1091 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="from">110</string>
+    <string name="pubdate">20120929</string>
+    <string name="softid">100001</string>
+    <!--
+    <string name="apikey">f1541f73bed34e54a7ca6efc485c5d71</string>
+	<string name="secretkey">c9fdb799d1f048fa8d01b20ec34f5aba</string>
+    -->
+    <string name="apikey">55f6c278e72d40ab96bc1d7d78fe865b</string>
+    <string name="secretkey">bc9ea38417f541caa41b92723caeb9f5</string>
+    <string name="appid">208079</string>
+    <string name="subproperty">0</string>
+    <string name="app_name">私信</string>
+    <string name="version">2.2.0</string>
+    <string name="welcome_message">传递的不只是思念</string>
+    <string name="expression_radio_common">普通表情</string>
+    <string name="expression_radio_cool">炫酷表情</string>
+    <string name="cdw_chat_main_input_text_send_btn_text">发送</string>
+    <string name="cdw_chat_main_input_text_length">最多输入240字</string>
+
+    <drawable name="list_item_default">#F9F9F9</drawable>
+    <drawable name="list_item_selected">#4CA3FB</drawable>
+    
+    <!-- confirm cancel -->
+    <string name="ykn_confirm">确定</string>
+    <string name="ykn_cancel">取消</string>
+    <string name="ykn_retry">重试</string>
+    <string name="ykn_submitting">正在提交...</string>
+
+    <!-- first -->
+    <string name="ykn_first_logining">正在登录...</string>
+    <string name="ykn_first_request_failure">请求失败</string>
+    
+    <!-- welcome -->
+    <string name="ykn_welcome_login_renren">人人帐号登录</string>
+    <string name="ykn_welcome_login">登录</string>
+    <string name="ykn_welcome_login_sixin">使用私信帐号登录</string>
+    <string name="ykn_welcome_register">注册</string>
+    <string name="ykn_welcome_register_sixin">注册新的私信帐号</string>
+    
+    <string name="ykn_welcome_text1">沟通,</string>
+    <string name="ykn_welcome_text2">拉近你我之间的距离</string>
+    <string name="ykn_welcome_text3">表情,</string>
+    <string name="ykn_welcome_text4">让聊天更生动</string>
+    <string name="ykn_welcome_text5">特别的你,</string>
+    <string name="ykn_welcome_text6">需要特别的关注</string>
+    
+    <!--     PhotoNew.java    -->
+    <string name="PhotoNew_java_1">相冊中沒有照片無法進行該操作</string>
+    <string name="PhotoNew_java_2">該相冊中沒有照片</string>
+    <string name="PhotoNew_java_3">對非所有人可見的照片不能被分享</string>
+    <string name="PhotoNew_java_4">對非所有人可見的照片不能被收藏</string>
+    <string name="PhotoNew_java_5">照片正在加載,請稍候再試</string>
+    <string name="PhotoNew_java_6">保存成功到</string>
+    <string name="PhotoNew_java_7">保存照片失敗，請檢查SD卡是否正確</string>
+    <string name="PhotoNew_java_8">內容加載中，暂时無法進行該操作</string>
+    <!--     PhotosNew.java    -->
+    <string name="PhotosNew_java_1">張</string>
+    <string name="PhotosNew_java_2">的相冊</string>
+    
+
+    <!-- upload contact -->
+    <string name="ykn_uploadcontact_title">上传通讯录</string>
+    <string name="ykn_uploadcontact_guidance">系统会帮您匹配通讯录中的私信联系人,您的通讯录将以加密形式保存在服务器</string>
+    <string name="ykn_uploadcontact_button">开始上传</string>
+    <string name="ykn_uploadcontact_title_right">跳过</string>
+
+    <!-- bindinfo -->
+    <string name="ykn_bindinfo_phone_title">手机号</string>
+    <string name="ykn_bindinfo_phone_guidance">当前手机号</string>
+    <string name="ykn_bindinfo_phone_button">更换手机号</string>
+    <string name="ykn_bindinfo_phone_hint">您的手机号可以用于登录和找回密码.\n系统根据您的手机号为您推荐私信联系人.\n若您变更了手机号,请及时换绑.</string>
+    <string name="ykn_bindinfo_message">为了您的帐号安全请输入密码</string>
+    <string name="ykn_bindinfo_confirm">确定</string>
+    <string name="ykn_bindinfo_cancel">取消</string>
+    <string name="ykn_bindinfo_password">密码</string>
+    <string name="ykn_bindinfo_error">密码错误</string>
+    <string name="ykn_bindinfo_email_title">邮箱</string>
+    <string name="ykn_binfinfo_email_guidance">当前邮箱</string>
+    <string name="ykn_bindinfo_email_button">更换邮箱</string>
+    <string name="ykn_bindinfo_email_hint">您的邮箱可以用于登录和找回密码.\n若您变更了邮箱,请及时换绑.</string>
+
+    <!-- register account -->
+    <string name="ykn_account_button">提交</string>
+    <string name="ykn_account_hint1">已经阅读并同意</string>
+    <string name="ykn_account_hint2">使用条款和隐私政策</string>
+    <string name="ykn_account_message">请阅读并同意使用条款和隐私政策</string>
+    <string name="ykn_account_message1">为了您的帐号安全请输入密码</string>
+    <string name="ykn_account_confirm">确定</string>
+    <string name="ykn_account_phone_title">填写手机号</string>
+    <string name="ykn_account_phone_guidance">请输入手机号</string>
+    <string name="ykn_account_phone_edittext">您本人的手机号</string>
+    <string name="ykn_account_email_title">填写邮箱</string>
+    <string name="ykn_account_email_guidance">请输入邮箱</string>
+    <string name="ykn_account_email_edittext">您本人的邮箱</string>
+    <string name="ykn_account_register_title">填写帐号</string>
+    <string name="ykn_account_register_guidance">请输入手机号或邮箱</string>
+    <string name="ykn_account_register_edittext">您本人的手机号或邮箱</string>
+    <string name="ykn_account_findsecret_guidance">请输入注册时使用的手机号或邮箱</string>
+    <string name="ykn_account_toast1">帐号不能为空</string>
+    <string name="ykn_account_toast2">帐号格式错误</string>
+    <string name="ykn_account_toast3">邮箱格式错误</string>
+    <string name="ykn_account_toast4">手机号格式错误</string>
+    <string name="ykn_account_toast5">获取验证码成功!</string>
+    <string name="ykn_account_toast6">获取验证码失败!</string>
+    <string name="ykn_account_toast7">帐号格式错误</string>
+
+    <!-- reset password -->
+    <string name="ykn_reset_title">重置密码</string>
+    <string name="ykn_reset_password">新密码</string>
+    <string name="ykn_reset_confirm">再次输入新密码</string>
+    <string name="ykn_reset_submit">完成</string>
+    <string name="ykn_reset_error1">请输入6-20位数字或字母(区分大小写)</string>
+    <string name="ykn_reset_error2">密码输入不一致</string>
+    <string name="ykn_reset_message">密码设置成功，请使用重置后的密码进行登录</string>
+    <string name="ykn_reset_login">立即登录</string>
+
+    <!-- register captcha -->
+    <string name="ykn_captcha_title">填写验证码</string>
+    <string name="ykn_captcha_edittext">验证码</string>
+    <string name="ykn_captcha_button">提交</string>
+    <string name="ykn_captcha_phone_guidance1">您的手机号:</string>
+    <string name="ykn_captcha_phone_guidance2">我们给您发送了一条短信,请将短信中的数字作为验证码填写在下面.</string>
+    <string name="ykn_captcha_email_guidance1">您的邮箱:</string>
+    <string name="ykn_captcha_email_guidance2">我们给您发送了一封邮件,请将邮件中的数字作为验证码填写在下面.</string>
+    
+    <string name="ykn_captcah_toast1">验证码为空,请输入</string>
+    <string name="ykn_captcah_toast2">帐号格式错误</string>
+    <string name="ykn_captcah_toast3">帐号格式错误</string>
+    <string name="ykn_captcah_toast4">帐号格式错误</string>
+    <string name="ykn_captcah_toast5">帐号格式错误</string>
+    
+
+    <!-- 新帐户体系 account -->
+    <!-- 检测本地官方帐号授权页面 -->
+    <string name="ykn_renren_authorize_title">人人帐号登录</string>
+    <string name="ykn_renren_authorize_text">已检测到您的人人帐号,您可以使用该人人帐号登录私信</string>
+    <string name="ykn_renren_authorize_button_login">授权登录</string>
+    <string name="ykn_renren_authorize_button_login_other">其他方式登录</string>
+
+    <!-- 注册页面 -->
+
+    <string name="ykn_register_title">注册私信</string>
+    <string name="ykn_register_guidance">请输入注册手机号或邮箱,我们将向该手机号或邮箱发送一条验证码.</string>
+    <string name="ykn_register_edittext">手机号/邮箱</string>
+    <string name="ykn_register_submit">提交</string>
+    <string name="ykn_register_button_normal">获取验证码</string>
+    <string name="ykn_register_button_pressed">重新获取</string>
+    <string name="ykn_register_captcha">验证码</string>
+    <string name="ykn_register_find_secret_title">验证帐号</string>
+    <string name="ykn_register_find_secret_guidance">请输入已绑定的手机号或邮箱.我们将向该手机号或邮箱发送一条验证码.验证通过后,您可以重新设置密码.</string>
+    <string name="ykn_register_find_secret_hint">*如果重设密码过程中遇到了困难,请拨打我们的客服电话:1234567</string>
+    <string name="ykn_register_bind_email_title">绑定邮箱</string>
+    <string name="ykn_register_bind_email_guidance">绑定邮箱后可以使用邮箱找回密码.</string>
+    <string name="ykn_register_bind_email_edittext">邮箱</string>
+    <string name="ykn_register_bind_email_submit">绑定邮箱</string>
+    <string name="ykn_register_bind_phone_title">绑定手机号</string>
+    <string name="ykn_register_bind_phone_guidance">绑定手机号后可以使用手机号找回密码,还可以为您匹配到更多的好友以及可能认识的人.</string>
+    <string name="ykn_register_bind_phone_edittext">手机号</string>
+    <string name="ykn_register_bind_phone_submit">绑定手机号</string>
+
+    <!-- 完善资料 注册 -->
+    <string name="ykn_register_info_title">完善资料</string>
+    <string name="ykn_register_info_hint1">请填写真实姓名和性别,完成后不可更改</string>
+    <string name="ykn_register_info_hint2">密码必须为6-20位,由数字或字母(区分大小写)组成</string>
+    <string name="ykn_register_info_realname">您的真实姓名</string>
+    <string name="ykn_register_info_password">密码</string>
+    <string name="ykn_register_info_confirm">再次输入密码</string>
+    <string name="ykn_register_info_submit">完成</string>
+    <string name="ykn_register_info_male">男</string>
+    <string name="ykn_register_info_female">女</string>
+    <string name="ykn_register_info_inputname">请输入姓名</string>
+    <string name="ykn_register_info_inputsex">请选择性别</string>
+    <string name="ykn_register_info_inputpassword1">请输入密码</string>
+    <string name="ykn_register_info_inputpassword2">请再次输入密码</string>
+    <string name="ykn_register_info_inputpassword3">两次密码输入不一致,请重新输入</string>
+
+    <!-- 登录页面 -->
+    <string name="ykn_login_sixin_title">登录</string>
+    <string name="ykn_login_sixin_username">手机号/邮箱</string>
+    <string name="ykn_login_sixin_password">密码</string>
+    <string name="ykn_login_sixin_captcha">计算结果</string>
+    <string name="ykn_login_sixin_login">登录</string>
+    <string name="ykn_login_sixin_forget">忘记密码?</string>
+    <string name="ykn_login_sixin_registered_guidance1">您的手机号</string>
+    <string name="ykn_login_sixin_registered_guidance2">您的邮箱</string>
+    <string name="ykn_login_sixin_registered_guidance3">已经注册私信,请直接输入密码登录</string>
+    <string name="ykn_login_sixin_hint">检测到您的人人帐号信息:邮箱或手机号单独注册过私信帐号,请您进行登录,登录后您可以绑定当前人人帐号.</string>
+    <string name="ykn_login_renren_title">人人帐号登录</string>
+    <string name="ykn_login_renren_username">手机号/邮箱/帐号</string>
+    <string name="ykn_login_renren_hint">使用人人帐号登录私信可以:\n自动匹配已开通私信的人人好友\n与人人好友直接聊天\n添加人人好友特别关注</string>
+    <string name="ykn_login_dialog_message">你的人人帐号已经注册私信,请使用该帐号直接登录私信.</string>
+    <string name="ykn_login_toast1">密码输入有误,请重新输入</string>
+    <string name="ykn_login_toast2">帐号或密码错误,请重新输入</string>
+    
+    <!-- dialog -->
+    <string name="ykn_dialog_checking_captcha">正在校对验证码...</string>
+    <string name="ykn_dialog_registering">正在注册帐号...</string>
+
+    <!-- 设置 -->
+    <string name="vibrate">Vibrate</string>
+    <string name="vibrate_summ_off">Off</string>
+    <string name="loading">数据加载中...</string>
+
+    <!-- 听筒——扬声器(语音播放切换) -->
+    <string name="turn_to_speaker">扬声器模式</string>
+    <string name="turned_to_ear_phone">已切换到听筒模式</string>
+    <string name="turned_to_speaker">已切换到扬声器模式</string>
+    <string name="open_single_image_failure">打开图片失败!</string>
+    <string name="sdcard_unmounted_download_disabled">SD卡使用中,请加载SD卡后重试</string>
+
+    <!-- 对话列表 -->
+    <string name="see_chat_details">查看聊天信息</string>
+    <string name="delete_chat">删除对话</string>
+    <string name="can_not_see_chat_details">您已不在此群中</string>
+    <string name="chat_session_list">私信</string>
+
+    <!-- ActionDispatcher.java -->
+    <string name="ActionDispatcher_java_1">处理</string>
+    <string name="ActionDispatcher_java_2">处理异常</string>
+
+    <!-- 特别关注 -->
+    <string name="lc_feed_footer_layout_1">更多新鲜事...</string>
+    <string name="lc_feed_footer_layout_2">正在加载...</string>
+    <string name="lc_feed_header_layout_1">条新鲜事</string>
+    <string name="lc_feed_header_layout_2">正在加载...</string>
+    <string name="lc_feed_item_layout_1">刘超</string>
+    <string name="lc_feed_item_layout_2">天气不错</string>
+    <string name="lc_feed_item_layout_3">刘超</string>
+    <string name="lc_feed_item_layout_4">囧</string>
+    <string name="lc_feed_item_layout_5">静安中心</string>
+    <string name="lc_feed_item_layout_6">time</string>
+    <string name="lc_feed_item_reblog">转给</string>
+    <string name="lc_feed_item_reply">发消息</string>
+    <string name="lc_feed_noattention_layout_1">立即添加关注</string>
+    <string name="lc_nodata_layout_layout_1">暂无数据</string>
+    <string name="lc_feed_title">好友动态</string>
+    <string name="lc_feed_noattention_info">将好友设为特别关注,第一时间获取Ta的状态和照片</string>
+
+    <!-- plugin -->
+    <string name="plugin_no_data_1">没有可用插件</string>
+    <string name="plugin_no_data_2">快去添加插件应用吧</string>
+    <string name="plugin_all_title">应用插件</string>
+    <string name="plugin_loading">加载中...</string>
+    <string name="plugin_refresh_completed">刷新完成</string>
+    <string name="plugin_refresh_notice">刷新一下,更多惊喜!</string>
+    <string name="plugin_installed_text">已安装</string>
+    <string name="plugin_unstalled_text">未安装</string>
+    
+    
+    <!-- RenRenChatActivity.java -->
+    <string name="RenRenChatActivity_java_1">正在加载聊天记录...</string>
+    <string name="RenRenChatActivity_java_2">默认</string>
+    <string name="RenRenChatActivity_java_3">阿狸</string>
+    <string name="RenRenChatActivity_java_4">秒</string>
+    <!-- Command_SendText.java -->
+    <string name="Command_SendText_java_1">不能输入空串</string>
+    <!-- ChatItemFacader_FlashEmotion.java -->
+    <string name="ChatItemFacader_FlashEmotion_java_1">炫酷表情:</string>
+    <!-- ChatMessageWarpper_FlashEmotion.java -->
+    <string name="ChatMessageWarpper_FlashEmotion_java_1">重新发送</string>
+    <string name="ChatMessageWarpper_FlashEmotion_java_2">删除炫酷表情消息</string>
+    <string name="ChatMessageWarpper_FlashEmotion_java_3">转给</string>
+    <string name="ChatMessageWarpper_FlashEmotion_java_4">取消</string>
+    <string name="ChatMessageWarpper_FlashEmotion_java_5">[炫酷表情]</string>
+    <!-- ChatMessageWarpper_Image.java -->
+    <string name="ChatMessageWarpper_Image_java_1">文件未找到</string>
+    <string name="ChatMessageWarpper_Image_java_2">重新下载</string>
+    <string name="ChatMessageWarpper_Image_java_3">删除图片消息</string>
+    <string name="ChatMessageWarpper_Image_java_4">[图片]</string>
+    <!-- ChatMessageWarpper_LBS.java -->
+    <string name="ChatMessageWarpper_LBS_java_1">删除LBS消息</string>
+    <string name="ChatMessageWarpper_LBS_java_2">[位置]</string>
+    <!-- ChatMessageWarpper_Null.java -->
+    <!-- ChatMessageWarpper_SoftInfo.java -->
+    <string name="ChatMessageWarpper_SoftInfo_java_1">苍井空,川滨奈美,堤莎也加,町田梨乃,二阶堂仁美,饭岛爱</string>
+    <!-- ChatMessageWarpper_Text.java -->
+    <string name="ChatMessageWarpper_Text_java_1">删除</string>
+    <string name="ChatMessageWarpper_Text_java_2">复制</string>
+    <string name="ChatMessageWarpper_Text_java_3">删除</string>
+    <!-- ChatMessageWarpper_Unknow.java -->
+    <string name="ChatMessageWarpper_Unknow_java_1">系统提示:您当前使用的客户端版本暂不支持此类型的消息</string>
+    <string name="ChatMessageWarpper_Unknow_java_2">[未知消息类型]</string>
+    <!-- ChatMessageWarpper_Voice.java -->
+    <string name="ChatMessageWarpper_Voice_java_1">删除</string>
+    <string name="ChatMessageWarpper_Voice_java_2">[语音]</string>
+    <string name="ChatMessageWarpper_Voice_java_3">下载开始</string>
+    <string name="ChatMessageWarpper_Voice_java_4">下载成功</string>
+    <!-- TestFeedModelFactory.java -->
+    <string name="TestFeedModelFactory_java_1">北京</string>
+    <!-- ChatEventManager.java -->
+    <string name="ChatEventManager_java_1">请休息一会儿</string>
+    <string name="ChatEventManager_java_2">休息一会儿</string>
+    <!-- ImageItemOnClickListenner.java -->
+    <string name="ImageItemOnClickListenner_java_1">图片文件丢失</string>
+    <!-- VoiceOnClickListenner.java -->
+    <string name="VoiceOnClickListenner_java_1">正在下载...</string>
+    <string name="VoiceOnClickListenner_java_2">是否重新下载</string>
+    <string name="VoiceOnClickListenner_java_3">确定</string>
+    <string name="VoiceOnClickListenner_java_4">本地音频文件丢失</string>
+    <!-- XMLParse_Visitor.java -->
+    <string name="XMLParse_Visitor_java_1">[这是一条位置信息]</string>
+    <!-- AbstractFeedAdapter.java -->
+    <!-- ResendDialog.java -->
+    <string name="ResendDialog_java_1">重新发送消息</string>
+    <!-- ContactsDAO.java -->
+    <string name="ContactsDAO_java_1">关注失败</string>
+    <string name="ContactsDAO_java_2">取消失败</string>
+    <!-- ChatService.java -->
+    <string name="ChatService_java_1">没有帐户</string>
+    <string name="ChatService_java_2">没有binder链接 发送broadcast</string>
+    <string name="ChatService_java_3">启动服务</string>
+    <!-- ChatSessionAdapter.java -->
+    <string name="ChatSessionAdapter_java_1">您确定要删除此对话并清空此对话的所有记录吗?</string>
+    <string name="ChatSessionAdapter_java_2">群聊</string>
+    <string name="ChatSessionAdapter_java_3">昨天</string>
+    <string name="ChatSessionAdapter_java_4">前天</string>
+    <string name="ChatSessionAdapter_java_5">我:</string>
+    <string name="ChatSessionAdapter_java_6">我: [语音]</string>
+    <string name="ChatSessionAdapter_java_7">: [语音]</string>
+    <string name="ChatSessionAdapter_java_8">我: [图片]</string>
+    <string name="ChatSessionAdapter_java_9">: [图片]</string>
+    <string name="ChatSessionAdapter_java_10">我: [炫酷表情]</string>
+    <string name="ChatSessionAdapter_java_11">: [炫酷表情]</string>
+    <!-- ChatSessionScreen.java -->
+    <string name="ChatSessionScreen_java_1"> 连接中...</string>
+    <string name="ChatSessionScreen_java_2"> 收取中...</string>
+    <!-- D_AttentionAdapter.java -->
+    <string name="D_AttentionAdapter_java_1">关注中</string>
+    <string name="D_AttentionAdapter_java_2">取消中</string>
+    <string name="D_AttentionAdapter_java_3">取消关注</string>
+    <string name="D_AttentionAdapter_java_4">关注</string>
+    <!-- D_AttentionCache.java -->
+    <!-- D_AttentionScreen.java -->
+    <string name="D_AttentionScreen_java_1">添加关注</string>
+    <string name="D_AttentionScreen_java_2">最多输入20个字</string>
+    <!-- AttentionSettingModel.java -->
+    <string name="AttentionSettingModel_java_1">刘德华</string>
+    <!-- D_AttentionSettingActivity.java -->
+    <string name="D_AttentionSettingActivity_java_1">添加</string>
+    <string name="D_AttentionSettingActivity_java_2">编辑</string>
+    <string name="D_AttentionSettingActivity_java_3">完成</string>
+    <string name="D_AttentionSettingActivity_java_4">设置</string>
+    <string name="D_AttentionSettingActivity_java_5">正在加载...</string>
+    <string name="D_AttentionSettingActivity_java_6">正在取消关注...</string>
+    <!-- ContactListView.java -->
+    <!-- ContactModel.java -->
+    <string name="ContactModel_java_4">年</string>
+<!--     <string name="ContactModel_java_5">80后</string> -->
+<!--     <string name="ContactModel_java_6">90后</string> -->
+    <string name="ContactModel_java_7">月</string>
+    <string name="ContactModel_java_8">日</string>
+    <string name="ContactModel_java_9">暂无</string>
+    <string name="ContactModel_java_10">女</string>
+    <string name="ContactModel_java_11">男</string>
+    <string name="ContactModel_java_12">人人好友(未绑定)</string>
+    <string name="ContactModel_java_13">人人好友</string>
+    <string name="ContactModel_java_14">联系人推荐</string>
+
+    <!-- UserInfoActivity.java -->
+    <string name="UserInfoActivity_java_1">加为联系人</string>
+    <string name="UserInfoActivity_java_2">打招呼</string>
+    <string name="UserInfoActivity_java_3">学校</string>
+    <string name="UserInfoActivity_java_4">加入黑名单</string>
+    <string name="UserInfoActivity_java_5">添加联系人</string>
+    <string name="UserInfoActivity_java_6">按姓名、手机号和私信ID搜索联系人</string>
+    <string name="UserInfoActivity_java_7">通讯录找人</string>
+    <string name="UserInfoActivity_java_8">手机号</string>
+    <string name="UserInfoActivity_java_9">已绑定</string>
+    <string name="UserInfoActivity_java_10">发消息</string>
+    <string name="UserInfoActivity_java_11">删除联系人</string>
+    <string name="UserInfoActivity_java_12">移除黑名单</string>
+    <string name="UserInfoActivity_java_13">Ta还没有注册私信</string>
+    <string name="UserInfoActivity_java_14">添加成功</string>
+    <string name="UserInfoActivity_java_15">解除成功</string>
+    <string name="UserInfoActivity_java_16">删除成功</string>
+
+    <!-- <string name="contact_message_address">通讯录联系人</string> -->
+    <!-- <string name="contact_message_sixin">私信联系人</string> -->
+    <!-- <string name="contact_message_friend_request">好友请求</string> -->
+    <string name="contact_message_friend_nodata">暂无联系人推荐</string>
+    <string name="contact_message_friend_title">联系人推荐</string>
+    <string name="contact_add_title">联系人选项</string>
+    <!-- <string name="contact_add_title">通讯录找人</string> -->
+    <string name="contact_add_bind_phone">绑定手机号</string>
+    <string name="contact_add_bind_renren">人人帐号</string>
+    <string name="contact_adding">正在添加联系人...</string>
+    <string name="contact_blacklist_adding">正在添加黑名单...</string>
+    <string name="contact_searching">正在搜索...</string>
+    <string name="contact_deleting">正在删除...</string>
+    <string name="contact_removing">正在移除...</string>
+    <string name="contact_sending">正在发送...</string>
+    <string name="contact_searching_nodata">没有查找到符合要求的联系人</string>
+    <string name="contact_verify">对方设置了联系人验证</string>
+    <string name="contact_verify2">您需要发送验证申请,对方通过后才能添加其为联系人</string>
+    <string name="contact_verify_hint">请填写验证信息</string>
+    <string name="contact_add_succeed">成功添加对方为联系人</string>
+    <string name="contact_verify_notnull">验证信息不能为空</string>
+    <string name="contact_verify_string">我是XXX,想加你为私信联系人</string>
+    <string name="contact_message_del">删除该推荐信息</string>
+    <string name="contact_search_hint">搜索联系人</string>
+    <string name="contact_search_nodata">没有搜索到符合要求的联系人</string>
+    <string name="contact_added">成功添加对方为联系人</string>
+    <string name="contact_refresh_error">刷新失败</string>
+    <string name="contact_verify_tip">加入黑名单后,将不再收到对方的消息</string>
+    <string name="contact_blacklist_add_sucess">已将对方加入黑名单</string>
+    <string name="contact_blacklist_remove_sucess">已将对方移出黑名单</string>
+    <string name="contact_send_ok">发送成功</string>
+     
+    
+
+    <!-- C_ContactScreen.java -->
+    <string name="C_ContactScreen_java_1">常用</string>
+    <string name="C_ContactScreen_java_2">全部</string>
+    <string name="C_ContactScreen_java_3">正在更新联系人...</string>
+    <string name="C_ContactScreen_java_4">位联系人</string>
+    <string name="C_ContactScreen_java_5">位在线联系人</string>
+    <string name="C_ContactScreen_java_6">您还没有常用联系人</string>
+    <string name="C_ContactScreen_java_7">您还没有私信联系人</string>
+    <string name="C_ContactScreen_java_8">对方验证后你们就可以聊天了</string>
+    <string name="C_ContactScreen_java_9">网络连接失败,请稍后再试</string>
+    <!-- C_UserInfoActivity.java -->
+    <string name="C_UserInfoActivity_java_1">人人网</string>
+    <string name="C_UserInfoActivity_java_2">预览失败,请稍候再试</string>
+    <string name="C_UserInfoActivity_java_3">保密</string>
+    <string name="C_UserInfoActivity_java_4">发送中...</string>
+    <string name="C_UserInfoActivity_java_5">已发请求</string>
+    <string name="C_UserInfoActivity_java_6">加为好友</string>
+    <!-- ChatFeedDataManager.java -->
+    <string name="ChatFeedDataManager_java_1">条新鲜事</string>
+    <!-- ChatFeedScreen.java -->
+    <string name="ChatFeedScreen_java_1">应用</string>
+    <!-- ChatFeedScreenHolder.java -->
+    <string name="ChatFeedScreenHolder_java_1">网络连接失败,请稍后重试</string>
+    <string name="ChatFeedScreenHolder_java_2">暂无数据</string>
+    <!-- GroupContactModel.java -->
+    <string name="GroupContactModel_java_1">群组</string>
+    <string name="GroupContactModel_java_2">群聊</string>
+    <!-- MultiChatForwardScreen.java -->
+    <string name="MultiChatForwardScreen_java_1">常用联系人</string>
+    <string name="MultiChatForwardScreen_java_2">提示</string>
+    <string name="MultiChatForwardScreen_java_3">是否要将该信息转发给:</string>
+    <string name="MultiChatForwardScreen_java_4">该群已经解散</string>
+    <string name="MultiChatForwardScreen_java_5">是否要将该信息转发到群:</string>
+    <string name="MultiChatForwardScreen_java_6">确认</string>
+    <!-- MultiChatNameSettingActivity.java -->
+    <!-- MultiChatNameSettingScreen.java -->
+    <string name="MultiChatNameSettingScreen_java_1">修改群聊名称</string>
+    <string name="MultiChatNameSettingScreen_java_2">请输入群名</string>
+    <string name="MultiChatNameSettingScreen_java_3">请稍候...</string>
+    <string name="MultiChatNameSettingScreen_java_4">未命名</string>
+    <string name="MultiChatNameSettingScreen_java_5">修改群名成功</string>
+    <string name="MultiChatNameSettingScreen_java_6">确定</string>
+    <!-- MultiChatNameSettingScreenHolder.java -->
+    <!-- RoomInfosData.java -->
+    <string name="RoomInfosData_java_1">删除联系人成功</string>
+   
+    <!-- ChatMessageGridView.java -->
+    <!-- ChatMessagesActivity.java -->
+    <string name="ChatMessagesActivity_java_1">成员(</string>
+    <string name="ChatMessagesActivity_java_2">清除聊天记录</string>
+    <string name="ChatMessagesActivity_java_3">退出并解散</string>
+    <string name="ChatMessagesActivity_java_4">群聊将被解散,所有聊天记录将被删除</string>
+    <string name="ChatMessagesActivity_java_5">正在发送请求...</string>
+    <string name="ChatMessagesActivity_java_6">退出并删除</string>
+    <string name="ChatMessagesActivity_java_7">退出群聊,所有聊天记录将被删除</string>
+    <string name="ChatMessagesActivity_java_8">正在发送请求...</string>
+    <string name="ChatMessagesActivity_java_9">是否删除该对话?(只清空聊天记录和删除对话,但不会退出该群聊)</string>
+    <string name="ChatMessagesActivity_java_10">抱歉,您不是群主,无法修改群聊名称</string>
+    <string name="ChatMessagesActivity_java_11">保存到联系人列表</string>
+    <string name="ChatMessagesActivity_java_12">是否将该群组从联系人列表删除?(该群组将不再显示在联系人列表中,但是您不会退出该群组)</string>
+    <string name="ChatMessagesActivity_java_13">聊天信息</string>
+    <string name="ChatMessagesActivity_java_14">添加成员</string>
+    <string name="ChatMessagesActivity_java_15">正在删除成员...</string>
+    <string name="ChatMessagesActivity_java_16">保存成功</string>
+    <string name="ChatMessagesActivity_java_17">解散群成功</string>
+    <string name="ChatMessagesActivity_java_18">退群成功</string>
+    <string name="ChatMessagesActivity_java_19">同时删除云端聊天记录</string>
+    <string name="ChatMessagesActivity_java_20">获取最近300条的云端聊天记录并覆盖本地</string>
+    <string name="ChatMessagesActivity_java_21">已保存到联系人列表</string>
+    <string name="ChatMessagesActivity_java_22">获取</string>
+    <string name="ChatMessagesActivity_java_23">条聊天记录</string>
+    <string name="ChatMessagesActivity_java_24">获取失败,请稍后再试</string>
+    <!-- SelectContactAdapter.java -->
+    <!-- SelectContactsItemHolder.java -->
+    <!-- SelectContactsScreenHolder.java -->
+    <!-- SelectGroupActivity.java -->
+    <string name="SelectGroupActivity_java_1">选择群组</string>
+    <string name="SelectGroupActivity_java_2">暂无群组</string>
+    <!-- SelectGroupAdapter.java -->
+    <!-- SelectGroupChatContactActivity.java -->
+    <string name="SelectGroupChatContactActivity_java_1">抱歉,群成员数量已达上限</string>
+    <string name="SelectGroupChatContactActivity_java_2">选择联系人</string>
+    <string name="SelectGroupChatContactActivity_java_3">正在创建群聊...</string>
+    <string name="SelectGroupChatContactActivity_java_4">正在邀请...</string>
+    <string name="search_contact_title">查找联系人</string>
+    <string name="search_contact_text">姓名/手机号/私信ID</string>
+    <string name="search_contact_button">查找</string>
+    <string name="contact_index_search">搜</string>
+
+    <!-- RegisterScreen.java -->
+    <string name="RegisterScreen_java_1">短信注册</string>
+    <string name="RegisterScreen_java_2">密码为空 请重新输入</string>
+    <string name="RegisterScreen_java_3">密码不符合要求,请重新输入</string>
+    <!-- SupplyUserInfoActivity.java -->
+    <!-- SupplyUserInfoScreen.java -->
+    <string name="SupplyUserInfoScreen_java_1">男生</string>
+    <string name="SupplyUserInfoScreen_java_2">女生</string>
+    <string name="SupplyUserInfoScreen_java_3">工作</string>
+    <string name="SupplyUserInfoScreen_java_4">大学</string>
+    <string name="SupplyUserInfoScreen_java_5">中学</string>
+    <string name="SupplyUserInfoScreen_java_6">其他</string>
+    <string name="SupplyUserInfoScreen_java_7">完善资料</string>
+    <string name="SupplyUserInfoScreen_java_8">请选择性别</string>
+    <string name="SupplyUserInfoScreen_java_9">身份</string>
+    <string name="SupplyUserInfoScreen_java_10">请填写生日</string>
+    <string name="SupplyUserInfoScreen_java_11">您岁数太大了</string>
+    <string name="SupplyUserInfoScreen_java_12">生日不能选择未来,请重新选择</string>
+    <string name="SupplyUserInfoScreen_java_13">请选择身份</string>
+    <string name="SupplyUserInfoScreen_java_14">请输入您的真实姓名</string>
+    <string name="SupplyUserInfoScreen_java_15">提交资料发生异常,请重试.</string>
+    <string name="SupplyUserInfoScreen_java_16">正在提交资料...</string>
+    <!-- SyncContactsActivity.java -->
+    <!-- SyncContactsScreen.java -->
+    <string name="SyncContactsScreen_java_1">匹配通讯录</string>
+    <string name="SyncContactsScreen_java_2">跳过</string>
+    <string name="SyncContactsScreen_java_3">正在匹配...</string>
+    <string name="SyncContactsScreen_java_4">系统繁忙,请稍后再试...</string>
+    <!-- ImageLoader.java -->
+    <!-- ImageNavigatorView.java -->
+    <!-- ImageViewActivity.java -->
+    <string name="ImageViewActivity_java_1">SD卡不可用</string>
+    <string name="ImageViewActivity_java_2">分享到人人网</string>
+    <string name="ImageViewActivity_java_3">上传图片到人人网手机相册</string>
+    <string name="ImageViewActivity_java_4">分享失败</string>
+    <string name="ImageViewActivity_java_5">图片文件存储失败</string>
+    <string name="ImageViewActivity_java_6">正在上传照片...</string>
+    <string name="ImageViewActivity_java_7">照片上传中...</string>
+    <string name="ImageViewActivity_java_8">上传成功</string>
+    <string name="ImageViewActivity_java_9">图片已上传到人人网</string>
+    <string name="ImageViewActivity_java_10">上传失败</string>
+    <string name="ImageViewActivity_java_11">图片上传失败</string>
+    <string name="ImageViewActivity_java_12">存储卡已满,无法保存图片.</string>
+    <string name="ImageViewActivity_java_13">存储卡被移除,无法保存图片.</string>
+    <string name="ImageViewActivity_java_14">创建文件失败</string>
+    <string name="ImageViewActivity_java_15">图片已保存至</string>
+    <string name="ImageViewActivity_java_16">图片预览错误</string>
+    <string name="ImageViewActivity_java_17">图片无法显示</string>
+    <string name="ImageViewActivity_java_18">保存失败</string>
+    <string name="ImageViewActivity_java_19">图片选择失败!</string>
+    <string name="ImageViewActivity_java_20">请先绑定人人帐号</string>
+    <string name="ImageViewActivity_java_21">使用</string>
+    <!-- Login.java -->
+    <string name="Login_java_1">帐号不能为空</string>
+    <string name="Login_java_2">密码不能为空</string>
+    <string name="Login_java_3">帐号或密码错误,请重新输入</string>
+    <string name="Login_java_4">Please enter a password</string>
+    <string name="Login_java_5">回调接口 1</string>
+    <string name="Login_java_6">回调接口 2</string>
+    <!-- RRSmsManager.java -->
+    <string name="RRSmsManager_java_1">未能获取发送短信权限</string>
+    <!-- FeedNotificationManager.java -->
+    <string name="FeedNotificationManager_java_1">发布了一条状态</string>
+    <string name="FeedNotificationManager_java_2">发布了一张图片</string>
+    <string name="FeedNotificationManager_java_3">发布了多张图片</string>
+    <string name="FeedNotificationManager_java_4">发布了状态</string>
+    <!-- MessageNotificationManager.java -->
+    <string name="MessageNotificationManager_java_1">条未读消息</string>
+    <!-- AboutChatActivity.java -->
+    <string name="AboutChatActivity_java_1">版本号:</string>
+    <string name="AboutChatActivity_java_2">正在检查更新</string>
+    <!-- AboutChatScreen.java -->
+    <string name="AboutChatScreen_java_1">关于私信</string>
+    <!-- SettingScreen.java -->
+    <string name="SettingScreen_java_1">您确定要退出登录吗?</string>
+    <string name="SettingScreen_java_2">意见反馈</string>
+    <string name="SettingScreen_java_3">已关闭</string>
+    <string name="SettingScreen_java_4">已开启</string>
+    <!-- BaseTitleLayout.java -->
+    <string name="BaseTitleLayout_java_1">\@id/自定义id</string>
+    <string name="BaseTitleLayout_java_2">人人</string>
+    <!-- BaseTitleStateFactory.java -->
+    <string name="BaseTitleStateFactory_java_1">手机在线</string>
+    <string name="BaseTitleStateFactory_java_2">iPhone在线</string>
+    <string name="BaseTitleStateFactory_java_3">电脑在线</string>
+    <string name="BaseTitleStateFactory_java_4">离线</string>
+    <string name="BaseTitleStateFactory_java_5">对方正在说话...</string>
+    <!-- QuickAction.java -->
+    <string name="QuickAction_java_1">回复</string>
+    <!-- ShareAndBecomeFansDialog.java -->
+    <string name="ShareAndBecomeFansDialog_java_1">分享成功</string>
+    <!-- RenRenWebView.java -->
+    <string name="RenRenWebView_java_1">您访问的资源不存在</string>
+    <string name="RenRenWebView_java_2">您的rom版本过低,rom版本达到2.2以上才能正常观看视频</string>
+    <string name="RenRenWebView_java_3">您没有安装Adobe Flash Player,无法正常播放网页视频,请安装后重试</string>
+    <string name="RenRenWebView_java_4">您的手机当前内存过低,建议您关掉一些其他应用或重启手机后重试</string>
+    <string name="RenRenWebView_java_5">检测操作系统内存大小失败,请重启手机后重试</string>
+    <string name="RenRenWebView_java_6">很抱歉,您的手机不支持播放网页视频</string>
+    <!-- DateFormat.java -->
+    <string name="DateFormat_java_1">刚刚更新</string>
+    <string name="DateFormat_java_2">分钟前</string>
+    <string name="DateFormat_java_3">今天</string>
+    <string name="DateFormat_java_4">昨天</string>
+    <string name="DateFormat_java_5">日</string>
+    <string name="DateFormat_java_6">1小时内</string>
+    <string name="DateFormat_java_7">11小时前</string>
+    <string name="DateFormat_java_8">10小时前</string>
+    <string name="DateFormat_java_9">9小时前</string>
+    <string name="DateFormat_java_10">8小时前</string>
+    <string name="DateFormat_java_11">7小时前</string>
+    <string name="DateFormat_java_12">6小时前</string>
+    <string name="DateFormat_java_13">5小时前</string>
+    <string name="DateFormat_java_14">4小时前</string>
+    <string name="DateFormat_java_15">3小时前</string>
+    <string name="DateFormat_java_16">2小时前</string>
+    <string name="DateFormat_java_17">1小时前</string>
+    <string name="DateFormat_java_18">3周前</string>
+    <string name="DateFormat_java_19">2周前</string>
+    <string name="DateFormat_java_20">上周</string>
+    <string name="DateFormat_java_21">2天前</string>
+    <string name="DateFormat_java_22">更早</string>
+    <string name="DateFormat_java_23">半年前</string>
+    <string name="DateFormat_java_24">2个月前</string>
+    <string name="DateFormat_java_25">上个月</string>
+    <string name="DateFormat_java_26">今天</string>
+    <!-- Methods.java -->
+    <string name="Methods_java_1">无法连接网络,请检查您的手机网络设置...</string>
+    <string name="Methods_java_2">您操作太快了,歇会儿再试吧</string>
+    <string name="Methods_java_3">系统服务出错(1)</string>
+    <string name="Methods_java_4">系统服务出错(3)</string>
+    <string name="Methods_java_5">系统服务出错,请稍候重试(5)</string>
+    <string name="Methods_java_6">系统服务出错,请稍候重试(6)</string>
+    <string name="Methods_java_7">登录失效,请重新登录(102)</string>
+    <string name="Methods_java_8">系统服务出错,请重新登录(103)</string>
+    <string name="Methods_java_9">签名失效,请重新登录</string>
+    <string name="Methods_java_10">系统服务出错,请稍候重试(105)</string>
+    <string name="Methods_java_11">登录失败,请重试</string>
+    <string name="Methods_java_12">帐号或密码输入有误,请检查后再试</string>
+    <string name="Methods_java_13">帐号或密码错误,请重新输入</string>
+    <string name="Methods_java_14">您的帐号由于存在安全问题,已被暂时冻结.如需恢复,建议在电脑登录处理,或联系管理员(027-82660276)咨询恢复使用!</string>
+    <string name="Methods_java_15">您的帐号因使用不当已停止使用.如需恢复,建议在电脑登录处理,或联系管理员(027-82660276)咨询恢复使用哦!</string>
+    <string name="Methods_java_16">您的帐号已注销或停止使用.如需恢复,建议在电脑登录处理,或联系管理员(027-82660276)即可原地复活继续使用!</string>
+    <string name="Methods_java_17">系统服务出错(10201)</string>
+    <string name="Methods_java_18">系统服务出错(10202)</string>
+    <string name="Methods_java_19">系统服务出错(10204)</string>
+    <string name="Methods_java_20">系统服务出错(10205)</string>
+    <string name="Methods_java_21">系统服务出错(10206)</string>
+    <string name="Methods_java_22">系统服务出错(10207)</string>
+    <string name="Methods_java_23">您所输入的内容含有非法字符,请检查</string>
+    <string name="Methods_java_24">您当天的操作已达上限,暂时无法继续操作</string>
+    <string name="Methods_java_25">抱歉,对方不接收您的消息</string>
+    <string name="Methods_java_26">不支持的文件格式,目前仅支持bmp、png、jpeg、jpg格式的图片</string>
+    <string name="Methods_java_27">您的好友数已达上限,无法添加好友</string>
+    <string name="Methods_java_28">对方好友数已达上限,无法添加好友</string>
+    <string name="Methods_java_29">客户端无法收到此请求</string>
+    <string name="Methods_java_30">由于对方隐私设置,暂时不能加为好友</string>
+    <string name="Methods_java_31">很抱歉,请稍后重试</string>
+    <string name="Methods_java_32">关注人数已达上限</string>
+    <!-- CrashHandler.java -->
+    <string name="CrashHandler_java_1">很抱歉,程序出现异常,即将退出</string>
+    <!-- FlashChecker.java -->
+    <!-- Htf.java -->
+    <!-- RenRenWebPluginSetting.java -->
+    <!-- RenRenWebSetting.java -->
+    <!-- Variables.java -->
+    <!-- ILocationListener.java -->
+    <!-- LocationThread.java -->
+    <string name="LocationThread_java_1">GPS 成功</string>
+    <string name="LocationThread_java_2">GPS 失败</string>
+    <string name="LocationThread_java_3">gsm 成功</string>
+    <string name="LocationThread_java_4">gsm 失败</string>
+    <string name="LocationThread_java_5">wifi 成功</string>
+    <string name="LocationThread_java_6">wifi 失败</string>
+    <string name="LocationThread_java_7">network 成功</string>
+    <string name="LocationThread_java_8">network 失败</string>
+    <string name="LocationThread_java_9">电子串号</string>
+    <string name="LocationThread_java_10">中国移动</string>
+    <!-- ServiceProvider.java -->
+
+
+    <!-- about_chat.xml -->
+    <string name="about_chat_layout_1">Copyright © 2006-2012</string>
+    <string name="about_chat_layout_2">www.renren.com All rights reserved</string>
+    <string name="about_chat_layout_3">检查更新</string>
+    <string name="about_chat_layout_4">123456</string>
+    <!-- blessing_sms_content_item.xml -->
+    <string name="blessing_sms_content_item_layout_1">hello</string>
+    <!-- blessing_sms_item.xml -->
+    <string name="blessing_sms_item_layout_1">hello</string>
+    <!-- cdw_audio_popwindow_lessone.xml -->
+    <string name="cdw_audio_popwindow_lessone_layout_1">小于一秒,无法发送</string>
+    <!-- cdw_audio_popwindow_mic.xml -->
+    <string name="cdw_audio_popwindow_mic_layout_1">10秒</string>
+    <string name="cdw_audio_popwindow_mic_layout_2">滑动至此可以取消发送</string>
+    <!-- cdw_audio_popwindow_overtime.xml -->
+    <string name="cdw_audio_popwindow_overtime_layout_1">语音最长为60秒</string>
+    <!-- cdw_audio_popwindow_warntime.xml -->
+    <string name="cdw_audio_popwindow_warntime_layout_1">56</string>
+    <string name="cdw_audio_popwindow_warntime_layout_2">秒</string>
+    <string name="cdw_audio_popwindow_warntime_layout_3">已接近60秒</string>
+    <!-- cdw_audio_popwindow_wastebin.xml -->
+    <string name="cdw_audio_popwindow_wastebin_layout_1">松开手指取消发送</string>
+    <!-- cdw_chat_main.xml -->
+    <string name="cdw_chat_main_layout_1">输入聊天内容</string>
+    <!-- cdw_chat_main_input.xml -->
+    <!-- cdw_chat_main_pconline_toast.xml -->
+    <string name="cdw_chat_main_pconline_toast_layout_1">对方电脑在线,可能无法及时回复您.</string>
+    <!-- cdw_chat_main_switch_speaker.xml -->
+    <string name="cdw_chat_main_switch_speaker_layout_1">已切换至扬声器模式</string>
+    <string name="cdw_chat_main_switch_speaker_layout_2">已切换至听筒模式</string>
+    <!-- cdw_contacts.xml -->
+    <string name="cdw_contacts_layout_1">无结果</string>
+    <!-- cdw_contact_listview_item.xml -->
+    <string name="cdw_contact_listview_item_layout_1">name</string>
+    <string name="cdw_contact_listview_item_layout_2">[电脑在线]</string>
+    <!-- cdw_emotion_popwindow.xml -->
+    <!-- cdw_feed.xml -->
+    <string name="cdw_feed_layout_1">10秒</string>
+    <!-- cdw_feed_layout.xml -->
+    <!-- cdw_feed_view.xml -->
+    <string name="cdw_feed_view_layout_1">图片描述,分享理由,状态转发理由</string>
+    <string name="cdw_feed_view_layout_2">原作者的姓名</string>
+    <string name="cdw_feed_view_layout_3">状态内容,日志标题</string>
+    <string name="cdw_feed_view_layout_4">日志摘要</string>
+    <string name="cdw_feed_view_layout_5">静安中心</string>
+    <string name="cdw_feed_view_layout_6">回复人的姓名+文字内容</string>
+    <!-- cdw_item_choice_popwindow.xml -->
+    <string name="cdw_item_choice_popwindow_layout_1">拷贝</string>
+    <string name="cdw_item_choice_popwindow_layout_2">删除</string>
+    <string name="cdw_item_choice_popwindow_layout_3">转发</string>
+    <!-- cdw_listview_history_header.xml -->
+    <string name="cdw_listview_history_header_layout_1">查看更多历史记录</string>
+    <!-- cdw_listview_item.xml -->
+    <string name="cdw_listview_item_layout_1">2010.11.4 12:04</string>
+    <string name="cdw_listview_item_layout_2">苍井空,川滨奈美,堤莎也加,町田梨乃</string>
+    <!-- cdw_listview_item_from.xml -->
+    <string name="cdw_listview_item_from_layout_1">松岛枫</string>
+    <!-- cdw_listview_item_from_flash.xml -->
+    <string name="cdw_listview_item_from_flash_layout_1">hello</string>
+    <!-- cdw_listview_item_from_image.xml -->
+    <!-- cdw_listview_item_from_text.xml -->
+    <string name="cdw_listview_item_from_text_layout_1">hello</string>
+    <!-- cdw_listview_item_from_voice.xml -->
+    <string name="cdw_listview_item_from_voice_layout_1">无时间数据</string>
+    <!-- cdw_listview_item_to.xml -->
+    <string name="cdw_listview_item_to_layout_1">松岛枫</string>
+    <!-- cdw_listview_item_to_flash.xml -->
+    <string name="cdw_listview_item_to_flash_layout_1">hello</string>
+    <!-- cdw_listview_item_to_image.xml -->
+    <!-- cdw_listview_item_to_text.xml -->
+    <string name="cdw_listview_item_to_text_layout_1">hello</string>
+    <!-- cdw_listview_item_to_voice.xml -->
+    <string name="cdw_listview_item_to_voice_layout_1">10</string>
+    <!-- cdw_search_edittext.xml -->
+    <string name="cdw_search_edittext_layout_1">搜索</string>
+    <!-- cdw_userinfo.xml -->
+    <string name="cdw_userinfo_layout_1">联系人详情</string>
+    <string name="cdw_userinfo_layout_2">张三12345</string>
+    <string name="cdw_userinfo_layout_3">关注</string>
+    <string name="cdw_userinfo_layout_4">加为好友</string>
+    <string name="cdw_userinfo_layout_5">私信ID:</string>
+    <string name="cdw_userinfo_layout_6">你好,加我为联系人吧~</string>
+    <string name="cdw_userinfo_layout_7">开始对话</string>
+    <string name="cdw_userinfo_layout_8">性别</string>
+    <string name="cdw_userinfo_layout_9">暂无</string>
+    <string name="cdw_userinfo_layout_10">生日</string>
+    <string name="cdw_userinfo_layout_11">暂无</string>
+    <string name="cdw_userinfo_layout_12">个人主页</string>
+    <!-- chatmessages.xml -->
+    <string name="chatmessages_layout_1">群聊名称:</string>
+    <string name="chatmessages_layout_2">大撒旦撒大苏打撒旦撒旦撒旦撒</string>
+    <string name="chatmessages_layout_3">未命名</string>
+    <string name="chatmessages_layout_4">编辑</string>
+    <string name="chatmessages_layout_5">保存到联系人列表</string>
+    <string name="chatmessages_layout_6">清除聊天记录</string>
+    <string name="chatmessages_layout_7">退出该群</string>
+    <string name="chatmessages_layout_8">移出联系人列表</string>
+    <string name="chatmessages_layout_9">开始聊天</string>
+    <string name="chatmessages_layout_10">获取云端聊天记录</string>
+    <string name="chatmessages_layout_11">群消息提醒</string>
+    <string name="chatmessages_layout_12">对方非私信用户,不可进行群聊</string>
+    <string name="chatmessages_layout_13">正在获取</string>
+    <string name="chatmessages_layout_14">正在清除...</string>
+    <string name="chatmessages_layout_15">清除完毕</string>
+    <string name="chatmessages_layout_16">群聊详情</string>
+    <string name="chatmessages_layout_17">正在同步，请稍后...</string>
+    <string name="chatmessages_layout_18">正在清空，请稍后...</string>
+    <string name="chatmessages_layout_19">同步进行中，请稍后重试</string>
+    <string name="chatmessages_layout_20">云端没有聊天记录，暂时不用尝试同步!</string>
+    <string name="chatmessages_layout_21">清空服务器聊天记录失败，清空本地成功</string>
+    <!-- chat_no_data.xml -->
+    <string name="chat_no_data_layout_1">暂无私信对话,快去联系人列表找人聊天吧</string>
+    <string name="chat_no_data_layout_2">快去联系人列表找人聊天吧</string> 
+    <!-- contact_listview_item.xml -->
+    <string name="contact_listview_item_layout_1">name</string>
+    <string name="contact_listview_item_layout_2">[电脑在线]</string>
+    <!-- contact_radio_button_left.xml -->
+    <!-- contact_radio_button_right.xml -->
+    <!-- d_attention_listview_item.xml -->
+    <string name="d_attention_listview_item_layout_1">name</string>
+    <string name="d_attention_listview_item_layout_2">关注</string>
+    <string name="d_attention_listview_item_layout_3">关注</string>
+    <!-- d_attention_setting.xml -->
+    <string name="d_attention_setting_layout_1">特别关注</string>
+    <string name="d_attention_setting_layout_2">将好友设为特别关注,第一时间获取Ta的状态和照片!</string>
+    <string name="d_attention_setting_layout_3">编辑</string>
+    <string name="d_attention_setting_layout_4">特别关注的好友</string>
+    
+    <!-- fxch_share_and_become_fans.xml -->
+    <string name="fxch_share_and_become_fans_layout_1">在人人网上发一条状态,告诉朋友们你开始使用私信了!</string>
+    <string name="fxch_share_and_become_fans_layout_2">关注私信公共主页</string>
+    <!-- group_member_item.xml -->
+    <string name="group_member_item_layout_1">123123</string>
+    <!-- imageviewer_s.xml -->
+
+
+    <!-- loading_dialog.xml -->
+    <string name="loading_dialog_layout_1">正在加载...</string>
+    <!-- login.xml -->
+    <string name="login_layout_1">人人帐号/手机号</string>
+    <string name="login_layout_2">密码</string>
+    <string name="login_layout_3">登录</string>
+    <string name="login_layout_4">没有帐号?</string>
+    <string name="login_layout_5">点击注册</string>
+    <!-- map_layout.xml -->
+    <!-- multi_chat_forward.xml -->
+    <string name="multi_chat_forward_layout_1">创建新聊天</string>
+    <!-- multi_chat_name_setting.xml -->
+    <string name="multi_chat_name_setting_layout_1">最多输入20个字</string>
+    <!-- new_chat_session_screen_list_item.xml -->
+    <string name="new_chat_session_screen_list_item_layout_1">22+</string>
+    <string name="new_chat_session_screen_list_item_layout_2">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
+    <string name="new_chat_session_screen_list_item_layout_3">content.................................................lllllllllllj.</string>
+    <string name="new_chat_session_screen_list_item_layout_4">time</string>
+    <!-- popview.xml -->
+    <string name="popview_layout_1">查看个人资料</string>
+    <!-- quickaction.xml -->
+    <!-- screen.xml -->
+    <!-- search_edit_text.xml -->
+    <string name="search_edit_text_layout_1">搜索联系人</string>
+    <!-- search_item_layout.xml -->
+    <string name="search_item_layout_layout_1">搜索联系人</string>
+    <!-- selectphoto_preview.xml -->
+    <string name="selectphoto_preview_layout_1">发送</string>
+    <string name="selectphoto_preview_layout_2">取消</string>
+    <!-- select_contacts.xml -->
+    <string name="select_contacts_layout_1">选择一个群组</string>
+    <string name="select_contacts_layout_2">无结果</string>
+    <!-- select_contact_gridview_item.xml -->
+    <!-- select_contact_listview_item.xml -->
+    <string name="select_contact_listview_item_layout_1">name</string>
+    <!-- select_group.xml -->
+    <!-- send_mode.xml -->
+    <string name="send_mode_layout_1">13621213060</string>
+    <string name="send_mode_layout_2">只使用网络数据进行信息的发送</string>
+    <string name="send_mode_layout_3">只使用网络数据进行信息的发送</string>
+    <string name="send_mode_layout_4">让系统帮您选择最佳的发送模式</string>
+    <!-- setting.xml -->
+    <string name="setting_layout_1">听筒模式</string>
+    <string name="setting_layout_2">已开启</string>
+    <string name="setting_layout_3">声音提示</string>
+    <string name="setting_layout_4">已开启</string>
+    <string name="setting_layout_5">震动提示</string>
+    <string name="setting_layout_6">已开启</string>
+    <string name="setting_layout_7">意见反馈</string>
+    <string name="setting_layout_8">关于私信</string>
+    <string name="setting_layout_9">退出登录</string>
+    <!-- takephoto_preview.xml -->
+    <string name="takephoto_preview_layout_1">发送</string>
+    <string name="takephoto_preview_layout_2">取消</string>
+    <!-- titlebar.xml -->
+    <!-- view_image.xml -->
+    <string name="view_image_layout_1">图片</string>
+    <string name="view_image_layout_2">正在加载...</string>
+    <!-- web_main.xml -->
+    <string name="web_main_layout_1"></string>
+    <string name="web_main_layout_2"></string>
+    <!-- y_login_dialog.xml -->
+    <string name="y_login_dialog_layout_1">正在登录...</string>
+    <!-- y_main.xml -->
+    <string name="y_main_layout_1">私信</string>
+    <string name="y_main_layout_2">new</string>
+    <string name="y_main_layout_3">联系人</string>
+    <string name="y_main_layout_4">10</string>
+    <string name="y_main_layout_5">特别关注</string>
+    <string name="y_main_layout_6">new</string>
+    <string name="y_main_layout_7">工具</string>
+    <string name="y_main_layout_8">new</string>
+    <string name="y_main_layout_9">应用</string>
+    <!-- y_supply_user_info_layout.xml -->
+    <string name="y_supply_user_info_layout_layout_1">姓名</string>
+    <string name="y_supply_user_info_layout_layout_2">你的真实姓名(必填)</string>
+    <string name="y_supply_user_info_layout_layout_3">男</string>
+    <string name="y_supply_user_info_layout_layout_4">女</string>
+    <string name="y_supply_user_info_layout_layout_5">生日</string>
+    <string name="y_supply_user_info_layout_layout_6">请输入生日</string>
+    <string name="y_supply_user_info_layout_layout_7">身份</string>
+    <string name="y_supply_user_info_layout_layout_8">请输入身份</string>
+    <!-- y_sync_contact_layout.xml -->
+    <string name="y_sync_contact_layout_layout_1">通过上传通讯录,系统会自动帮你找到通讯录中的私信好友.你的通讯录将以加密形式保存在服务器.</string>
+    <string name="y_sync_contact_layout_layout_2">开始匹配</string>
+    <string name="y_sync_contact_layout_layout_3">正在匹配...</string>
+    <!-- y_welcome_layout.xml -->
+
+    <string name="main_fragment_activity_logout">退出</string>
+
+    <!-- 设置页面 F_SettingScreen  add by xiangchao.fan -->
+    <string name="F_SettingScreen_1">设置</string>
+    <string name="F_SettingScreen_2">个人信息</string>
+    <string name="F_SettingScreen_3">个人资料、帐号、密码设置</string>
+    <string name="F_SettingScreen_4">系统设置</string>
+    <string name="F_SettingScreen_5">声音、震动及推送消息提醒设置</string>
+    <string name="F_SettingScreen_6">人人帐号</string>
+    <string name="F_SettingScreen_7">绑定后可以匹配更多联系人,订阅人人好友状态</string>
+    <string name="F_SettingScreen_8">黑名单</string>
+    <string name="F_SettingScreen_9">屏蔽联系人消息</string>
+    <string name="F_SettingScreen_10">隐私设置</string>
+    <string name="F_SettingScreen_11">加联系人时验证、搜索屏蔽等设置</string>
+    <string name="F_SettingScreen_12">功能介绍</string>
+    <string name="F_SettingScreen_13">关于私信</string>
+    <string name="F_SettingScreen_14">使用反馈</string>
+    <string name="F_SettingScreen_15">评价私信</string>
+    <string name="F_SettingScreen_16">未安装电子市场!</string>
+    <string name="F_SettingScreen_17">正在处理,请稍候...</string>
+    <string name="F_SettingScreen_18">退出登录成功</string>
+    <string name="F_SettingScreen_19">退出登录失败,请稍候重试</string>
+    <string name="F_SettingScreen_20">欢迎您使用在线反馈，很高兴为您服务，请问您有什么问题？</string>
+
+    <!-- 个人资料页面 SelfInfoSettingScreen add by xiangchao.fan -->
+    <string name="SelfInfoSettingScreen_1">个人信息</string>
+    <string name="SelfInfoSettingScreen_2">私信ID:</string>
+    <string name="SelfInfoSettingScreen_3">手机号</string>
+    <string name="SelfInfoSettingScreen_4">绑定手机号可以找回密码</string>
+    <string name="SelfInfoSettingScreen_5">邮箱</string>
+    <string name="SelfInfoSettingScreen_6">绑定邮箱后可以找回密码</string>
+    <string name="SelfInfoSettingScreen_7">修改密码</string>
+    <string name="SelfInfoSettingScreen_8">性别</string>
+    <string name="SelfInfoSettingScreen_9">生日</string>
+    <string name="SelfInfoSettingScreen_10">学校</string>
+    <string name="SelfInfoSettingScreen_11">请选择正确的时间</string>
+
+    <!-- f_popup_sex.xml -->
+    <string name="f_popup_sex_1">取消</string>
+    <string name="f_popup_sex_2">确定</string>
+    <string name="f_popup_sex_3">男</string>
+    <string name="f_popup_sex_4">女</string>
+
+    <!-- f_popup_birthday.xml -->
+    <string name="f_popup_birthday_1">取消</string>
+    <string name="f_popup_birthday_2">确定</string>
+
+    <!-- 修改密码页面 ChangePwdScreen add by xiangchao.fan -->
+    <string name="ChangePwdScreen_1">修改密码</string>
+    <string name="ChangePwdScreen_2">密码格式错误</string>
+    <string name="ChangePwdScreen_3">当前密码错误</string>
+    <string name="ChangePwdScreen_4">密码输入不一致</string>
+    <string name="ChangePwdScreen_5">密码修改成功</string>
+    <string name="ChangePwdScreen_7">请输入6-20位数字或英文字母</string>
+
+    <!-- f_change_pwd.xml -->
+    <string name="f_change_pwd_1">请输入当前密码</string>
+    <string name="f_change_pwd_2">输入新密码</string>
+    <string name="f_change_pwd_3">再次输入密码</string>
+    <string name="f_change_pwd_4">确定</string>
+    <string name="f_change_pwd_5">请稍候...</string>
+    <string name="f_change_pwd_6">密码必须为6-20位,由数字或字母(区分大小写)组成</string>
+
+    <!-- 修改密码页面 SelectCollegeScreen add by xiangchao.fan -->
+    <string name="SelectCollegeScreen_1">选择学校</string>
+    <string name="SelectCollegeScreen_2">搜索</string>
+    <string name="SelectCollegeScreen_3">没有结果</string>
+    <string name="SelectCollegeScreen_4">确定</string>
+    <string name="SelectCollegeScreen_5">取消</string>
+    <string name="SelectCollegeScreen_6">请选择一所学校</string>
+
+    <!-- 系统设置页面 SystemSettingScreen add by xiangchao.fan -->
+    <string name="SystemSettingScreen_1">系统设置</string>
+    <string name="SystemSettingScreen_2">声音提醒</string>
+    <string name="SystemSettingScreen_3">震动提醒</string>
+    <string name="SystemSettingScreen_4">后台提醒</string>
+    <string name="SystemSettingScreen_5">语言</string>
+    <string name="SystemSettingScreen_6">清除缓存</string>
+    <string name="SystemSettingScreen_7">确定清除所有本地聊天记录及图片缓存?</string>
+    <string name="SystemSettingScreen_8">确定</string>
+    <string name="SystemSettingScreen_9">取消</string>
+
+    <!-- f_system_setting.xml -->
+    <string name="f_system_setting_1">运行私信时,你可以选择是否需要声音或震动提示,同时建议开启推送消息提醒功能,以免错过朋友联络你的消息</string>
+
+    <!-- 界面语言页面 LanguageSettingScreen add by xiangchao.fan -->
+    <string name="LanguageSettingScreen_1">界面语言</string>
+    <string name="LanguageSettingScreen_2">简体中文</string>
+    <string name="LanguageSettingScreen_3">繁體中文</string>
+    <string name="LanguageSettingScreen_4">English</string>
+    <string name="LanguageSettingScreen_5">确定更改显示语言?</string>
+    <string name="LanguageSettingScreen_6">更改语言成功</string>
+
+    <!-- 绑定人人帐号页面 BindRenrenAccountScreen add by xiangchao.fan -->
+    <string name="BindRenrenAccountScreen_1">人人帐号</string>
+    <string name="BindRenrenAccountScreen_2">college</string>
+    <string name="BindRenrenAccountScreen_3">解除绑定后您将无法绑定新增联系人,确认解除绑定?</string>
+    <string name="BindRenrenAccount_null">帐号不能为空</string>
+    <string name="BindRenrenAccount_psw_null">密码不能为空</string>
+    <string name="BindRenrenAccount_dialog_title">确定要解除绑定人人帐号?</string>
+    <string name="BindRenrenAccount_dialog_confirm">确定</string>
+    <string name="BindRenrenAccount_dialog_cancel">取消</string>
+
+    <!-- f_bind_renren_account.xml -->
+    <string name="f_bind_renren_account_1">当前人人帐号</string>
+    <string name="f_bind_renren_account_2">解除绑定</string>
+    <string name="f_bind_renren_account_3">绑定人人帐号后可以匹配到更多联系人并获得新增联系人通知</string>
+    <string name="f_bind_renren_account_4">手机号/邮箱/帐号</string>
+    <string name="f_bind_renren_account_5">密码</string>
+    <string name="f_bind_renren_account_6">绑定人人帐号</string>
+    <string name="f_bind_renren_unbind_success">解绑成功</string>
+    <string name="f_bind_renren_unbind_fail">解绑失败</string>
+    <string name="f_bind_renren_bind_success">绑定成功</string>
+    <string name="f_bind_renren_bind_fail">绑定失败</string>
+    <string name="f_bind_renren_dialog_binding">正在绑定</string>
+    <string name="f_bind_renren_dialog_unbinding">正在取消绑定</string>
+
+    <!-- 黑名单页面 BlacklistScreen add by xiangchao.fan -->
+    <string name="BlacklistScreen_1">黑名单</string>
+    <string name="BlacklistScreen_2">搜索</string>
+    <string name="BlacklistScreen_3">暂无黑名单</string>
+
+    <!-- 隐私设置页面 PrivateSettingScreen add by xiangchao.fan -->
+    <string name="PrivateSettingScreen_1">隐私设置</string>
+    <string name="PrivateSettingScreen_2">加我为联系人时需要验证</string>
+    <string name="PrivateSettingScreen_3">通过私信ID查找到我</string>
+    <string name="PrivateSettingScreen_4">通过手机号查找到我</string>
+    <string name="PrivateSettingScreen_5">通过姓名查找到我</string>
+    <string name="PrivateSettingScreen_6">正在加载...</string>
+
+    <!-- f_private_setting.xml -->
+    <string name="f_private_setting_1">开启后对方加你为联系人时需要经过验证</string>
+    <string name="f_private_setting_2">开启后任何人都可以通过以上3种方式搜索到你</string>
+
+    <!-- 意见反馈页面 UserFeedbackScreen add by xiangchao.fan -->
+    <string name="UserFeedbackScreen_1">意见反馈</string>
+
+    <!-- f_user_feedback.xml -->
+    <string name="f_user_feedback_1">请输入您要反馈的意见或问题</string>
+    <string name="f_user_feedback_2">发送</string>
+
+    <!-- f_setting_item -->
+    <string name="f_setting_item_1">已开启</string>
+    <string name="f_setting_item_2">已关闭</string>
+    <string name="sex_male">男</string>
+    <string name="sex_female">女</string>
+
+    <!-- PhotoUploadActivity -->
+    <string name="PhotoUploadActivity_1">正在上传头像,请稍候...</string>
+    <string name="PhotoUploadActivity_2">上传成功</string>
+    <string name="PhotoUploadActivity_3">上传失败</string>
+    <string name="PhotoUploadActivity_4">取消</string>
+    <string name="PhotoUploadActivity_5">使用</string>
+    <string name="PhotoUploadActivity_6">修改头像</string>
+    <string name="PhotoUploadActivity_7">图片过小，请重新选择图片</string>
+    <string name="PhotoUploadActivity_8">长度以上的图片!</string>
+    <string name="PhotoUploadActivity_9">异常!</string>
+     <!-- INPUTBAR -->
+    <string name="InputBar_Hit_1">输入聊天内容</string>
+    <string name="InputBar_Hit_2">请输入回复内容</string>
+    <!-- f_photo_upload -->
+    <string name="f_photo_upload_1">头像</string>
+
+    <string name="login_error_title">登录异常</string>
+    <string formatted="false" name="login_error_msg">你的私信帐号已于%s在其他地方登录,请确认帐号安全.</string>
+    
+    <!-- SettingDataManager -->
+    <string name="SettingDataManager_1">拍照上传</string>
+    <string name="SettingDataManager_2">本地上传</string>
+    <string name="SettingDataManager_3">修改头像</string>
+    
+ 	<!-- 下拉刷新 -->
+    <string name="pull_to_refresh_pull_label">下拉可以刷新</string>
+    <string name="pull_to_refresh_release_label">松开即可刷新</string>
+    <string name="pull_to_refresh_refreshing_label">正在刷新... </string>
+    <string name="pull_to_refresh_ok_label">刷新成功</string>
+    <string name="pull_to_refresh_last_update_time">最后更新</string>
+	<!-- 下拉刷新  时间格式 -->	
+    <string formatted="false" name="pull_to_refresh_format_1">%d分%d秒前</string>
+    <string formatted="false" name="pull_to_refresh_format_2">%d分钟前</string>
+    <string formatted="false" name="pull_to_refresh_format_3">%d秒前</string>
+    <string name="pull_to_refresh_format_4">刚刚刷新</string>
+    <string name="new_pull_update_header_layout_1">最后更新： 3分钟前</string>
+    
+</resources>

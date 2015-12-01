@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="HEADPHOTO_SIZE">50dip</dimen>
+	
+	<!-- account -->
+	<dimen name="ykn_common_height_edittext">46dip</dimen>
+    <dimen name="ykn_common_height_button">46dip</dimen>
+    <dimen name="ykn_common_vertical">16dip</dimen>
+    <dimen name="ykn_common_horizontal">10dip</dimen>
+    
+    <dimen name="ykn_common_textsize_edittext">18sp</dimen>
+    <dimen name="ykn_common_textsize_button">18sp</dimen>
+    
+    <!-- add by xiangchao.fan -->
+    <dimen name="setting_layout_with_head">90dip</dimen>
+    <dimen name="setting_layout_big">66dip</dimen>
+    <dimen name="setting_layout">44dip</dimen>
+    
+    <dimen name="search_layout_left">10dip</dimen>
+    <dimen name="search_layout_top">6dip</dimen>
+    <dimen name="search_layout_right_general">10dip</dimen> 
+    <dimen name="search_layout_right_special">26dip</dimen>
+    <dimen name="search_layout_bottom">6dip</dimen>
+    <dimen name="search_edittext_padding">38dip</dimen>
+    
+    <dimen name="FLIPPER_RIGHT_OFFSET">274dip</dimen>
+    <dimen name="FLIPPER_LEFT_OFFSET">60dip</dimen>
+    <dimen name="flipper_head_height">48dp</dimen>
+    <dimen name="flipper_head_button_width">54dp</dimen>
+    <dimen name="flipper_head_button_line_height">24dip</dimen>
+    <dimen name="flipper_head_text_size">16sp</dimen>
+
+    <dimen name="flipper_head_pop_up_menu_item_height">40dp</dimen>
+    <dimen name="flipper_head_pop_up_menu_item_width">160dp</dimen>
+    <dimen name="flipper_head_pop_up_menu_width">160dp</dimen>
+    <dimen name="activity_bottom_height">48dp</dimen>
+    
+    <!-- add by xiangchao.fan 查看大图按钮大小与边界 -->
+	<dimen name="imageview_title_button_width">74dip</dimen>
+	<dimen name="imageview_title_button_height">34dip</dimen>
+	<dimen name="imageview_title_button_margin">10dip</dimen>
+	
+</resources>

@@ -1,0 +1,464 @@
+package com.renren.mobile.chat.base.util;
+
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.base.GlobalValue;
+import com.renren.mobile.chat.common.TextualUtil;
+
+import java.util.List;
+
+public class SystemUtil {
+
+    public static final String  TAG    = "SYSTEMUTIL";
+    public static final boolean mDebug = true;
+
+    /**
+     * 测试用toast
+     * *
+     */
+    public static void toastTest(final String msg) {
+        if (!mDebug) {
+            return;
+        }
+        RenrenChatApplication.sHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                Toast.makeText(
+                        RenrenChatApplication.mContext,
+                        msg,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * 测试用Log
+     * *
+     */
+    public static void log(String logName, String logMessage) {
+        if (!mDebug) {
+            return;
+        }
+        Log.v(logName, logMessage);
+    }
+
+
+//	public static void toast(final Context context,final String msg){
+//		RenrenChatApplication.sHandler.post(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				Toast.makeText(
+//						context, 
+//						msg, 
+//						Toast.LENGTH_LONG).show();
+//			}
+//		});
+//		
+//	}
+
+    public static void toast(final String msg) {
+        RenrenChatApplication.sHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+            	if(!TextUtils.isEmpty(msg)){
+            		Toast.makeText(
+                            RenrenChatApplication.mContext,
+                            msg,
+                            Toast.LENGTH_SHORT).show();
+            	}
+            }
+        });
+    }
+
+    public static void toast(final String msg, boolean isShow) {
+        if (isShow) {
+            RenrenChatApplication.sHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                	if(!TextUtils.isEmpty(msg)){
+                		Toast.makeText(
+                                RenrenChatApplication.mContext,
+                                msg,
+                                Toast.LENGTH_SHORT).show();
+                	}
+                }
+            });
+        }
+    }
+
+    public static void toast(final int msgId) {
+        toast(msgId, true);
+    }
+
+    public static void toast(final int msgId, boolean isShow) {
+        if (isShow) {
+            RenrenChatApplication.sHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                	if(!TextUtils.isEmpty(GlobalValue.getCurrentActivity().getResources().getText(msgId))){
+                		if (GlobalValue.getCurrentActivity() != null) {
+                            Toast.makeText(
+                                    GlobalValue.getCurrentActivity(),
+                                    GlobalValue.getCurrentActivity().getResources().getText(msgId),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RenrenChatApplication.mContext,
+                                    RenrenChatApplication.mContext.getResources().getText(msgId),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                	}
+                    
+                }
+            });
+        }
+    }
+
+    public static void waitTime(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    // kaining.yang
+    public static void logykn(String logMessage) {
+        Log.d("sunnyykn", logMessage);
+    }
+
+    // kaining.yang
+    public static void logykn(String tag, String logMessage) {
+        Log.d("sunnyykn", tag + ":" + logMessage);
+    }
+
+    public static void log(String logMessage) {
+        Log.v("cdw", logMessage);
+    }
+
+    public static void logerror(String logMessage) {
+        Log.v("cdwerror", logMessage);
+    }
+
+    public static void log(Object logMessage) {
+        Log.v("systemUtil", "" + logMessage);
+    }
+
+
+    public static void exception(String logName, Exception e, String tagName) {
+        if (tagName == null) {
+            return;
+        }
+        StackTraceElement[] elements = e.getStackTrace();
+        for (StackTraceElement ele : elements) {
+            if (ele.getClassName().equals(tagName)) {
+                error(logName, tagName + "的" + ele.getMethodName() + "()方法中的" + ele.getLineNumber() + "行异常:" + e);
+            }
+        }
+    }
+
+
+    public static void error(String logName, String logMessage) {
+        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+        StackTraceElement des = null;
+        for (StackTraceElement e : stacks) {
+            des = e;
+            String className = e.getClassName();
+            if (
+                    !className.contains("dalvik.system.VMStack")
+                            && !className.contains("java.lang.Thread")
+                            && !className.contains("java.lang.Class")
+                            && !className.contains("android.app.Instrumentation")
+                            && !className.contains("com.renren.mobile.chat.base.util.SystemUtil")) {
+                break;
+            }
+        }
+        String pre = "";
+        if (des != null) {
+            int index = des.getClassName().lastIndexOf(".");
+            String className = des.getClassName();
+            if (index > 0) {
+                className = className.substring(index);
+            }
+//			if(str.length>1){
+            pre += className + "#" + des.getMethodName() + "()\r\n";
+//			}
+            Log.v(logName, "[Method]:" + pre);
+        }
+
+        Log.v(logName, "&&&E:" + logMessage);
+    }
+
+    public static void blue(String logName, String logMessage) {
+        log(logName, logMessage);
+    }
+
+
+    public static String getProcessTime(long preTime) {
+        return "" + (System.currentTimeMillis() - preTime);
+    }
+
+    public static String printStackElements() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StringBuilder builder = new StringBuilder();
+        builder.append("堆栈为:");
+        for (StackTraceElement e : elements) {
+            builder.append(e.getClassName() + ":" + e.getMethodName() + "():" + e.getLineNumber() + "\r\n");
+        }
+        builder.append("--------------------------------------------------");
+        return builder.toString();
+    }
+
+    public static String printStackElements(int index) {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        StringBuilder builder = new StringBuilder();
+        builder.append("堆栈为:");
+        int l = 0;
+        for (StackTraceElement e : elements) {
+            if (l > 2) {
+                builder.append(e.getClassName() + ":" + e.getMethodName() + "():" + e.getLineNumber() + "\r\n");
+                if (l > index) {
+                    break;
+                }
+            }
+            l++;
+        }
+        builder.append("--------------------------------------------------");
+        return builder.toString();
+    }
+
+    public static String printStackElements(StackTraceElement[] elements) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("堆栈为:");
+        for (StackTraceElement e : elements) {
+            builder.append(e.getClassName() + ":" + e.getMethodName() + "():" + e.getLineNumber() + "\r\n");
+        }
+        builder.append("--------------------------------------------------");
+        return builder.toString();
+    }
+
+    private static long time = 0l;
+
+    public static void beginTime() {
+        time = System.currentTimeMillis();
+    }
+
+    public static void processTime(Object index) {
+        SystemUtil.log("time", "process " + index + " :" + (System.currentTimeMillis() - time));
+        time = System.currentTimeMillis();
+    }
+
+
+    /**
+     * Log
+     * *
+     */
+    public static void f_log(String logMessage) {
+        if (!mDebug) {
+            return;
+        }
+        Log.v("fxch", logMessage);
+    }
+
+    public static final String CFTAG = "cf";
+    // public   final static boolean DEBUG=true;
+    //  public   final boolean DEBUG=false;
+    // public static final byte MAS =1;
+    // public static final byte MCS =2;
+    // public static  byte TEST =MAS;
+
+    public static void logd(String str) {
+        if (mDebug) {
+            Log.i(CFTAG, getTAG() + "---" + str);
+        }
+    }
+
+    public static void errord(String str) {
+        if (mDebug) {
+            Log.e(CFTAG, getTAG() + "---" + str);
+        }
+    }
+
+    public static void mark() {
+        if (mDebug) {
+            Log.w(CFTAG, getTAG());
+        }
+    }
+
+    public static void mark(String str) {
+        if (mDebug) {
+            Log.w(CFTAG, getTAG() + "---" + str);
+        }
+    }
+
+    public static void traces() {
+        if (mDebug) {
+            // StackTraceElement stack[] = (new Throwable()).getStackTrace();
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[3];
+                sb.append(ste.getClassName() + "." + ste.getMethodName() + "#line=" + ste.getLineNumber() + "的调用：\n");
+                for (int i = 4; i < stacks.length && i < 15; i++) {
+                    ste = stacks[i];
+                    sb.append((i - 4) + "--" + ste.getClassName() + "." + ste.getMethodName() + "(...)#line:" +
+                            ste.getLineNumber() + "\n");
+                }
+            }
+            Log.w(CFTAG, getTAG() + "--" + sb.toString());
+        }
+
+    }
+
+
+    public static String getTAG() {
+        // XXX this not work with proguard, maybe we cannot get the line number with a proguarded jar file.
+        // I add a try/catch as a quick fixing.
+        try {
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[4];
+                sb.append(ste.getFileName().subSequence(0, ste.getFileName().length() - 5) + "." + ste.getMethodName() +
+                        "#" + ste.getLineNumber());
+            }
+            return sb.toString();
+        } catch (NullPointerException e) {
+            return "PROGUARDED";
+        }
+    }
+
+    public static void log(String str, byte[] bytes) {
+        if (mDebug) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(str).append('=');
+            sb.append('[');
+            if (bytes != null) {
+                for (int i = 0; i < bytes.length; i++) {
+                    sb.append(Integer.toHexString(bytes[i]));
+                    if (i != bytes.length - 1) {
+                        sb.append(',');
+                    }
+                }
+            }
+            sb.append(']');
+            Log.i("mylog", getTAG() + "---" + sb.toString());
+        }
+    }
+
+
+    public static void log(String str, short[] shorts) {
+        if (mDebug) {
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[3];
+                sb.append(ste.getFileName() + "." + ste.getMethodName() + "#" + ste.getLineNumber());
+            }
+            String tmpTAG = sb.toString();
+            sb = new StringBuilder();
+            sb.append(str).append('=');
+            sb.append('[');
+            if (shorts != null) {
+                for (int i = 0; i < shorts.length; i++) {
+                    // sb.append(Integer.toHexString(shorts[i]));
+                    sb.append(shorts[i]);
+                    if (i != shorts.length - 1) {
+                        sb.append(',');
+                    }
+                }
+            }
+            sb.append(']');
+            Log.i("mylog", tmpTAG + "---" + sb.toString());
+        }
+    }
+
+    public static void log(String str, int[] ints) {
+        if (mDebug) {
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[3];
+                sb.append(ste.getFileName() + "." + ste.getMethodName() + "#" + ste.getLineNumber());
+            }
+            String tmpTAG = sb.toString();
+            sb = new StringBuilder();
+            sb.append(str).append('=');
+            sb.append('[');
+            if (ints != null) {
+                for (int i = 0; i < ints.length; i++) {
+                    // sb.append(Integer.toHexString(shorts[i]));
+                    sb.append(ints[i]);
+                    if (i != ints.length - 1) {
+                        sb.append(',');
+                    }
+                }
+            }
+            sb.append(']');
+            Log.i("mylog", tmpTAG + "---" + sb.toString());
+        }
+    }
+
+    public static void log(String str, String[] strary) {
+        if (mDebug) {
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[3];
+                sb.append(ste.getFileName() + "." + ste.getMethodName() + "#" + ste.getLineNumber());
+            }
+            String tmpTAG = sb.toString();
+            sb = new StringBuilder();
+            sb.append(str).append('=');
+            sb.append('[');
+            if (str != null) {
+                for (int i = 0; i < strary.length; i++) {
+                    // sb.append(Integer.toHexString(shorts[i]));
+                    sb.append(strary[i]);
+                    if (i != strary.length - 1) {
+                        sb.append(',');
+                    }
+                }
+            }
+            sb.append(']');
+            Log.i("mylog", tmpTAG + "---" + sb.toString());
+        }
+    }
+
+    public static void log(String str, List list) {
+        if (mDebug) {
+            StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
+            StringBuilder sb = new StringBuilder();
+            if (stacks != null) {
+                StackTraceElement ste = stacks[3];
+                sb.append(ste.getFileName() + "." + ste.getMethodName() + "#" + ste.getLineNumber());
+            }
+            String tmpTAG = sb.toString();
+            sb = new StringBuilder();
+            sb.append(str).append('=');
+            sb.append('[');
+            if (list != null) {
+                int size = list.size();
+                for (int i = 0; i < size; i++) {
+                    sb.append(list.get(i).toString());
+                    if (i != size - 1) {
+                        sb.append(',');
+                    }
+                }
+            }
+            sb.append(']');
+            Log.i("mylog", tmpTAG + "---" + sb.toString());
+        }
+    }
+
+
+}

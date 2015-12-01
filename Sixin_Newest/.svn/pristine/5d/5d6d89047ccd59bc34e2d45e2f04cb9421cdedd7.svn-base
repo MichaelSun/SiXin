@@ -1,0 +1,221 @@
+package com.renren.mobile.chat.ui.groupchat;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.core.util.SystemService;
+import com.core.util.ViewMapUtil;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.base.views.NotSynImageView.DownloadImageAbleListener;
+import com.renren.mobile.chat.ui.contact.C_ContactsData;
+import com.renren.mobile.chat.ui.contact.C_ContactsItemHolder;
+import com.renren.mobile.chat.ui.contact.ContactModel;
+
+
+/**
+ * 
+ * @author rubin.dong@renren-inc.com
+ * @date 
+ * 选择联系人Adapter
+ *
+ */
+public class D_SelectContactAdapter extends BaseAdapter implements DownloadImageAbleListener{
+
+	private int mDataType = -1;
+	private Context context;
+    private boolean mAllContact = false;
+	C_ContactsItemHolder holder = null;
+	private boolean isScrolling; 
+	private boolean isSelect;
+	//private int dip58Topx = 0;
+
+	List<ContactModel> list = new ArrayList<ContactModel>();
+	List<ContactModel> mDataList = new ArrayList<ContactModel>();
+	
+
+	
+	public D_SelectContactAdapter(int dataType,Context context, boolean allContact){
+		mDataType = dataType;
+        mAllContact = allContact;
+		this.context = context;
+		//dip58Topx=(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,58, context.getResources().getDisplayMetrics());
+		
+	}
+	
+	@Override
+	public int getCount() {
+		return mDataList.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return mDataList.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+	
+	public void setData(List<ContactModel> models){
+		list = models;
+	}
+	
+	public void setDataList(List<ContactModel> models,boolean isUpdate){
+		Log.v("aaab", "models = " + models.size());
+		this.mDataList.clear();
+		this.mDataList.addAll(models);
+		try {
+			if(list.size()>0){
+				for (ContactModel contactModel : list) {
+					int size = this.mDataList.size();
+					for(int i=0;i<size;i++){
+						if(this.mDataList.get(i).mUserId == contactModel.mUserId){
+							this.mDataList.remove(i);
+							break;
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+		if(isUpdate){
+			update(this.mDataList);
+		}
+		notifyDataSetChanged();  
+	}
+	
+	public void update(List<ContactModel> models){
+		C_ContactsData.getInstance().updateIndex(models);
+	}
+
+	public List<ContactModel> getDataList(){
+		return mDataList;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		
+		ContactModel model = mDataList.get(position);
+		if(model!=null){
+			if(convertView==null || convertView.getTag()==null){
+				holder = new C_ContactsItemHolder();
+				convertView = SystemService.sInflaterManager.inflate(R.layout.d_select_contact_listview_item, null);
+				ViewMapUtil.getUtil().viewMapping(holder, convertView);
+				convertView.setTag(holder);
+			}
+			holder = (C_ContactsItemHolder)convertView.getTag();
+			this.warp(model, holder,position);
+			setItemHeadImg(holder,model);
+			
+			if(model.mSelected){
+				holder.selectBtn.setSelected(true);
+			}else{
+				holder.selectBtn.setSelected(false);
+			}
+
+			return convertView;
+		}
+		return new TextView(RenrenChatApplication.mContext);
+	}
+	private void warp(ContactModel model, C_ContactsItemHolder holder,int position){
+		
+		if(mDataType == C_ContactsData.TYPE.SIXIN_CONTACTS
+                || (mDataType == C_ContactsData.TYPE.FILTER_CONTACTS && mAllContact)){
+			this.showAlpheBar(model.mIsShowAlephLabel_Choose, holder, model.mAlephString);
+//			ContactModel nextModel = C_ContactsData.getInstance().getItem(mDataType, position+1);
+			ContactModel nextModel = null;
+//			List<ContactModel> contactModels = C_ContactsData.getInstance().getFilterContacts(mDataType, list);
+//			if (position + 1 < contactModels.size()) {
+//				nextModel  = contactModels.get(position+1);
+//			}
+			if(position+1<getCount()){
+				nextModel = mDataList.get(position+1);
+			}
+			
+			if(nextModel!=null && nextModel.mIsShowAlephLabel_Choose && nextModel.mAlephString!=null ){
+				holder.mDivider.setVisibility(View.GONE);
+			}else{
+				holder.mDivider.setVisibility(View.VISIBLE);
+			}
+//            if(position + 1 == contactModels.size()) {
+//                holder.mDivider.setVisibility(View.GONE);
+//            }
+		}
+		
+		if(mDataType == C_ContactsData.TYPE.SEARCH_CONTACTS || mDataType == C_ContactsData.TYPE.COMMON_CONTACTS
+                || (mDataType == C_ContactsData.TYPE.FILTER_CONTACTS && !mAllContact)){
+			this.showAlpheBar(false, holder, model.mAlephString);
+			holder.mDivider.setVisibility(View.VISIBLE);
+		}
+		if(model.mAlephString != null){
+			holder.mShadowAlpheBar.setText(model.mAlephString.toUpperCase());
+			//holder.mShadowAlpheBar.setTextViewLength(dip58Topx);
+		}
+		
+		if(mDataType == C_ContactsData.TYPE.SEARCH_CONTACTS){
+			holder.mUserNameView.setText(model.mContactName);
+		}else{
+			holder.mUserNameView.setText(model.mContactName);
+		}
+
+        //是否在黑名单里
+        if(model.isBlacklist(model.mRelation)) {
+            holder.mIsInBlackListView.setVisibility(View.VISIBLE);
+        }else {
+            holder.mIsInBlackListView.setVisibility(View.GONE);
+        }
+
+	}
+	private void showAlpheBar(boolean flag,C_ContactsItemHolder holder,String text){
+		if(flag ){
+			if(text != null){
+				holder.mAlpheBar.setText(text.toUpperCase());
+			}
+			//holder.mAlpheBar.setTextViewLength(dip58Topx);
+			holder.mAlpheBar.setVisibility(View.VISIBLE);
+		}else{
+			holder.mAlpheBar.setVisibility(View.GONE);
+		}
+	}
+	
+	/**
+	 * 设置item的头像
+	 * */
+	private void setItemHeadImg(C_ContactsItemHolder viewHolder, ContactModel contactModel) {
+		String headUrl = contactModel.mHeadUrl;
+		viewHolder.mHeadImage.clear();
+		viewHolder.mHeadImage.addUrl(headUrl);
+		viewHolder.mHeadImage.setDownloadAbleListener(this);
+	}
+	
+	public void setScrollState(boolean scrollState){
+		isScrolling = scrollState;
+		if(!scrollState){
+			this.notifyDataSetChanged();
+		}
+	}
+	
+	public void setSelectState(boolean selectState){
+		isSelect = selectState;
+		if(!isSelect){
+			this.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public boolean enable() {
+		return !isScrolling;
+	}
+
+}

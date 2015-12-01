@@ -1,0 +1,230 @@
+package com.renren.mobile.chat.base;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import plugin.database.Plugin_DB;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.PowerManager;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
+
+import com.common.manager.LoginManager;
+import com.core.util.SystemService;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.database.ChatDB;
+import com.renren.mobile.chat.util.C_ChatListAdapter;
+
+/**
+ * @author dingwei.chen
+ * 全局量注册器
+ * */
+public final class GlobalValue {
+
+	
+	//当前栈顶的Activity
+	private static Activity sCurrentActivity = null;
+	//栈底Activity
+	private static Activity sRootActivity = null;
+	
+	//全局聊天适配器
+	public static C_ChatListAdapter sChatAdapter = null;
+	//
+	
+	//默认图片
+	public static Bitmap sDefaultBitmap_left = null;
+	public static Bitmap sDefaultBitmap_right = null;
+	//注册当前栈顶Activity
+	public static final void registorCurrentActivity(Activity currentActivity){
+		if(currentActivity!=null){
+			sCurrentActivity = currentActivity;
+		}
+		if(sRootActivity==null){
+			sRootActivity = currentActivity;
+		}
+	}
+	public static final void unRegistorCurrentActivity(Activity currentActivity){
+		if(sCurrentActivity==currentActivity){
+			sCurrentActivity = null;
+		}
+	}
+	
+	//得到当前的Activity
+	public static final Activity getCurrentActivity(){
+		return sCurrentActivity;
+	}
+	//得到根的Activity
+	public static final Activity getRootActivity(){
+		if(sRootActivity==null){
+			sRootActivity = sCurrentActivity;
+		}
+		return sRootActivity;
+	}
+	
+	private static GlobalValue sInstance = new GlobalValue();
+	private GlobalValue(){}
+	public static GlobalValue getInstance(){
+		return sInstance;
+	}
+	public boolean isLockScreen(){
+		PowerManager powerManager = SystemService.sPowerManager;
+		return powerManager.isScreenOn();
+	}
+	
+	/**是否后台运行*/
+	public boolean isRunBackground(){
+		if(this.getCurrentActivity()==null){
+			return true;
+		}
+		ActivityManager manager =SystemService.sActivityManager;
+        List<RunningTaskInfo> list = manager.getRunningTasks(1);
+        return !list.remove(0).baseActivity.getPackageName().equalsIgnoreCase("com.renren.mobile.chat");
+	}
+	
+	public Bitmap getDefualtBitmap(boolean isLeft){
+		if(sDefaultBitmap_left==null){
+			sDefaultBitmap_left = BitmapFactory.decodeResource(RenrenChatApplication.getAppResources(), R.drawable.cdw_chat_listview_item_default_image1);
+		}
+		if(sDefaultBitmap_right==null){
+			sDefaultBitmap_right = BitmapFactory.decodeResource(RenrenChatApplication.getAppResources(), R.drawable.cdw_chat_listview_item_default_image2);
+		}
+		if(isLeft){
+			return sDefaultBitmap_left;
+		}else{
+			return sDefaultBitmap_right;
+		}
+	}
+	
+	public String getUserRootPath(){
+		String userRootDir = 
+				"/sdcard/sixin/"+LoginManager.getInstance().getLoginInfo().mUserId+"/";
+		File dir = new File(userRootDir);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		createNomediaFile();
+		return userRootDir;
+	}
+	private void createNomediaFile() {
+		String nomediaPath = "/sdcard/sixin/.nomedia";
+		File nomedia = new File(nomediaPath);
+		if (!nomedia.exists()) {
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public String getUserAudioPath(long toChatId){
+		String userRootDir = this.getUserRootPath();
+		String audioPath = userRootDir+"Audio/"+toChatId+"/";
+		File dir = new File(audioPath);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		return audioPath;
+	}
+	public String getUserAudioFromOutToLocal(long toChatId){
+		String dir = this.getUserAudioPath(toChatId);
+		String newDir = dir+"out_to_local/";
+		File dirFile = new File(newDir);
+		if(!dirFile.exists()){
+			dirFile.mkdirs();
+		}
+		return newDir;
+	}
+	public String getUserAudioFromLocalToOut(long toChatId){
+		String dir = this.getUserAudioPath(toChatId);
+		String newDir = dir+"local_to_out/";
+		File dirFile = new File(newDir);
+		if(!dirFile.exists()){
+			dirFile.mkdirs();
+		}
+		return newDir;
+	}
+	public String getUserPhotos(long toChatId){
+		String userRootDir = this.getUserRootPath();
+		String photoPath = userRootDir+"Photos/"+toChatId+"/";
+		this.createDir(photoPath);
+		return photoPath;
+	}
+	private void createDir(String dir){
+		File dirFile = new File(dir);
+		if(!dirFile.exists()){
+			dirFile.mkdirs();
+		}
+	}
+	//新鲜事图片路劲
+	public String getFeedPhotosDir(){
+		String newsPath =  getUserRootPath()+"NewsPhotos/";
+		File file = new File(newsPath);
+		if(!file.exists()){
+			file.mkdirs();
+		}
+		return newsPath;
+	}
+	
+	//小图路径
+	public String getUserPhotos_Tiny(long toChatId){
+		String parentDir = getUserPhotos(toChatId);
+		String dir = parentDir+"tiny/";
+		this.createDir(dir);
+		return parentDir;
+	}
+	
+	//中图路径
+	public String getUserPhotos_Main(long toChatId){
+		String parentDir = getUserPhotos(toChatId);
+		String dir = parentDir+"main/";
+		this.createDir(dir);
+		return parentDir;
+	}
+	//大图路径
+	public String getUserPhotos_Large(long toChatId){
+		String parentDir = getUserPhotos(toChatId);
+		String dir = parentDir+"large/";
+		this.createDir(dir);
+		return parentDir;
+	}
+	public String createRecordFileName(long userId){
+		String str = this.getUserAudioFromLocalToOut(userId)+System.currentTimeMillis();
+		return str;
+	}
+	public static boolean sIsChatActivityTop = false;
+	
+	public boolean isChatActivityTop() {
+		return sIsChatActivityTop;
+	}
+	DisplayMetrics mDisplay = null;
+	public DisplayMetrics getDisplayMetrics(){
+		if(mDisplay==null){
+			mDisplay = new DisplayMetrics();
+			WindowManager windowsManager = SystemService.sWindowsManager;
+			windowsManager.getDefaultDisplay().getMetrics(mDisplay);
+		}
+		return mDisplay;
+	}
+	public int getScreenWidth(){
+		return getDisplayMetrics().widthPixels;
+	}
+	public int getScreentHeight(){
+		return getDisplayMetrics().heightPixels;
+	}
+	
+	public int calcFromDip(int number){
+		float f = getDisplayMetrics().density;
+		return (int)(number*f);
+	}
+	
+	
+	
+}

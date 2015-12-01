@@ -1,0 +1,450 @@
+package com.renren.mobile.chat.ui.contact;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.common.manager.LoginManager;
+import com.common.mcs.INetRequest;
+import com.common.mcs.INetResponse;
+import com.common.mcs.McsServiceProvider;
+import com.core.json.JsonObject;
+import com.core.json.JsonValue;
+import com.core.util.SystemService;
+import com.core.util.ViewMapUtil;
+import com.core.util.ViewMapping;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.activity.RenRenChatActivity;
+import com.renren.mobile.chat.base.util.SystemUtil;
+import com.renren.mobile.chat.base.views.NotSynImageView;
+import com.renren.mobile.chat.base.views.NotSynImageView.DownloadImageAbleListener;
+import com.renren.mobile.chat.common.PinyinUtils;
+import com.renren.mobile.chat.common.ResponseError;
+import com.renren.mobile.chat.ui.contact.C_ContactsData.NewContactsDataObserver;
+import com.renren.mobile.chat.ui.contact.utils.ContactResrouceUtils;
+
+public class ContactMessageAdapter extends BaseAdapter implements DownloadImageAbleListener{
+	
+	private class ViewHolder {
+		
+		@ViewMapping(ID=R.id.contact_message_item_type_image)
+		public ImageView contactMessageTypeImage; //类型图标
+		
+		@ViewMapping(ID=R.id.contact_message_item_type_text)
+		public TextView contactMessageTypeText;//类型标题
+		
+		@ViewMapping(ID=R.id.contact_message_item_name)
+		public TextView contactMessageUserName;//姓名
+		
+		@ViewMapping(ID=R.id.contact_message_item_content)
+		public TextView contactMessageContent;//body
+		
+		@ViewMapping(ID=R.id.contact_message_item_operation)
+		public Button contactMessageOperation;//最右边操作按钮
+		
+		@ViewMapping(ID=R.id.contact_message_item_head)
+		public NotSynImageView contactMessageNewImage;
+		
+		@ViewMapping(ID=R.id.contact_message_main)
+		public LinearLayout contactMessageMain;
+		
+	}
+	
+	private boolean isScrolling; 
+	private ProgressDialog dialog;   //正在添加的提示
+	List<ContactMessageModel> mDataList = new ArrayList<ContactMessageModel>();
+	Activity activity;
+	AlertDialog.Builder menu;
+	public ContactMessageAdapter(Activity activity){
+		this.activity = activity;
+		dialog = new ProgressDialog(activity);
+		//dialog.setMessage(activity.getText(R.string.contact_adding));
+		menu = new AlertDialog.Builder(activity);
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return mDataList.size();
+	}
+	
+
+	@Override
+	public ContactMessageModel getItem(int position) {
+		// TODO Auto-generated method stub
+		return mDataList.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return position;
+	}
+	
+	public void notifyData(){
+		mDataList = ContactMessageData.getInstance().getData();
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("size="+mDataList.size());
+		}
+		this.notifyDataSetChanged();
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+//		// TODO Auto-generated method stub
+//		if(convertView == null) {
+//			convertView = (LinearLayout) SystemService.sInflaterManager.inflate(R.layout.contact_message_item, null);
+//		}
+//		return convertView;
+		ContactMessageModel model = mDataList.get(position);
+		if(model!=null){
+			ViewHolder holder = null;
+			if(convertView==null){
+				holder = new ViewHolder();
+				convertView = SystemService.sInflaterManager.inflate(R.layout.contact_message_item, null);
+				ViewMapUtil.getUtil().viewMapping(holder, convertView);
+				convertView.setTag(holder);
+				holder.contactMessageNewImage.setDownloadAbleListener(this);
+			}
+			holder = (ViewHolder)convertView.getTag();
+			if(holder!=null){
+				this.warp(model, holder,position);
+				setItemHeadImg(holder,model);
+				setItemOnclick(holder,model,position);
+			}
+			return convertView;
+		}
+		return null;
+	}
+
+	private void warp(ContactMessageModel model, ViewHolder holder, int position) {
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("type="+model.getType());
+		}
+		switch (model.getType()) {
+		case ContactMessageModel.TYPE_ADD: //A,B通讯录录或sns中互有联系方式   系统默认将它们加为联系人
+			if(SystemUtil.mDebug){
+				SystemUtil.logd("From_type="+model.getFrom_type());
+			}
+			switch (model.getFrom_type()) {
+			case ContactMessageModel.FROM_TYPE_ADDRESS:
+				holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_address);
+				break;
+			case ContactMessageModel.FROM_TYPE_RENREN:
+				holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_renren);
+				break;
+			case ContactMessageModel.FROM_TYPE_FACEBOOK:
+				holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_facebook);
+				break;
+			}
+			//holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_renren);
+			//holder.contactMessageTypeText.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.contact_message_sixin));
+			holder.contactMessageOperation.setBackgroundResource(R.drawable.contact_message_chat);
+			break;
+		case ContactMessageModel.TYPE_RECOMMEND://A 通讯录中有B，但B中没有A， 系统发送相互推荐加为联系人
+			holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_address);
+			///holder.contactMessageTypeText.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.contact_message_address));
+			if(model.getAdded()==ContactMessageModel.ADD_NO){
+				holder.contactMessageOperation.setBackgroundResource(R.drawable.lc_attention_add_btn);
+			}else{
+				holder.contactMessageOperation.setBackgroundResource(R.drawable.contact_message_chat);
+			}
+			break;
+		case ContactMessageModel.TYPE_ADDED_BY_OTHER://A发送加B为联系人，B验证为关，系统向A发送添加的联系人B，并向B发送一个特殊对话
+			break;
+		case ContactMessageModel.TYPE_REQUEST://A发送加B为联系人，但B验证为开，A发送验证请求，系统给B发送好友请求
+			holder.contactMessageTypeImage.setBackgroundResource(R.drawable.contact_message_friend);
+			//holder.contactMessageTypeText.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.contact_message_friend_request));
+			//holder.contactMessageOperation.setBackgroundResource(R.drawable.contact_message_item_add);
+			if(model.getAdded()==ContactMessageModel.ADD_NO){
+				holder.contactMessageOperation.setBackgroundResource(R.drawable.lc_attention_add_btn);
+			}else{
+				holder.contactMessageOperation.setBackgroundResource(R.drawable.contact_message_chat);
+			}
+			break;
+		}
+		holder.contactMessageTypeText.setText(model.getFrom_text());
+		holder.contactMessageUserName.setText(model.getName());
+		holder.contactMessageContent.setText(model.getBody());
+	}
+
+	/**
+	 * 设置item的头像
+	 * */
+	private void setItemHeadImg(ViewHolder viewHolder, ContactMessageModel contactModel) {
+		viewHolder.contactMessageNewImage.clear();
+		viewHolder.contactMessageNewImage.setBackgroundColor(NotSynImageView.GRAY);
+		viewHolder.contactMessageNewImage.addUrl(contactModel.getHead_url());
+	}
+	
+
+	private void setItemOnclick(ViewHolder holder, final ContactMessageModel model,final int position) {
+		holder.contactMessageOperation.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(SystemUtil.mDebug){
+					SystemUtil.logd("点击 type="+model.getType());
+				}
+				ContactModel cm = new ContactModel();
+				cm.setmUserId(model.getGid());
+				cm.setName(model.getName());
+				cm.setmContactName(model.getName());
+				cm.setmHeadUrl(model.getHead_url());
+				cm.setmDomain(model.getDomain());
+				cm.setmRelation(ContactBaseModel.Relationship.CONTACT);
+				cm.setmComplete(ContactModel.COMPLETE_NO);
+				char aleph = PinyinUtils.getAleph(cm.getmContactName());
+				if(aleph == PinyinUtils.default_aleph){
+					aleph=C_LetterBar.CHAR_OTHER;
+				}
+				cm.setAleph(aleph);
+				int nameLength = PinyinUtils.nameLength(cm.getmContactName());
+				cm.initDye(nameLength);
+				ContactResrouceUtils.setPinyinIntoItem(cm, null, null, nameLength);
+				switch (model.getType()) {
+				case ContactMessageModel.TYPE_ADD: //A,B通讯录录或sns中互有联系方式   系统默认将它们加为联系人
+					RenRenChatActivity.show(activity,cm);
+					break;
+				case ContactMessageModel.TYPE_RECOMMEND://A 通讯录中有B，但B中没有A， 系统发送相互推荐加为联系人
+					if(model.getAdded()==ContactMessageModel.ADD_NO){
+						makeFriendRequest(cm,model.getNativeId());
+					}else{
+						RenRenChatActivity.show(activity,cm);
+					}
+					break;
+				case ContactMessageModel.TYPE_ADDED_BY_OTHER://A发送加B为联系人，B验证为关，系统向A发送添加的联系人B，并向B发送一个特殊对话
+					break;
+				case ContactMessageModel.TYPE_REQUEST://A发送加B为联系人，但B验证为开，A发送验证请求，系统给B发送好友请求
+					if(model.getAdded()==ContactMessageModel.ADD_NO){
+						makeFriendRequest(cm,model.getNativeId());
+					}else{
+						RenRenChatActivity.show(activity,cm);
+					}
+					break;
+				}
+			}
+		});
+		
+		holder.contactMessageMain.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				 showMenu(model,position);
+				return true;
+			}
+		});
+		
+		holder.contactMessageMain.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if(SystemUtil.mDebug){
+					SystemUtil.logd("点击 type="+model.getType());
+				}
+				UserInfoActivity.show(activity,model.nativeId);
+			}
+		});
+		
+	}
+	
+	private void showMenu(final ContactMessageModel item, final int position) {
+		String[] content = {activity.getText(R.string.contact_message_del).toString()};
+		menu.setTitle(item.getFrom_text());
+		menu.setItems(content, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ContactMessageData.getInstance().delete(item.getNativeId());
+			}
+		});
+		menu.show();
+	}
+	
+	private void makeFriendRequest(final ContactModel model,final long contactMsgId) {
+		showAlertDialog(R.string.contact_adding);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+                if(SystemUtil.mDebug){
+                	SystemUtil.logd("添加好友="+obj.toJsonString());
+				}
+                RenrenChatApplication.mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.checkError(map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加成功");
+								}
+								SystemUtil.toast(activity.getText(R.string.contact_added).toString());
+								makeFriendSuccess(model,contactMsgId);
+								//notifyDataSetChanged();
+							}
+						}else{ //出错
+							int error_code = (int) map.getNum("error_code");
+							String error_msg = map.getString("error_msg");
+							if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加失败 error_code = "+error_code+"#msg="+error_msg);
+							}
+							if(error_code == UserInfoActivity.ERROR_CODE_VERIFY){//对方验证开  填写验证信息
+								//LayoutInflater inflater = context.getLayoutInflater();
+								LayoutInflater inflater=(LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+								View layout = inflater.inflate(R.layout.contact_add_verify_dialog,(ViewGroup) activity.findViewById(R.id.contact_add_dialog));
+								final EditText et = (EditText)layout.findViewById(R.id.contact_verify_text);
+								String str= activity.getText(R.string.contact_verify_string).toString();
+								String nameString = LoginManager.getInstance().mLoginInfo.mUserName;
+								if(!TextUtils.isEmpty(nameString)){
+									str = str.replace("XXX",nameString);
+									et.setText(str);
+								}else{
+									et.setText("");
+								}
+
+								Builder dialog =new AlertDialog.Builder(activity).setView(layout);
+								dialog.setNegativeButton(activity.getText(R.string.selectphoto_preview_layout_2), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.cancel(); 
+									}
+								});
+								dialog.setPositiveButton(activity.getString(R.string.takephoto_preview_layout_1), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if(TextUtils.isEmpty(et.getText().toString())){
+											SystemUtil.toast(activity.getText(R.string.contact_verify_notnull).toString());
+										}else{
+											SendVerifyMessage(model.getmUserId(),et.getText().toString());	
+										}
+									}
+								});
+								dialog.setCancelable(false);
+								dialog.show();
+							}else{
+								SystemUtil.toast(error_msg);
+							}
+			               
+							
+						}
+					}
+				});
+			}
+
+		};
+        // makeFriendSuccess(model,contactMsgId);
+		McsServiceProvider.getProvider().addContact(response, String.valueOf(model.mUserId), 0,"");
+	}
+	
+	
+//	/**
+//	 * 加为好友成功之后改变界面布局及文案
+//	 * */
+//	private void makeFriendSuccess(ContactModel model) {
+//		Log.v("wyy6", "makeFriendSuccess mRelationshipType = "+model.mRelationshipType);
+//		model.mRelationshipType = model.mRelationshipType|RELATIONSHIP_TYPE.IS_FRIEND;   //进行或操作，表示成为好友
+//		Log.v("wyy6", " mRelationshipType = "+model.mRelationshipType);
+//		this.notifyDataSetChanged();
+//		C_ContactsData.getInstance().addContact(model);
+//	}
+	
+	private void makeFriendSuccess(ContactModel model,long nativeID) {
+		ContactMessageData.getInstance().addSucessd(nativeID);
+		model.mRelation = model.mRelation|ContactBaseModel.Relationship.IS_CONTACT ;
+		C_ContactsData.getInstance().addContact(model);
+		//C_ContactsData.getInstance().refreshAllContacts(null);
+		C_ContactsData.getInstance().notifyNewObserver(NewContactsDataObserver.DATA_STATE_OK,NewContactsDataObserver.TYPE_FIND);
+	}
+	
+	private void SendVerifyMessage(final Long uid,String message) {
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+                if(SystemUtil.mDebug){
+                	SystemUtil.logd("验证信息="+obj.toJsonString());
+				}
+                activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.checkError(map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("发送验证成功");
+								}
+								SystemUtil.toast(R.string.contact_send_ok);
+							}
+						}else{ //出错
+							int error_code = (int) map.getNum("error_code");
+							String error_msg = map.getString("error_msg");
+							if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加失败 error_code = "+error_code+"#msg="+error_msg);
+							}
+							SystemUtil.toast(error_msg);
+						}
+					}
+				});
+			}
+
+		};
+		//SystemUtil.toast("添加成功");
+		//makeFriendSuccess();
+		McsServiceProvider.getProvider().addContact(response, String.valueOf(uid), 1,message);
+	}
+	
+	public void showAlertDialog(int stringId){
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("showAlertDialog");
+		}
+		if(dialog!=null){
+            if(dialog.isShowing()){
+            	dialog.dismiss();
+			}
+			dialog.setMessage(activity.getText(stringId));
+			dialog.show();
+		}
+	}
+	
+	public void closeAlertDialog(){
+//		if(SystemUtil.mDebug){
+//			SystemUtil.logd("closeAlertDialog");
+//		}
+		if(dialog!=null){
+			 if(dialog.isShowing()){
+				 dialog.dismiss();
+			 }
+		}
+	}
+
+	public void setScrollState(boolean scrollState){
+		isScrolling = scrollState;
+		//SystemUtil.logd("isScrolling=="+isScrolling);
+		if(!scrollState){
+			//SystemUtil.logd("setscroolstate notify-------------");
+			this.notifyDataSetChanged();
+		}
+	}
+	
+	@Override
+	public boolean enable() {
+		//SystemUtil.logd("enable=="+(!isScrolling));
+		return !isScrolling;
+	}
+}

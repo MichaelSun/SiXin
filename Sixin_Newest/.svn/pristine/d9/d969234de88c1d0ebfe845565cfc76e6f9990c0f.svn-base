@@ -1,0 +1,403 @@
+package com.renren.mobile.chat.util;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import android.content.ContentValues;
+import android.util.Log;
+
+import com.common.manager.LoginManager;
+import com.common.mcs.INetRequest;
+import com.common.mcs.INetResponse;
+import com.common.mcs.McsServiceProvider;
+import com.common.network.DomainUrl;
+import com.common.utils.Methods;
+import com.core.json.JsonArray;
+import com.core.json.JsonObject;
+import com.core.json.JsonValue;
+import com.data.parser.C_SAXParserHandler;
+import com.data.xmpp.Iq;
+import com.data.xmpp.Message;
+import com.data.xmpp.Presence;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.actions.models.RoomInfoModelWarpper;
+import com.renren.mobile.chat.actions.models.SynHistoryRecordModel;
+import com.renren.mobile.chat.base.model.ChatBaseItem;
+import com.renren.mobile.chat.base.util.SystemUtil;
+import com.renren.mobile.chat.common.ResponseError;
+import com.renren.mobile.chat.dao.ChatHistoryDAO;
+import com.renren.mobile.chat.dao.ChatHistoryDAOObserver;
+import com.renren.mobile.chat.dao.DAOFactoryImpl;
+import com.renren.mobile.chat.dao.SynHistoryRecordDAO;
+import com.renren.mobile.chat.dao.SynHistoryRecordDAOObserver;
+import com.renren.mobile.chat.database.ChatHistory_Column;
+import com.renren.mobile.chat.database.SynHistoryRecord_Column;
+import com.renren.mobile.chat.model.warpper.ChatMessageFactory;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper;
+import com.renren.mobile.chat.newsfeed.NewsFeedFactory;
+import com.renren.mobile.chat.newsfeed.NewsFeedWarpper;
+import com.renren.mobile.chat.ui.contact.C_ContactsData;
+import com.renren.mobile.chat.ui.contact.ContactBaseModel;
+import com.renren.mobile.chat.ui.contact.ContactModel;
+import com.renren.mobile.chat.ui.contact.RoomInfosData;
+
+public class SynHistoryUtil implements ChatHistoryDAOObserver, SynHistoryRecordDAOObserver, C_SAXParserHandler.OnDataParserListener {
+
+    private Map<Long, ArrayList<ChatMessageWarpper>> messagesMap = new HashMap<Long, ArrayList<ChatMessageWarpper>>();
+    private Map<Long, Integer> historyCounts = new HashMap<Long, Integer>();
+    private Map<Long, Integer> countSaveds = new HashMap<Long, Integer>();
+    private List<HistoryUpdateObserver> mObservers = new ArrayList<HistoryUpdateObserver>();
+	private ChatHistoryDAO dao = null;
+    private List<Long> synChatUserIdList = new ArrayList<Long>();
+    private SynHistoryRecordDAO synHistoryRecordDAO;
+    private static SynHistoryUtil sInstance;
+
+    private class SynHistoryResponse implements INetResponse {
+
+        private long mChatId;
+
+        @Override
+        public void response(INetRequest req, JsonValue obj) {
+            Log.v("@@@", "response!!!");
+            if (obj != null && obj instanceof JsonObject) {
+                Log.v("@@@", "obj != null!!!");
+                final JsonObject map = (JsonObject) obj;
+                if (ResponseError.noError(req, map, true)) {
+
+                    Log.v("@@@", "data = "+map.toJsonString());
+                    historyCounts.put(mChatId, (int)map.getNum("count"));
+                    Log.v("@@@", "count = "+historyCounts.get(mChatId));
+                    if(historyCounts.get(mChatId) == 0) {
+                        Log.v("@@@", "count == 0,直接走回调！！！");
+                        notifyObserver(true, mChatId, 0, 0);
+                        return;
+                    }
+                    JsonArray array = map.getJsonArray("history_list");
+                    Log.v("@@@", "array = " + array.toJsonString());
+                    parse(array);
+
+                }else {
+                    Log.v("@@@", "error data = "+map.toJsonString());
+                    notifyObserver(false, mChatId, 0, 0);
+                }
+            }else {
+                Log.v("@@@", "no obj!!!");
+                notifyObserver(false, mChatId, 0, 0);
+            }
+        }
+
+        private void setmChatId(long chatId) {
+            mChatId = chatId;
+        }
+
+    }
+    
+    private SynHistoryUtil() {
+    	dao = DAOFactoryImpl.getInstance().buildDAO(ChatHistoryDAO.class);
+    	dao.registorObserver(this);
+        synHistoryRecordDAO = DAOFactoryImpl.getInstance().buildDAO(SynHistoryRecordDAO.class);
+        synHistoryRecordDAO.registorObserver(this);
+    }
+	
+	public static synchronized SynHistoryUtil getInstance() {
+        if(sInstance == null) {
+            sInstance = new SynHistoryUtil();
+        }
+		return sInstance;
+	}
+	
+	public synchronized void synChatHistory(long toChatUserId, boolean isGroup) {
+        if(!synChatUserIdList.contains(toChatUserId)) {
+        	 Log.v("@@@", " start syn ");
+            synChatUserIdList.add(toChatUserId);
+            SynHistoryResponse response = new SynHistoryResponse();
+            response.setmChatId(toChatUserId);
+            McsServiceProvider.getProvider().getHistoryMessages(isGroup, toChatUserId, response);
+        }else{
+        	SystemUtil.toast("已经在同步");
+        }
+	}
+
+    private void parse(JsonArray array) {
+        JsonValue[] objs = array.getValue();
+        Log.v("wyy1", "objs = "+objs.length);
+        C_SAXParserHandler.Transaction t=C_SAXParserHandler.getInstance().beginTransaction(this);
+		for(JsonValue v : objs) {
+            String xml = v.toString();
+            Log.v("wyy1", "xml = "+xml);
+            C_SAXParserHandler.getInstance().parse(xml,t);
+        }
+        t.commit();
+    }
+	
+	private void saveHistory(long chatId) {
+//		}
+//        Log.v("@@@", "size is:" + messagesMap.get(chatId).size() + " and count is:" + historyCounts.get(chatId));
+		ArrayList<ChatMessageWarpper> list = messagesMap.get(chatId);
+		SystemUtil.log("@@@", "insert size = "+list.size());
+		dao.insertChatMessageList(messagesMap.get(chatId));
+//        Log.v("@@@", "ChatDataHelper.getInstance().saveToTheDatabase");
+	}
+
+	@Override
+	public synchronized void onParserMessageNode(List<Message> list) {
+		// TODO Auto-generated method stub
+        String name = "";
+        String headUrl = "";
+        long chatUserId = 0;
+        Message message = list.get(0);
+        if(message.mTo.contains(DomainUrl.MUC_URL)) {
+            chatUserId = message.getToId();
+            RoomInfoModelWarpper roomInfo = RoomInfosData.getInstance().getRoomInfo(chatUserId);
+            if(roomInfo != null) {
+                name = roomInfo.getName();
+                headUrl = roomInfo.mHeadUrl;
+            }
+        } else if(LoginManager.getInstance().mLoginInfo.mUserId != message.getFromId()){
+            chatUserId = message.getFromId();
+            if(!message.mFrom.contains(DomainUrl.MUC_URL)) {
+                ContactBaseModel model = C_ContactsData.getInstance().getContact(chatUserId, message.getFromDomain());
+                name = message.getFromName();
+                if(model != null) {
+                    headUrl = model.getmHeadUrl();
+                }
+            }
+        } else {
+            chatUserId = message.getToId();
+            ContactBaseModel model = C_ContactsData.getInstance().getContact(chatUserId, message.getToDomain());
+            if(model != null) {
+                headUrl = model.getmHeadUrl();
+                name = model.getName();
+            }
+        }
+        for(Message node : list) {
+            ChatMessageWarpper messageWarpper = ChatMessageFactory.getInstance().obtainMessage(node.mBody.getType());
+            if(node.mType.equals("chat") && !node.mBody.mType.equals("action")) {
+                basicParserSingle(messageWarpper, node, name, headUrl);
+                messageWarpper.swapDataFromXML(node);
+                if(node.isContainFeed()){//解析新鲜事
+                    NewsFeedWarpper item = NewsFeedFactory.getInstance().obtainNewsFeedModel(node);
+                    messageWarpper.setNewsFeedModel(item);
+                }
+            } else if((node.mFrom.contains(DomainUrl.MUC_URL) || node.mTo.contains(DomainUrl.MUC_URL)) && node.mType.equals("groupchat") && node.mBody!=null) {
+                basicParserGroup(messageWarpper, node, name, headUrl);
+                messageWarpper.swapDataFromXML(node);
+                messageWarpper.mIsGroupMessage = ChatBaseItem.MESSAGE_ISGROUP.IS_GROUP;
+                if(node.isContainFeed()){//解析新鲜事
+                    NewsFeedWarpper item = NewsFeedFactory.getInstance().obtainNewsFeedModel(node);
+                    messageWarpper.setNewsFeedModel(item);
+                }
+            }
+            if(chatUserId == 0) {
+            	chatUserId = messageWarpper.mToChatUserId;
+            }
+            if(!messagesMap.containsKey(chatUserId)) {
+                ArrayList<ChatMessageWarpper> messages = new ArrayList<ChatMessageWarpper>();
+                messages.add(messageWarpper);
+                messagesMap.put(chatUserId, messages);
+                countSaveds.put(chatUserId, 0);
+            } else {
+                messagesMap.get(chatUserId).add(messageWarpper);
+            }
+        }
+        ChatDataHelper.getInstance().deleteChatMessageByGroupId(chatUserId);
+
+//        Log.v("@@@", "after add message");
+//        Log.v("@@@", "messages size is:" + messages.size());
+
+
+	}
+
+    @Override
+    public synchronized void onParserPresenceNode(List<Presence> list) {
+
+    }
+
+    @Override
+    public synchronized void onParserIqNode(List<Iq> list) {
+
+    }
+
+    @Override
+	public synchronized void onParserError(String errorMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    private void basicParserGroup(ChatMessageWarpper message, Message m, String toChatUserNmae, String headUrl) {
+        Log.v("@@@", "basicParserGroup------->0");
+        if(LoginManager.getInstance().mLoginInfo.mUserId == m.getFromId()) {
+            Log.v("@@@", "basicParserGroup------->1");
+            message.mLocalUserId = m.getFromId();
+            message.mToChatUserId = m.getToId();
+            message.mComefrom= ChatBaseItem.MESSAGE_COMEFROM.LOCAL_TO_OUT;
+            message.mUserName = toChatUserNmae;
+            message.mGroupId = m.getToId();
+            message.mDomain = m.getToDomain();
+        } else {
+            Log.v("@@@", "basicParserGroup------->2");
+            message.mLocalUserId = m.getToId();
+            message.mToChatUserId = m.getSendId();
+            message.mGroupId = m.getFromId();
+            message.mComefrom= ChatBaseItem.MESSAGE_COMEFROM.OUT_TO_LOCAL;
+            message.mDomain = m.getFromDomain();
+        }
+        if(message.mToChatUserId != message.mGroupId) {
+            Log.v("@@@", "basicParserGroup------->3");
+            ContactBaseModel model = C_ContactsData.getInstance().getContact(message.mToChatUserId, message.mDomain);
+            if(model != null) {
+                Log.v("@@@", "basicParserGroup------->4");
+                message.parseUserInfo(model);
+            }
+            message.mGroupId = m.getFromId();
+        } else {
+            Log.v("@@@", "basicParserGroup------->6");
+            message.mHeadUrl = LoginManager.getInstance().getLoginInfo().mOriginal_Url;
+        }
+        message.mUserName = m.getFromName();
+        Log.v("@@@", "basicParserGroup------->7");
+        message.mMessageKey = m.getMsgKey();
+        message.mVersion = m.mBody.getVersion();
+        message.mMessageReceiveTime = m.getTime();
+        message.mIsGroupMessage = ChatBaseItem.MESSAGE_ISGROUP.IS_GROUP;
+    }
+
+    private void basicPresenceRoom(ChatMessageWarpper message, Message m, String toChatUserNmae) {
+
+    }
+	
+	private void basicParserSingle(ChatMessageWarpper message,Message m, String toChatUserNmae, String headUrl){
+        if(LoginManager.getInstance().mLoginInfo.mUserId == m.getToId()) {
+            message.mLocalUserId = m.getToId();
+            Log.v("wyy1", "mLocalUserId = "+message.mLocalUserId);
+            message.mToChatUserId = m.getFromId();
+            Log.v("wyy1", "mToChatUserId = "+message.mToChatUserId);
+            message.mUserName = m.getFromName();
+            Log.v("wyy1", "mUserName = "+message.mUserName);
+            message.mComefrom= ChatBaseItem.MESSAGE_COMEFROM.OUT_TO_LOCAL;
+            Log.v("wyy1", "mComefrom = "+message.mComefrom);
+            message.mHeadUrl = headUrl;
+            message.mDomain = m.getFromDomain();
+        } else if(LoginManager.getInstance().mLoginInfo.mUserId == m.getFromId()) {
+            message.mLocalUserId = m.getFromId();
+            Log.v("wyy1", "mLocalUserId = "+message.mLocalUserId);
+            message.mToChatUserId = m.getToId();
+            Log.v("wyy1", "mToChatUserId = "+message.mToChatUserId);
+            message.mComefrom= ChatBaseItem.MESSAGE_COMEFROM.LOCAL_TO_OUT;
+            Log.v("wyy1", "mComefrom = "+message.mComefrom);
+            message.mUserName = toChatUserNmae;
+            message.mHeadUrl = LoginManager.getInstance().getLoginInfo().mOriginal_Url;
+            message.mDomain = m.getToDomain();
+        }
+        message.mGroupId = message.mToChatUserId;
+        Log.v("wyy1", "mGroupId = "+message.mGroupId);
+        message.mMessageKey = m.getMsgKey();
+        Log.v("wyy1", "mMessageKey = "+message.mMessageKey);
+        message.mMessageReceiveTime = m.getTime();
+	}
+	
+	public interface HistoryUpdateObserver {
+		public void historyUpdate(boolean isSuccess, long toChatUserId, int count, long updateTime);
+	}
+
+	@Override
+	public synchronized void onInsert(ChatMessageWarpper message) {
+        long chatId = message.mGroupId;
+        if(messagesMap.size() > 0  && messagesMap.containsKey(chatId) && messagesMap.get(chatId).contains(message)) {
+		    countSaveds.put(chatId, countSaveds.get(chatId) + 1);
+            Log.v("@@@", "onInsert countSaveds.put");
+        }
+        if(historyCounts.containsKey(chatId) && countSaveds.containsKey(chatId) &&
+                historyCounts.get(chatId) == countSaveds.get(chatId) && historyCounts.get(chatId) != 0) {
+            SynHistoryRecordModel synHistoryRecordModel = new SynHistoryRecordModel();
+            synHistoryRecordModel.mToChatId = chatId;
+            synHistoryRecordModel.mLastSynTime = System.currentTimeMillis();
+            synHistoryRecordModel.mLocalId = LoginManager.getInstance().mLoginInfo.mUserId;
+            synHistoryRecordDAO.updateSynHitoryRecordInfo(chatId, synHistoryRecordModel);
+            messagesMap.get(chatId).clear();
+            messagesMap.remove(chatId);
+            countSaveds.remove(chatId);
+            Log.v("@@@", "onInsert updateSynHitoryRecordInfo");
+        }
+	}
+
+    public synchronized void registorObserver(HistoryUpdateObserver observer) {
+        if(observer != null && !mObservers.contains(observer)){
+            mObservers.add(observer);
+        }
+    }
+
+    public synchronized void unRegistorObserver(HistoryUpdateObserver observer) {
+        if(observer!=null && mObservers.contains(observer)){
+            mObservers.remove(observer);
+        }
+    }
+
+    public synchronized void notifyObserver(boolean isSuccess, long toChatUserId, int count, long updateTime) {
+        Log.v("@@@", "进入回调 notifyObserver！！！");
+        historyCounts.remove(toChatUserId);
+        synChatUserIdList.remove(toChatUserId);
+        Log.v("@@@", "回调 notifyObserver 清空与该条记录相关的内容！！！");
+        for (HistoryUpdateObserver observer : mObservers) {
+            if (observer != null) {
+                observer.historyUpdate(isSuccess, toChatUserId, count, updateTime);
+            }
+        }
+    }
+
+    @Override
+    public synchronized void onInsert(SynHistoryRecordModel message) {
+        Log.v("@@@", "onInsert SynHistoryRecordModel");
+        long chatId = message.mToChatId;
+        if(synChatUserIdList.contains(chatId)) {
+            Log.v("@@@", "onInsert SynHistoryRecordModel id is:" + chatId);
+            notifyObserver(true, chatId, historyCounts.get(chatId), message.mLastSynTime);
+        }
+    }
+
+    @Override
+	public synchronized void onDelete(String columnName, long _id) {
+        Log.v("@@@", "onDelete" + " id is:" + _id + " columnName is:" + columnName);
+        if(synChatUserIdList.contains(_id) && columnName.equals(ChatHistory_Column.GROUP_ID)) {
+            saveHistory(_id);
+            Log.v("@@@", "saveHistory(_id)");
+        }
+	}
+
+    @Override
+    public synchronized void onUpdate(String column, long _id, ContentValues values) {
+        if(synChatUserIdList.contains(_id) && column.equals(SynHistoryRecord_Column.TO_CHAT_ID)) {
+            notifyObserver(true, _id, historyCounts.get(_id), (Long) values.get(SynHistoryRecord_Column.LAST_SYN_TIME));
+        }
+    }
+
+	@Override
+	public void onInsert(List<ChatMessageWarpper> messages) {
+		int k ;
+		ChatMessageWarpper message;
+		for(k=0;k<messages.size();k++) {
+			message = messages.get(k);
+			long chatId = message.mGroupId;
+		    if(messagesMap.size() > 0  && messagesMap.containsKey(chatId) && messagesMap.get(chatId).contains(message)) {
+			    countSaveds.put(chatId, countSaveds.get(chatId) + 1);
+		        Log.v("@@@", "onInsert countSaveds.put");
+		    }
+		    if(historyCounts.containsKey(chatId) && countSaveds.containsKey(chatId) &&
+		            historyCounts.get(chatId) == countSaveds.get(chatId) && historyCounts.get(chatId) != 0) {
+		        SynHistoryRecordModel synHistoryRecordModel = new SynHistoryRecordModel();
+		        synHistoryRecordModel.mToChatId = chatId;
+		        synHistoryRecordModel.mLastSynTime = System.currentTimeMillis();
+		        synHistoryRecordModel.mLocalId = LoginManager.getInstance().mLoginInfo.mUserId;
+		        synHistoryRecordDAO.updateSynHitoryRecordInfo(chatId, synHistoryRecordModel);
+		        messagesMap.get(chatId).clear();
+		        messagesMap.remove(chatId);
+		        countSaveds.remove(chatId);
+		        Log.v("@@@", "onInsert updateSynHitoryRecordInfo");
+		    }
+		}
+	}
+
+}

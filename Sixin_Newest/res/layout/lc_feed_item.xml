@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/lc_feed_item_bg_color"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="10dip" >
+
+        <com.renren.mobile.chat.base.views.NotSynImageView
+            android:id="@+id/lc_feed_head"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:layout_gravity="center" />
+        <!-- 用户名和时间 -->
+
+        <TextView
+            android:id="@+id/lc_feed_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/lc_feed_head"
+            android:ellipsize="end"
+            android:maxEms="8"
+            android:paddingLeft="10dip"
+            android:singleLine="true"
+            android:text="@string/lc_feed_item_layout_1"
+            android:textColor="@color/Color_A"
+            android:textSize="14sp" />
+        <!-- 时间展示 -->
+
+        <TextView
+            android:id="@+id/lc_feed_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/lc_feed_item_layout_6"
+            android:textColor="@color/Color_B"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <!-- 内容 -->
+
+    <TextView
+        android:id="@+id/lc_feed_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginBottom="10dip"
+        android:text="@string/lc_feed_item_layout_2"
+        android:textColor="@color/Color_A"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:id="@+id/lc_feed_bottom_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="4dip"
+        android:layout_marginRight="4dip"
+        android:layout_marginBottom="8dip">
+
+        <!-- 图片展示(多图) -->
+
+        <LinearLayout
+            android:id="@+id/lc_feed_bottom_double_photo_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <FrameLayout
+                android:id="@+id/lc_feed_photo1_layout"
+                android:layout_width="154dip"
+                android:layout_height="154dip"
+                android:layout_marginRight="4dip"
+                android:layout_weight="1"
+                android:background="@color/Color_K" >
+
+                <ImageView
+                    android:id="@+id/lc_feed_double_img_loading_single"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/lc_feed_loading_small_img" />
+
+                <com.renren.mobile.chat.base.views.NewImageView
+                    android:id="@+id/lc_feed_photo1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop" />
+
+                <!-- 多图第一张图位置展示 -->
+
+                <LinearLayout
+                    android:id="@+id/lc_feed_location_double_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dip"
+                    android:layout_gravity="left|bottom"
+                    android:background="@drawable/lc_feed_photo_location"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/lc_feed_location_double_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="16dip"
+                        android:text="@string/lc_feed_item_layout_5"
+                        android:textColor="@color/Color_C"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+            			android:paddingLeft="4dip"
+                        android:src="@drawable/lc_feed_photo_location_icon" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/lc_feed_photo2_layout"
+                android:layout_width="154dip"
+                android:layout_height="154dip"
+                android:layout_weight="1"
+                android:background="@color/Color_K" >
+
+                <ImageView
+                    android:id="@+id/lc_feed_double_img_loading_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/lc_feed_loading_small_img" />
+
+                <com.renren.mobile.chat.base.views.NewImageView
+                    android:id="@+id/lc_feed_photo2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
+        </LinearLayout>
+        <!-- 单图展示 -->
+
+        <FrameLayout
+            android:id="@+id/lc_feed_bottom_photo_single_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="312dip"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/Color_K"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/lc_feed_single_img_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/lc_feed_loading_img" />
+
+            <com.renren.mobile.chat.base.views.NewImageView
+                android:id="@+id/lc_feed_photo_single"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerCrop" />
+
+            <!-- 单图位置展示 -->
+
+            <LinearLayout
+                android:id="@+id/lc_feed_location_single_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="30dip"
+                android:layout_gravity="left|bottom"
+                android:background="@drawable/lc_feed_photo_location"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/lc_feed_location_single_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="16dip"
+                    android:text="@string/lc_feed_item_layout_5"
+                    android:textColor="@color/Color_C"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+            		android:paddingLeft="4dip"
+                    android:src="@drawable/lc_feed_photo_location_icon" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- 转载展示 -->
+
+        <LinearLayout
+            android:id="@+id/lc_feed_bottom_reblog_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@drawable/lc_feed_reblog_line" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/lc_feed_reblog_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dip"
+                    android:text="@string/lc_feed_item_layout_3"
+                    android:textColor="#838383"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/lc_feed_reblog_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="1.5dip"
+                    android:text="@string/lc_feed_item_layout_4"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- 位置展示 -->
+
+    <LinearLayout
+        android:id="@+id/lc_feed_location_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dip"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/lc_feed_location_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="20dip"
+            android:text="@string/lc_feed_item_layout_5"
+            android:textColor="#838383"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="4dip"
+            android:src="@drawable/lc_feed_location_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="34dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <!-- 转发按钮 -->
+
+        <LinearLayout
+            android:id="@+id/lc_feed_item_bottom_reblog_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:duplicateParentState="false"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:src="@drawable/lc_feed_reblog_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="12dip"
+                android:duplicateParentState="true"
+                android:text="@string/lc_feed_item_reblog"
+                android:textColor="@color/Color_B"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- 回复按钮 -->
+
+        <LinearLayout
+            android:id="@+id/lc_feed_item_bottom_reply_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:duplicateParentState="false"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:src="@drawable/lc_feed_reply_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="16dip"
+                android:text="@string/lc_feed_item_reply"
+                android:textColor="@color/Color_B" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        >
+    </LinearLayout>
+    
+    <FrameLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        
+        <View 
+            android:layout_width="fill_parent"
+            android:layout_height="6dip"
+            android:background="@drawable/title_shadow"
+            />
+    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:paddingLeft="@dimen/ykn_common_horizontal"
+		    android:paddingRight="@dimen/ykn_common_horizontal"
+		    android:orientation="vertical" >
+		    <TextView 
+		        android:id="@+id/tv_guidance"
+		        android:paddingTop="@dimen/ykn_common_vertical"
+		        android:layout_height="wrap_content"
+		        android:layout_width="fill_parent"
+		        android:text=""
+		        android:textSize="16sp"
+		        android:textColor="@color/Color_B"
+		        />
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        >
+	            <EditText 
+			        android:id="@+id/et_phone_or_email"
+			        android:layout_marginTop="@dimen/ykn_common_vertical"
+			        android:layout_width="fill_parent"
+			        android:layout_height="@dimen/ykn_common_height_edittext"
+			        android:inputType="textEmailAddress"
+			        android:hint=""
+			        android:textSize="@dimen/ykn_common_textsize_edittext"
+			        android:textColorHint="@color/Color_D"
+			        android:singleLine="true"
+			        android:background="@drawable/ykn_edittext_background"
+			        />
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:id="@+id/check_area"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="@dimen/ykn_common_vertical"
+		        android:orientation="horizontal"
+		        android:layout_gravity="center_vertical"
+		        android:visibility="gone"
+		        >
+				<CheckBox 
+				    android:id="@+id/agree"
+				    android:checked="true"
+				    android:layout_marginTop="3dip"
+				    android:layout_marginLeft="2dip"
+				    android:layout_marginRight="10dip"
+				    android:layout_width="18dip"
+				    android:layout_height="18dip"
+				    android:background="@drawable/ykn_checkbox_agree"
+				    android:button="@null"
+				    />	        
+				<TextView 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/ykn_account_hint1"
+				    android:textSize="16sp"
+				    android:textColor="@color/Color_B"
+				    android:gravity="center_vertical"
+				    />
+				<TextView 
+				    android:id="@+id/protocol"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/ykn_account_hint2"
+				    android:textSize="16sp"
+				    android:textColor="@color/Color_O"
+				    android:gravity="center_vertical"
+				    />
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="@dimen/ykn_common_height_button"
+		        android:layout_marginTop="@dimen/ykn_common_vertical"
+		        >
+		        <Button 
+			        android:id="@+id/btn_submit"
+			        android:layout_width="fill_parent"
+			        android:layout_height="fill_parent"
+			        android:background="@drawable/ykn_button_background_blue"
+			        android:text="@string/ykn_account_button"
+			        android:textColor="@color/Color_C"
+			        android:textSize="@dimen/ykn_common_textsize_button"
+			        />
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="@dimen/ykn_common_vertical"
+		        >
+		        <TextView 
+		            android:id="@+id/tv_hint"
+		            android:visibility="gone"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:text=""
+			        android:textSize="16sp"
+			        android:textColor="@color/Color_B"/>
+		    </LinearLayout>
+		    
+		</LinearLayout>
+	</FrameLayout>
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/application"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="src/chat"/>
+	<classpathentry kind="src" path="src/ui"/>
+	<classpathentry kind="src" path="src/service"/>
+	<classpathentry kind="src" path="src/utils"/>
+	<classpathentry kind="src" path="src/data"/>
+	<classpathentry kind="src" path="src/third"/>
+	<classpathentry kind="src" path="src/base"/>
+	<classpathentry kind="src" path="src/database"/>
+	<classpathentry kind="src" path="src/actions"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar" sourcepath="D:/android-sdk-windows/extras/android/compatibility/v4/src"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

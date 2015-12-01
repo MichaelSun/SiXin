@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+    
+    <!-- scroll begin-->
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical" 
+    	android:layout_gravity="center_horizontal"
+    	android:layout_marginLeft="10dip"
+    	android:layout_marginRight="10dip">
+    	
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="16dip"
+    		android:orientation="vertical">
+	    	<!-- language_setting -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/verification_setting"
+		        style="@style/general_setting_layout_single"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+	    </LinearLayout>
+	    
+	    
+	    <TextView 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="10dip"
+    		android:textSize="14sp"
+    		android:lineSpacingExtra="8dip"
+    		android:text="@string/f_private_setting_1"
+    		android:visibility="gone"/>
+	    
+	    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="16dip"
+    		android:orientation="vertical">
+	    	<!-- search_by_sixin_id  -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/search_by_sixin_id"
+		        style="@style/general_setting_layout_top"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+            
+            <!-- search_by_mobile -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/search_by_mobile"
+		        style="@style/general_setting_layout_middle"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+            
+             <!-- search_by_name -->
+		    <com.renren.mobile.chat.view.GeneralSettingLayout
+		        android:id="@+id/search_by_name"
+		        style="@style/general_setting_layout_bottom"
+	    		android:layout_height="@dimen/setting_layout">
+		    </com.renren.mobile.chat.view.GeneralSettingLayout>
+                   
+	    </LinearLayout>
+	    
+	    
+	    
+	    <TextView 
+	        android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:layout_marginTop="10dip"
+    		android:textSize="14sp"
+    		android:lineSpacingExtra="8dip"
+    		android:text="@string/f_private_setting_2"
+    		android:visibility="gone"/>
+    	
+	    <!-- null layout -->
+	    <LinearLayout 
+        	android:layout_width="fill_parent"
+    		android:layout_height="30dip">
+    </LinearLayout>
+	</LinearLayout>
+    <!-- scroll end-->
+    
+</ScrollView>

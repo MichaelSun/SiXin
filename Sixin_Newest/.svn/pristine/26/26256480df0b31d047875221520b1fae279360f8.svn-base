@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 从本地發送的文本消息 start -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+  <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/cdw_feed_view"/>
+  <!-- 分割线 -->
+  <View android:id="@+id/cdw_feed_divier1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dip" android:layout_marginTop="6dip" android:background="@drawable/cdw_feed_divier" android:visibility="gone"/>
+  <View android:id="@+id/cdw_feed_divier2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dip" android:layout_marginTop="6dip" android:background="@drawable/cdw_feed_divier2"/>
+</merge>

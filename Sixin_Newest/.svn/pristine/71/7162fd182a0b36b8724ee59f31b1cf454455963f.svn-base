@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="72dip"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="72dip"
+        android:layout_height="72dip"
+        android:layout_gravity="center"
+        android:layout_marginTop="6dip" >
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_margin="6dip"
+            android:background="@drawable/chat_setting_member_bg"
+            android:paddingBottom="3px"
+            android:paddingLeft="1px"
+            android:paddingRight="2px" >
+
+            <com.renren.mobile.chat.base.views.NotSynImageView
+                android:id="@+id/group_member_head"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/member_head_click"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/member_head_selector" />
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/del_member_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_setting_member_del_btn_selector" />
+        <FrameLayout
+            android:id="@+id/frameLayout1"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:layout_gravity="center"
+            android:layout_margin="6dip" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/group_member_name"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:text="@string/group_member_item_layout_1"
+        android:textColor="@color/common_a"
+        android:textSize="12sp" />
+
+</LinearLayout>

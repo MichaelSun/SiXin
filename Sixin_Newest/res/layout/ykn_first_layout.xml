@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/ykn_first_background"
+    android:orientation="vertical" >
+
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:gravity="center"
+	    >
+	    <ImageView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/ykn_first_logo"
+	        android:layout_gravity="center"
+	        />
+	</LinearLayout>
+
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:orientation="vertical"
+	    >
+	    <TextView 
+	        android:id="@+id/logining"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="10dip"
+	        android:paddingBottom="10dip"
+	        android:text="@string/ykn_first_logining"
+	        android:textSize="18sp"
+	        android:textColor="@color/Color_C"
+	        android:visibility="invisible"
+	        />
+	    <ImageView 
+		    android:layout_width="fill_parent"
+		    android:layout_height="56dip"
+		    android:visibility="invisible"
+		    />
+	</LinearLayout>
+	
+</LinearLayout>

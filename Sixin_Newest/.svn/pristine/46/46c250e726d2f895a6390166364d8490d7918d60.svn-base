@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="horizontal"
+    android:visibility="visible" >
+
+    <!-- origin color:#99000000 -->
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dip"
+        android:paddingTop="8dip" >
+
+        <LinearLayout
+            android:id="@+id/text_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/header"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/pull_to_refresh_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/pull_to_refresh_pull_label"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/base_title_text_state"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/last_update_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pull_to_refresh_text"
+                android:gravity="center_horizontal"
+                android:text="@string/new_pull_update_header_layout_1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/base_title_text_state"
+                android:textSize="12dip" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="32dip"
+        android:layout_height="32dip"
+        android:layout_alignBottom="@id/frame_layout"
+        android:layout_marginBottom="8dip"
+        android:layout_marginLeft="16dip" >
+
+        <ProgressBar
+            android:id="@+id/pull_to_refresh_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:indeterminateDrawable="@drawable/pull_update_progressbar"
+            android:maxHeight="32dip"
+            android:maxWidth="32dip" />
+
+        <View
+            android:id="@+id/pull_to_refresh_image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/pull_update_header_arrow_down" />
+
+        <com.sixin.widgets.RotateImageView
+            android:id="@+id/pull_to_refresh_circle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/pull_update_header_grey_bg" />
+        
+    </FrameLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@id/frame_layout"
+        android:background="@color/blue" />
+
+</RelativeLayout>

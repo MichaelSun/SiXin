@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+    <FrameLayout
+        android:id="@+id/contact_main_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0" >
+
+        <LinearLayout
+    		android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:orientation="vertical" >
+    		
+	        <com.renren.mobile.chat.ui.contact.C_ContactsListView
+	            android:id="@+id/cdw_contacts_listview"
+	            android:layout_width="fill_parent"
+	            android:cacheColorHint="#00000000"
+	            android:layout_height="wrap_content" />
+	        
+	        <include
+	            android:id="@+id/contacts_nodata"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center"
+	            layout="@layout/chat_no_data"
+	            android:gravity="center"
+	            android:layout_weight="1.0" 
+	            android:visibility="gone" />
+	
+	        <include
+	            android:id="@+id/contacts_loaddata"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center"
+	            layout="@layout/loading_dialog"
+	            android:layout_weight="1.0" 
+	            android:gravity="center"
+	            android:visibility="gone" />
+	        
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/no_search_data"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="50dip"
+            android:gravity="center"
+            android:padding="5dip"
+            android:text="@string/cdw_contacts_layout_1"
+            android:textColor="#ffB8B8B8"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <com.renren.mobile.chat.ui.contact.C_LetterBar
+            android:id="@+id/cdw_letter_bar"
+            android:layout_width="25dip"
+            android:layout_height="fill_parent"
+            android:paddingTop="14dip"
+            android:layout_gravity="right"
+            android:background="@drawable/s_bar_bg" />
+
+        <TextView
+            android:id="@+id/cdw_pop_message"
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="5dip"
+            android:textColor="#fff5f5f5"
+            android:background="@drawable/s_contact_overlay_bg"
+            android:textSize="50sp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

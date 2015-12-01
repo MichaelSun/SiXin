@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/title_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        layout="@layout/base_title_layout" />
+
+    <!-- body -->
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:paddingTop="16dip"
+            android:orientation="vertical" >
+
+            <!-- <LinearLayout -->
+            <!-- android:id="@+id/contact_add_search" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="36dip" -->
+            <!-- android:layout_marginTop="14dip" -->
+            <!-- android:background="@drawable/ykn_edittext_normal" -->
+            <!-- android:orientation="vertical" > -->
+
+
+            <!-- <LinearLayout -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="fill_parent" -->
+            <!-- android:gravity="center_vertical" -->
+            <!-- android:orientation="horizontal" > -->
+
+
+            <!-- <TextView -->
+            <!-- android:id="@+id/userinfo_usermainurl_text" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:paddingLeft="14dip" -->
+            <!-- android:layout_weight="1" -->
+            <!-- android:layout_gravity="center_vertical" -->
+            <!-- android:text="@string/UserInfoActivity_java_6" -->
+            <!-- android:textColor="@color/general_setting_name_color_selector" -->
+            <!-- android:textSize="18sp" /> -->
+
+
+            <!-- <ImageView -->
+            <!-- android:id="@+id/userinfo_usermainurl_image" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_marginRight="10dip" -->
+            <!-- android:layout_gravity="center_vertical" -->
+            <!-- android:src="@drawable/d_next_page_default" /> -->
+            <!-- </LinearLayout> -->
+            <!-- </LinearLayout> -->
+
+            <RelativeLayout
+                android:id="@+id/contact_add_list"
+                android:background="@drawable/single_bg_selector"
+                android:layout_height="@dimen/ykn_common_height_edittext"
+                android:layout_width="fill_parent"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:id="@+id/contact_add_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/contact_add_address" />
+
+                <ImageView
+                    android:id="@+id/contact_add_address_right_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/next_page_selector" />
+
+                <TextView
+                    android:id="@+id/contact_add_usermainurl_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@id/contact_add_address_right_image"
+                    android:layout_toRightOf="@id/contact_add_address"
+                    android:duplicateParentState="true"
+                    android:gravity="center|left"
+                    android:text="@string/UserInfoActivity_java_7"
+                    android:textColor="@color/general_setting_name_color_selector"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/contact_add_phone_layout"
+                android:background="@drawable/single_bg_selector"
+                android:layout_height="@dimen/ykn_common_height_edittext"
+                android:layout_width = "fill_parent"
+                android:layout_marginTop="14dip" >
+
+                <ImageView
+                    android:id="@+id/contact_add_phone_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/contact_add_phone" />
+
+<!--                 <TextView -->
+<!--                     android:id="@+id/contact_add_binded_phone" -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="fill_parent" -->
+<!--                     android:layout_alignParentRight="true" -->
+<!--                     android:layout_gravity="center_vertical" -->
+<!--                     android:layout_marginRight="10dip" -->
+<!--                     android:duplicateParentState="true" -->
+<!--                     android:gravity="center|left" -->
+<!--                     android:text="@string/UserInfoActivity_java_9" -->
+<!--                     android:textColor="@color/general_setting_name_color_selector" -->
+<!--                     android:textSize="18sp" -->
+<!--                     android:visibility="gone" /> -->
+
+                <ImageView
+                    android:id="@+id/contact_add_phone_right_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/next_page_selector" />
+
+                <TextView
+                    android:id="@+id/contact_add_bind_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@id/contact_add_phone_right_img"
+                    android:layout_toRightOf="@id/contact_add_phone_img"
+                    android:duplicateParentState="true"
+                    android:gravity="center|left"
+                    android:text="@string/contact_add_bind_phone"
+                    android:textColor="@color/general_setting_name_color_selector"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/contact_add_renren_layout"
+               android:background="@drawable/single_bg_selector"
+                android:layout_height="@dimen/ykn_common_height_edittext"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="14dip" >
+
+                <ImageView
+                    android:id="@+id/contact_add_renren_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/contact_add_renren" />
+
+<!--                 <TextView -->
+<!--                     android:id="@+id/contact_add_binded_renren" -->
+<!--                     android:layout_width="wrap_content" -->
+<!--                     android:layout_height="fill_parent" -->
+<!--                     android:layout_alignParentRight="true" -->
+<!--                     android:layout_gravity="center_vertical" -->
+<!--                     android:layout_marginRight="10dip" -->
+<!--                     android:duplicateParentState="true" -->
+<!--                     android:gravity="center|left" -->
+<!--                     android:text="@string/UserInfoActivity_java_9" -->
+<!--                     android:textColor="@color/general_setting_name_color_selector" -->
+<!--                     android:textSize="18sp" -->
+<!--                     android:visibility="gone" /> -->
+
+                <ImageView
+                    android:id="@+id/contact_add_renren_right_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/next_page_selector" />
+
+                <TextView
+                    android:id="@+id/contact_add_bind_renren"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@id/contact_add_renren_right_img"
+                    android:layout_toRightOf="@id/contact_add_renren_image"
+                    android:duplicateParentState="true"
+                    android:gravity="center|left"
+                    android:text="@string/contact_add_bind_renren"
+                    android:textColor="@color/general_setting_name_color_selector"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="4dip"
+            android:background="@drawable/title_shadow" >
+        </View>
+    </FrameLayout>
+
+</LinearLayout>

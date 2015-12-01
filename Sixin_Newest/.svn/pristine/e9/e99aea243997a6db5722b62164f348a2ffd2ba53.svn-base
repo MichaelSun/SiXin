@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#F9F9F9"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="6dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="6dip" >
+
+        <LinearLayout
+            android:id="@+id/search_contact_item_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1" >
+
+            <com.renren.mobile.chat.base.views.NotSynImageView
+                android:id="@+id/search_contact_item_head"
+                android:layout_width="42dip"
+                android:layout_height="42dip"
+                android:layout_marginRight="10dip"
+                android:gravity="center_vertical"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/search_contact_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_weight="1"
+                android:text="NAME"
+                android:textColor="#222222"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/search_contact_item_operation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:background="@drawable/add_contact_add_icon" />
+    </LinearLayout>
+
+</LinearLayout>

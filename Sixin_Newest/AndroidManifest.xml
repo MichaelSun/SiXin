@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.renren.mobile.chat"
+    android:versionCode="22000"
+    android:versionName="2.2.0 Beta" >
+
+    <application
+        android:name="com.renren.mobile.chat.RenrenChatApplication"
+        android:debuggable="false"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity android:name=".ui.account.RegisterActivity" 
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".ui.account.RegisterInfoActivity" 
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".ui.account.RenrenAuthorizeActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".ui.account.LoginSixinActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".ui.account.RegisterAccountActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".ui.account.RegisterCaptchaActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".ui.account.ResetPasswordActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".ui.account.UploadContactActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="net.afpro.gl.NoLoopActivity" android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".ui.FirstActivity"
+            android:configChanges="keyboardHidden|navigation|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.account.ThirdWelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.account.SingleLoginActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".ui.ILoveSixinActivity"
+			android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="com.renren.mobile.chat.ui.ChatNotificationCancel"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+         <activity
+            android:name="com.renren.mobile.chat.ui.SingleLoginNotificationCancel"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="com.renren.mobile.chat.ui.FeedNotificationCancel"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.guide.SyncContacts"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".activity.RenRenChatActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" 
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity
+            android:name=".test.TestActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.ErrorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.friends.BuddyRequestActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.setting.AboutChatActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.message.PopActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/translucent" >
+        </activity>
+        <activity
+            android:name=".ui.UpdateActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/translucent" >
+        </activity>
+        <activity
+            android:name=".ui.SendModeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/translucent" >
+        </activity>
+        <activity
+            android:name=".ui.sms.BlessingSMSActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name=".ui.groupchat.D_ChatMessagesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.groupchat.D_SelectGroupChatContactActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.SelectContactsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.ContactOptionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.ThirdContactsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.ContactMessageActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.groupchat.SelectGroupActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.groupchat.ContactActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.sms.BlessingSMSContentActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".webview.RenRenWebView"
+            android:configChanges="keyboardHidden|navigation|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".ui.picture.BrowsingActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.imageviewer.ImageViewActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.photo.PhotoNew"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.guide.SyncContactsActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.guide.SupplyUserInfoActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.guide.RegisterActivity_ykn"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.MainFragmentActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".ui.contact.SearchContactActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <!-- 联系人相关 begin  add by yisong.li联系人相关 end -->
+        <activity
+            android:name=".ui.contact.attention.setting.AttentionSettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.attention.setting.D_AttentionSettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.attention.AttentionAddActiviy"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.contact.UserInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.guide.WelcomeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            >
+
+        </activity>
+        <activity
+            android:name=".ui.contact.mutichat.MultiChatNameSettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysVisible" >
+        </activity>
+        <activity
+            android:name=".ui.contact.mutichat.MultiChatForwardActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+            <intent-filter>
+		        <action android:name="android.intent.action.SEND" />
+		        <category android:name="android.intent.category.DEFAULT" />
+		        <data android:mimeType="image/*" />
+			</intent-filter>
+			<intent-filter>
+		        <action android:name="android.intent.action.SEND" />
+		        <category android:name="android.intent.category.DEFAULT" />
+		        <data android:mimeType="text/plain" />
+			</intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.account.BindInfoActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <!-- plugin test -->
+        <activity
+            android:name=".ui.plugins.TestPluginActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="plugin.ui.PluginSettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="plugin.ui.FlashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="com.renren.godlikepen.ui.ScrawlMainActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="plugin.ui.PluginAllActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name="plugin.ui.Html5PluginActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".ui.plugins.PluginAllActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@android:style/Theme.NoTitleBar">
+            
+        </activity>
+        <!-- 绑定人人账号 -->
+        <activity
+            android:name="com.renren.mobile.chat.ui.account.BindRenrenAccountActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.renren.mobile.chat.ui.contact.feed.ChatFeedActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+
+        <receiver android:name=".receiver.RenRenChatReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.renren.mobile.chat.receiver.PushMessagesReceiver" >
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.push.PushMessages" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.renren.mobile.chat.receiver.SingleLoginReceiver" >
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.SingleLogin" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.renren.mobile.chat.receiver.ChatCallReceiver" >
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.ACTION_CHAT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.ACTION_SESSION" />
+            </intent-filter>
+        </receiver>
+        
+        
+
+        <service
+            android:name="com.renren.mobile.chat.service.ChatService"
+            android:process=":sixinpush2" >
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.ACTION_CHAT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.renren.mobile.chat.ACTION_SESSION" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="com.renren.mobile.chat.provider.RenRenProvider"
+            android:authorities="com.renren.mobile.chat.provider"
+            android:permission="com.renren.mobile.chat.permission.PERMISSION_ADD_ACCOUNT" >
+        </provider>
+
+        <activity
+            android:name=".ui.setting.SettingForwardActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".ui.setting.SelfInfoSettingForwardActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".ui.setting.SystemSettingForwardActivity"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
+        <activity 
+            android:name=".ui.setting.PhotoUploadActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
+        </activity>
+    </application>
+
+    <permission
+        android:name="com.renren.mobile.chat.permission.PERMISSION_ADD_ACCOUNT"
+        android:permissionGroup="@string/app_name"
+        android:protectionLevel="dangerous" >
+    </permission>
+
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion=" 7" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_MMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" /> <!-- 接收短信权限 -->
+    <uses-permission android:name="android.permission.SEND_SMS" /> <!-- 发送短信权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="com.renren.mobile.android.permission.PERMISSION_ADD_ACCOUNT" />
+    <uses-permission android:name="com.renren.mobile.chat.permission.PERMISSION_ADD_ACCOUNT" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+</manifest>

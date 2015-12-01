@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/old_pwd"
+				style="@style/changePwd_EditText_Style"
+                android:hint="@string/f_change_pwd_1"/>
+
+            <EditText
+                android:id="@+id/new_pwd"
+                style="@style/changePwd_EditText_Style"
+                android:hint="@string/f_change_pwd_2"
+                android:maxLength="20"/>
+
+            <EditText
+                android:id="@+id/check_new_pwd"
+                style="@style/changePwd_EditText_Style"
+                android:hint="@string/f_change_pwd_3"
+                android:maxLength="20"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dip"
+                android:lineSpacingExtra="1dip"
+                android:text="@string/f_change_pwd_6"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_change_pwd"
+                style="@style/general_submit_button"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ykn_common_height_button"
+                android:layout_marginTop="16dip"
+                android:background="@drawable/ykn_button_background_blue"
+                android:text="@string/f_change_pwd_4" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/loading_change_pwd"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            layout="@layout/loading_dialog"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</ScrollView>

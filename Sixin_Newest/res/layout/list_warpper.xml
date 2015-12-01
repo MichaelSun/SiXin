@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout
+		android:id="@+id/innter_header"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center"
+		android:paddingTop="10dip"
+		android:paddingBottom="10dip"
+		android:background="#fdfdfe"
+	>
+	    <ProgressBar
+	        android:layout_width="20dip"
+	        android:layout_height="20dip"
+	        android:gravity="center"/>
+	    <TextView 
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center"
+	    	android:text="正在获取…"    
+	    />
+	    
+	    
+	</LinearLayout>
+         
+    
+   
+	<view.list.InnerListView
+	    android:id="@+id/inner_listview"
+	    android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@null" 
+        android:background="#fdfdfe"
+        android:divider="@null" 
+        android:fadingEdge="none" 
+        android:listSelector="@android:color/transparent" 
+        android:scrollingCache="@null"
+	/>
+</merge>

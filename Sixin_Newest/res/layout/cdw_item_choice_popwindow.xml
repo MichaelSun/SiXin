@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/root">
+  <LinearLayout android:id="@+id/cdw_chat_choice_select_linearlayout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/cdw_chat_choice_select" android:layout_gravity="center">
+    <TextView android:id="@+id/cdw_chat_choice_select_container_copy_textview" android:gravity="center" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/cdw_item_choice_popwindow_layout_1" android:paddingLeft="15dip" android:paddingRight="15dip"/>
+    <TextView android:id="@+id/cdw_chat_choice_select_container_delete_textview" android:gravity="center" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/cdw_item_choice_popwindow_layout_2" android:paddingLeft="15dip" android:paddingRight="15dip"/>
+    <TextView android:id="@+id/cdw_chat_choice_select_container_forward_textview" android:gravity="center" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/cdw_item_choice_popwindow_layout_3" android:paddingLeft="15dip" android:paddingRight="15dip"/>
+  </LinearLayout>
+</LinearLayout>

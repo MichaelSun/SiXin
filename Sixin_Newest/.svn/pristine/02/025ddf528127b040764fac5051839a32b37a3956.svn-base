@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="browsing_choices">
+        <item>保存</item>
+        <item>分享到人人网</item>
+        <item>转给</item>
+        <item>取消</item>
+    </string-array>
+    
+    <string-array name="gender">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+    
+    <string-array name="confirm_dialog">
+        <item>确定</item>
+        <item>取消</item>
+    </string-array>
+    
+    <string-array name="upload_photo">
+        <item>使用</item>
+        <item>重新选择头像</item>
+        <item>取消</item>
+    </string-array>
+    
+</resources>

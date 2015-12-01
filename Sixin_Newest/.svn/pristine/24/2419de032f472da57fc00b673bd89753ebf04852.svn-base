@@ -1,0 +1,559 @@
+package com.renren.mobile.chat.actions.models;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.util.Log;
+
+import com.common.manager.LoginManager;
+import com.common.network.DomainUrl;
+import com.common.utils.Methods;
+import com.core.json.JsonArray;
+import com.core.json.JsonObject;
+import com.data.util.ShowFieldsUtil;
+import com.data.xmpp.Item;
+import com.data.xmpp.Item.AFFILIATION;
+import com.data.xmpp.Query;
+import com.data.xmpp.X;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.activity.RenRenChatActivity.CanTalkable;
+import com.renren.mobile.chat.base.util.SystemUtil;
+import com.renren.mobile.chat.dao.DAOFactoryImpl;
+import com.renren.mobile.chat.dao.RoomDAO;
+import com.renren.mobile.chat.ui.contact.ContactModel;
+
+public class RoomInfoModelWarpper extends RoomBaseInfoModel implements CanTalkable{
+
+	private static final  String  CREATE_TIME = "create_time";
+	private static final  String  GROUP_ID = "id";
+	private static final  String  MEMBER_LIST = "member_list";
+	//private static final  String  USER_ID = "user_id";
+	//private static final  String  UPDATE_TIME = "update_time";
+	private static final  String  NAMES = "name";
+	private static final  String  CREATOR_ID = "creator";
+	private static final  String  VERSION = "version";
+	
+//	public Set<Long> idSet = new LinkedHashSet<Long>();
+	
+	public List<ContactModel> mMembers = new ArrayList<ContactModel>();
+	
+	
+	
+	public RoomInfoModelWarpper() {
+	}
+
+	public RoomInfoModelWarpper(X x) {
+		this.parse(x);
+	}
+	
+	
+
+	/**
+	 * 判断是否是群成员
+	 * **/
+	public synchronized boolean isMember(long contactId) {
+		for (ContactModel contactModel : this.mMembers) {
+			if (contactModel.mUserId == contactId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 删除某个群成员
+	 * **/
+	public synchronized void deleteMember(long contactId) {
+		int size = this.mMembers.size();
+		
+		for (int i = 0; i < this.mMembers.size(); i++) {
+			if (contactId == this.mMembers.get(i).mUserId) {
+				this.mMembers.remove(i);
+				break;
+			}
+		}
+		generateIds();
+	}
+	
+	/**
+	 * 新增加成员
+	 * **/
+	public synchronized void addMember(ContactModel model){
+		if(!isMember(model.mUserId)){
+			this.mMembers.add(model);
+			generateIds();
+		}
+	}
+	public synchronized void addMember(ContactModel model,boolean isGenerateId){
+		this.mMembers.add(model);
+		if(isGenerateId){
+			generateIds();
+		}
+	}
+	
+	/**
+	 * 更新群名
+	 * **/
+	public synchronized void updateSbject(String subject) {
+		this.mDisable = ROOM_ENABLE.ENABLE.Value;
+		this.mSubject = subject;
+	}
+
+	/**
+	 * 保存为联系人
+	 * **/
+	public synchronized void saveToContact() {
+		this.mRoomIsContact = 1;
+	}
+	
+	/**
+	 * 保存为联系人
+	 * **/
+	public synchronized void deleteToContact() {
+		this.mRoomIsContact = 0;
+	}
+	
+	/**
+	 * 更新群的版本号
+	 * **/
+	public synchronized void updateVersion(int version) {
+		this.mDisable = ROOM_ENABLE.ENABLE.Value;
+		this.mVersion = version;
+	}
+
+	/**
+	 * 主动离开群，或者被踢出群
+	 * **/
+	public synchronized void leaveRoom() {
+		if (LoginManager.getInstance().getLoginInfo().mUserId == this.mOwner) {
+			dismissRoom();
+		} else {
+			// TODO 发送离开群的网络请求
+			mDisable = ROOM_ENABLE.DISABLE.Value;
+		}
+	}
+
+	/**
+	 * 解散群，如果群主主动离开群，则群解散
+	 * **/
+	public synchronized void dismissRoom() {
+		mDisable = ROOM_ENABLE.DISABLE.Value;
+	}
+
+	/**
+	 * 新增加成员
+	 * **/
+	public synchronized void addMembers(List<Item> items) {
+		ContactModel contactModel;
+		for (Item item : items) {
+			contactModel = this.parse(item);
+			if (!this.isMember(contactModel.mUserId)) {
+				this.mMembers.add(contactModel);
+			}
+		}
+		this.mDisable = ROOM_ENABLE.ENABLE.Value;
+		generateHeadUrl();
+	}
+
+//	/**
+//	 * 删除成员
+//	 * **/
+//	public synchronized void deleteMembers(List<Item> items) {
+//		ContactModel contactModel;
+//		for (Item item : items) {
+//			contactModel = this.parse(item);
+//			deleteMember(contactModel.mUserId);
+//		}
+//		this.mDisable = ROOM_ENABLE.ENABLE.Value;
+//		generateHeadUrl();
+//	}
+
+
+
+	public synchronized void clearMembers() {
+		this.mMembers.clear();
+	}
+
+	private void generateHeadUrl() {
+		StringBuilder sb = new StringBuilder();
+		int headSize = 0;
+		if(this.mMembers.size()==0){
+			return;
+		}
+		if (this.mMembers.size() == 1) {
+			this.mHeadUrl = this.mMembers.get(0).mHeadUrl;
+			return;
+		}
+		if (this.mMembers.size() >= 4) {
+			headSize = 4;
+		} else if (this.mMembers.size() > 1 && this.mMembers.size() < 4) {
+			headSize = this.mMembers.size();
+		}
+		if(headSize>1){
+			for (int i = 0; i < headSize - 1; i++) {
+				sb.append(this.mMembers.get(i).mHeadUrl).append("|");
+			}
+			sb.append(this.mMembers.get(headSize - 1).mHeadUrl);
+			this.mHeadUrl = sb.toString();
+		}
+	}
+
+	/**
+	 * 通过presence里面的X节点创建model
+	 * **/
+	public synchronized void parse(X node) {
+		ContactModel contactModel;
+		this.mVersion = node.getVersion();
+		this.mSubject = node.mSubjectNode.mValue;
+		this.mLocalUserId = LoginManager.getInstance().getLoginInfo().mUserId;
+		this.mPrefix = node.mPrefix;
+		clearMembers();
+		for (Item item : node.mItemNode) {
+			contactModel = this.parse(item);
+			if(contactModel.mUserId != LoginManager.getInstance().getLoginInfo().mUserId){
+				this.mMembers.add(contactModel);
+			}
+			
+		}
+		this.mDisable = 0;
+		generateIds();
+		generateHeadUrl();
+	}
+	private String mPrefix = null;
+	/**
+	 * 通过iq里面的query节点创建model
+	 * **/
+	public synchronized void parse(Query node) {
+		ContactModel contactModel;
+		this.mVersion = node.getVersion();
+		this.mSubject = node.mSubjectNode.mValue;
+		this.mLocalUserId = LoginManager.getInstance().getLoginInfo().mUserId;
+		this.mPrefix = node.mPrefix;
+		clearMembers();
+		for (Item item : node.mItems) {
+			contactModel = this.parse(item);
+			if(contactModel.mUserId != LoginManager.getInstance().getLoginInfo().mUserId){
+				this.mMembers.add(contactModel);
+			}
+		}
+		this.mDisable = 0;
+		generateIds();
+		generateHeadUrl();
+	}
+	
+	public synchronized void generateIds(){
+		StringBuilder sb = new StringBuilder();
+		for (ContactModel contactModel : mMembers) {
+			sb.append(contactModel.mUserId).append(SPLIT);
+		}
+		if(sb.length()>2){
+			this.mIds = sb.substring(0, sb.length()-1);
+		}else{
+			this.mIds = "";
+		}
+		this.mRoomMemberNumber = this.mMembers.size()+1;
+	}
+
+	/**
+	 * 将item节点解析成ContactModel
+	 * **/
+	public ContactModel parse(Item item) {
+		ContactModel contactModel = new ContactModel();
+		contactModel.mUserId = item.getJid();
+		contactModel.mHeadUrl = mPrefix+item.mHeadUrl;
+//		contactModel.mHeadUrl = item.mUrl;
+		contactModel.mContactName = item.mName;
+		contactModel.mRelation = item.mRflag;
+//		if (item.isFriend()) {
+//			contactModel.mIsFriend = IS_FRIEND.IS_FRIEND;
+//		} else {
+//			contactModel.mIsFriend = IS_FRIEND.NOT_FRIEND;
+//		}
+
+		// this.mMembers.add(contactModel);
+		if (item.getAffiliaction() == AFFILIATION.owner.Value) {
+			this.mOwner = contactModel.mUserId;
+		}
+		return contactModel;
+	}
+
+	/**
+	 * 查询一个用户是否为群主
+	 * **/
+	public synchronized boolean isOwner(long uid) {
+		if (uid == mOwner) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return ShowFieldsUtil.showAllFields(0, this);
+	}
+
+	@Override
+	public synchronized long getUId() {
+		// TODO Auto-generated method stub
+		return mRoomId;
+	}
+
+	@Override
+	public synchronized String getName() {
+		// TODO Auto-generated method stub
+		if(this.mSubject!=null){
+			return this.mSubject;
+		}
+		return null;
+	}
+
+	@Override
+	public int isGroup() {
+		// TODO Auto-generated method stub
+		return GROUP.GROUP.Value;
+	}
+
+	@Override
+	public String getHeadUrl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
+	public ContactModel getMember(long uid){
+		for(ContactModel m:this.mMembers){
+			if(m.mUserId == uid){
+				return m;
+			}
+		}
+		return null;
+	}
+	
+	public synchronized void updateToDB(){
+		//替换DB中的数据
+		RoomDAO dao = DAOFactoryImpl.getInstance().buildDAO(RoomDAO.class);
+		dao.update_RoomInfo(LoginManager.getInstance().getLoginInfo().mUserId, this.mRoomId	, this);
+		
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof RoomInfoModelWarpper){
+			try {
+				RoomInfoModelWarpper m = (RoomInfoModelWarpper)o;
+				return this.mDisable==m.mDisable
+					&&this.mIds.equals(m.mIds)
+					&&this.mSubject.equals(m.mSubject);
+			} catch (Exception e) {
+				return false ; 
+			}
+		}
+		return false;
+	};
+	
+	
+	/**
+	 * 对onlinefriends接口的返回的json的解析
+	 * 
+	 * @param obj
+	 * @returnpublic static ArrayList<ContactModel> newParseContactModels(JsonArray array) {
+	 */
+	public static ArrayList<RoomInfoModelWarpper> newParseGroupContactModels(JsonArray array) {
+		ArrayList<RoomInfoModelWarpper> contacts = new ArrayList<RoomInfoModelWarpper>();
+		if (array != null && array.size()>0) {
+	        if(SystemUtil.mDebug){
+	        	SystemUtil.logd("联系人群组:"+array.toJsonString());
+			}
+			
+			JsonObject[] objs = new JsonObject[array.size()];
+			array.copyInto(objs);
+			for (JsonObject o : objs) {
+				RoomInfoModelWarpper c = newParseGroupContactModel(o);
+				if (c != null) {
+					contacts.add(c);
+				}
+			}
+		}else{
+	        if(SystemUtil.mDebug){
+	        	SystemUtil.logd("木有群组");
+			}
+			
+		}
+		return contacts;
+	}
+
+	/**
+    "group_list":[
+    {
+        "id":10618,
+        "name":"李小宾_女、汪涵",
+        "creator":384139006,
+        "create_time":1340076121676,
+        "update_time":0,
+        "version":1,
+        "member_list":[
+        {
+            "profile_info":{
+                "user_id":2,
+                 "domain_name": "talk.sixin.com",
+                "name":"汪涵",
+                "first_name":"",
+                "last_name":"",
+                "gender":0,
+                "birth_day":{"year":0,"month":0,"day":0},
+                "profile_image": {
+                    "medium_url": "http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg",
+                    "large_url": "http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg",
+                    "original_url": "http://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg"
+                 }
+             },
+            "relationship_type":5
+        },
+        {
+            "profile_info":{
+                "user_id":384139006,
+                "name":"李小宾_女",
+                "first_name":"",
+                "last_name":"",
+                "gender":0,
+                "birthday":{"year":2011,"month":6,"day":30},
+                "profile_image": {
+                    "medium_url": "http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg",
+                    "large_url": "http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg",
+                    "original_url": "http://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg"
+                 }
+             },
+            "relationship_type":5
+        }]
+    }]
+	 */
+	
+	public static RoomInfoModelWarpper newParseGroupContactModel(JsonObject obj) {
+		RoomInfoModelWarpper result = new RoomInfoModelWarpper();
+		if (obj != null) {
+	        if(SystemUtil.mDebug){
+	        	SystemUtil.logd("解析单个群组 ="+obj.toString());
+			}
+			
+			//创建时间
+			long createTime = obj.getNum(CREATE_TIME);
+			result.setCreateTime(createTime);
+			
+			//群组的id
+			long id = obj.getNum(GROUP_ID);
+			result.setRoomId(id);
+			
+			//群成员的id
+			JsonArray membersAry = obj.getJsonArray(MEMBER_LIST);
+			//String birth = null;
+			//Logd.log("membersAry = "+(membersAry==null)+"#size="+membersAry.size());
+			if (membersAry != null) {
+				
+				JsonObject[] objs = new JsonObject[membersAry.size()];
+				membersAry.copyInto(objs);
+				for (JsonObject o : objs) {
+					ContactModel c = ContactModel.newParseContactModel(o);
+					if (c != null && c.getmUserId()!=RenrenChatApplication.USER_ID) {
+						result.addMember(c);
+					}
+				}
+			}
+			
+			//创建者的id
+			long creatorId = obj.getNum(CREATOR_ID);
+			result.setCreatorId(creatorId);
+			
+			//群组的成员
+			String contactNames = Methods.htmlDecoder(obj.getString(NAMES));
+			result.setSubject(contactNames);
+			
+			//版本
+			long version=obj.getNum(VERSION);
+			result.setVersion((int)version);
+			
+			result.setContact(CONTACT_YES);
+			
+			if(result.mRoomMemberNumber==0){
+				result.mRoomMemberNumber=1;
+			}
+			
+			return result;
+		} else {
+			return null;
+		}
+	}
+	
+    //创建时间
+	private long mCreateTime;
+	public long getCreateTime(){
+		return mCreateTime;
+	}
+	public void setCreateTime(long time){
+		mCreateTime=time;
+	}
+	
+	//group id
+	public long getRoomId() {
+		return this.mRoomId;
+	}
+	public void setRoomId(long roomId){
+		this.mRoomId = roomId;
+	}
+	
+	//创建者的id
+	public long getCreatorId(){
+		return this.mOwner;
+	}
+	public void setCreatorId(long id){
+		mOwner = id;
+	}
+	
+	//群组名字
+	public  void setSubject(String subject){
+		this.mSubject = subject; 
+	}
+	public String getSubject(){
+		return mSubject;
+	}
+	
+	//版本号
+	public void setVersion(int version){
+		this.mVersion=version;
+	}
+	public int getVersion(){
+		return mVersion;
+	}
+	
+	//是否是群联系人
+	public static int CONTACT_YES = 1;
+	public static int CONTACT_NO = 0;
+	public int isContact(){
+		return mRoomIsContact;
+	}
+	public void setContact(int contact){
+		mRoomIsContact=contact;
+	}
+	
+	//是否被禁用
+	public void setDisabled(int disable){
+		this.mDisable=disable;
+	}
+
+	@Override
+	public long getLocalUId() {
+		// TODO Auto-generated method stub
+		return LoginManager.getInstance().getLoginInfo().mUserId;
+	}
+
+	@Override
+	public String getDomain() {
+		return DomainUrl.SIXIN_DOMAIN;
+	}
+	
+	
+			
+	
+}

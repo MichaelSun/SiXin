@@ -1,0 +1,290 @@
+package com.renren.mobile.chat.ui.contact;
+
+import java.io.Serializable;
+
+import android.text.TextUtils;
+
+import com.core.orm.ORM;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.activity.RenRenChatActivity.CanTalkable;
+import com.renren.mobile.chat.database.Contact_Column;
+import com.renren.mobile.chat.ui.BaseSearchItem;
+
+public class ContactBaseModel extends BaseSearchItem implements Serializable,CanTalkable {
+	private static final long serialVersionUID = 4795674308526916807L;
+	protected static final String BIRTHDAY = "birth_day";
+	protected static final String YEAR = "year";
+	protected static final String MONTH = "month";
+	protected static final String DAY = "day";
+	protected static final String USER_NAME = "user_name";
+	protected static final String USER_NAME_LAST = "last_name";
+	protected static final String USER_NAME_FIRST = "first_name";
+	protected static final String NAME = "name";
+	protected static final String SCHOOL = "school";
+	protected static final String EMPLOYER = "employer";
+	protected static final String DOMAIN = "domain";
+	protected static final String USER_URLS = "user_urls";
+	protected static final String HEAD_URL = "head_url";
+	protected static final String PROFILE_IMAGE = "profile_image";
+	protected static final String HEAD_LARGE_URL = "large_url";
+	protected static final String HEAD_MEDIUM_URL = "medium_url";
+	protected static final String HEAD_ORIGINAL_URL = "original_url";
+	protected static final String PROFILE_INFO = "profile_info";
+	protected static final String BIND_INFO = "bind_info";
+	protected static final String GENDER = "gender";
+	protected static final String USER_ID = "user_id";
+	protected static final String RELATIONSHIP= "relationship_type";
+	protected static final String LINE_IN ="-";
+	protected static final String DOMAIN_NAME = "domain_name";
+	protected static final String BIND_INFO_TMP = "{\"bind_info\":";
+	
+	@ORM(mappingColumn = Contact_Column.USER_ID)
+	public long mUserId;
+	@ORM(mappingColumn = Contact_Column.USER_NAME)
+	public String mContactName="";
+	
+	/*头像的url*/
+	@ORM(mappingColumn = Contact_Column.HEAD_LARGE)
+	public String mLargeHeadUrl="";
+	@ORM(mappingColumn = Contact_Column.HEAD_MEDIUM)
+	public String mHeadUrl = "";
+	@ORM(mappingColumn = Contact_Column.HEAD_ORIGINAL)
+	public String mOriginalHeadUrl = "";
+	
+	@ORM(mappingColumn = Contact_Column.SCHOOL)
+	public String mschool = "";
+	@ORM(mappingColumn = Contact_Column.EMPLOYER)
+	public String memployer = "";
+	/*性别*/
+	@ORM(mappingColumn = Contact_Column.GENDER)
+	public int mGender = -1;
+	/*生日*/
+	@ORM(mappingColumn = Contact_Column.BIRTH)
+	public String mBirth  = "";
+	
+	/*首字母索引*/
+	@ORM(mappingColumn = Contact_Column.ALEPH)
+	public String mAlephString = "A";
+	
+	@ORM(mappingColumn = Contact_Column.RELATION)
+	public int mRelation = Relationship.STRANGER;
+	
+	@ORM(mappingColumn = Contact_Column.DOMAIN)
+	public String mDomain  = "";
+	
+	
+	/**
+	 * 位定义
+私信用户（是/否）    联系人/陌生人    黑名单（是/否）
+1/0                    1/0                1/0
+这四个接口返回结果增加下面三个位属性（第一位代表是否是私信用户，第二位是否是联系人， 第三位是否在黑名单）
+不是私信用户    000（0）                
+是私信用户并且是联系人    110（6）
+是私信用户并且是陌生人    100（4）
+是私信用户并且是联系人(在黑名单)    111（7）
+是私信用户并且是陌生人(在黑名单)    101（5）
+	 *
+	 */
+	public static interface Relationship{
+		byte IS_SI_XIN = 4;
+		byte IS_CONTACT = 2;
+		byte IS_BLACK_LIST = 1;
+		byte CONTACT = 6;
+		byte STRANGER = 4;
+		byte BLACK_LIST_CONTACT = 7;
+		byte BLACK_LIST_STRANGER =5;
+	}
+	
+
+	protected byte groupType=Contact_group_type.SINGLE;
+	public static interface Contact_group_type{
+		byte SINGLE = 0;
+		byte MULTIPLE = 1;
+		byte SPECIAL_RECOMMEND = 2;
+		byte THIRD = 3;
+		byte SPECIAL_RENREN = 4;
+	}
+	
+	
+	
+	public ContactBaseModel(){}
+	
+	
+	public boolean isSiXin(int relation){
+		if((relation&Relationship.IS_SI_XIN)==Relationship.IS_SI_XIN){
+			return true;
+		}
+		return false;
+	}
+	
+    public boolean isBlacklist(int relation){
+    	if(!isSiXin(relation)){
+    		return false;
+    	}
+    	if((relation&Relationship.IS_BLACK_LIST)==Relationship.IS_BLACK_LIST){
+			return true;
+		}
+		return false;
+	}
+    
+    public boolean isStranger(int relation){
+    	if(!isSiXin(relation)){
+    		return false;
+    	}
+    	if((relation&Relationship.IS_CONTACT)!=Relationship.IS_CONTACT){
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public void setAleph(char c){
+		this.mAleph = c;
+		this.mAlephString = this.mAleph+"";
+	}
+	
+	public void setGroupType(byte type){
+		this.groupType=type;
+	} 
+	public byte getGroupType(){
+		return groupType;
+	}
+	
+	public String getmContactName() {
+		if(TextUtils.isEmpty(this.mContactName)){
+			return "#";
+		}
+		return this.mContactName;
+	}
+	
+	
+	public long getmUserId() {
+		return mUserId;
+	}
+
+
+	public void setmUserId(long mUserId) {
+		this.mUserId = mUserId;
+	}
+
+
+	public String getmLargeHeadUrl() {
+		return mLargeHeadUrl;
+	}
+
+
+	public void setmLargeHeadUrl(String mLargeHeadUrl) {
+		this.mLargeHeadUrl = mLargeHeadUrl;
+	}
+
+
+	public String getmHeadUrl() {
+		return mHeadUrl;
+	}
+
+
+	public void setmHeadUrl(String mHeadUrl) {
+		this.mHeadUrl = mHeadUrl;
+	}
+
+
+	public String getmOriginalHeadUrl() {
+		return mOriginalHeadUrl;
+	}
+
+
+	public void setmOriginalHeadUrl(String mOriginalHeadUrl) {
+		this.mOriginalHeadUrl = mOriginalHeadUrl;
+	}
+
+
+	public String getmSchool() {
+		return mschool;
+	}
+
+
+	public void setmSchool(String mschool) {
+		this.mschool = mschool;
+	}
+
+
+	public String getmEmployer() {
+		return memployer;
+	}
+
+
+	public void setmEmployer(String memployer) {
+		this.memployer = memployer;
+	}
+
+
+	public int getmGender() {
+		return mGender;
+	}
+
+
+	public void setmGender(int mGender) {
+		this.mGender = mGender;
+	}
+
+
+	public String getmBirth() {
+		return mBirth;
+	}
+
+
+	public void setmBirth(String mBirth) {
+		this.mBirth = mBirth;
+	}
+
+	public String getmAlephString() {
+		return mAlephString;
+	}
+
+	public void setmAlephString(String mAlephString) {
+		this.mAlephString = mAlephString;
+	}
+
+	public int getmRelation() {
+		return mRelation;
+	}
+
+	public void setmRelation(int relation) {
+		this.mRelation = relation;
+	}
+
+	public String getmDomain() {
+		return mDomain;
+	}
+
+	public void setmDomain(String mDomain) {
+		this.mDomain = mDomain;
+	}
+
+	public void setmContactName(String mContactName) {
+		this.mContactName = mContactName;
+		this.name = mContactName;
+	}
+
+	@Override
+	public long getUId() {
+		return this.mUserId;
+	}
+	@Override
+	public int isGroup() {
+		return CanTalkable.GROUP.CONTACT_MODEL.Value;
+	}
+	@Override
+	public String getHeadUrl() {
+		return this.mHeadUrl;
+	}
+	@Override
+	public long getLocalUId() {
+		// TODO Auto-generated method stub
+		return RenrenChatApplication.USER_ID;
+	}
+	@Override
+	public String getDomain() {
+		return mDomain;
+	}
+}

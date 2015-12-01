@@ -1,0 +1,990 @@
+package com.renren.mobile.chat.ui;
+
+import plugin.DBBasedPluginManager;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
+import android.os.RemoteException;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.common.app.AbstractRenrenApplication;
+import com.common.binder.LocalBinderPool;
+import com.common.emotion.emotion.EmotionNameList;
+import com.common.emotion.emotion.EmotionPool;
+import com.common.emotion.emotion.EmotionRank;
+import com.common.emotion.emotion.EmotionRankManager;
+import com.common.emotion.manager.DataBaseLock;
+import com.common.emotion.manager.EmotionManager;
+import com.common.manager.LoginManager;
+import com.common.mcs.HttpProviderWrapper;
+import com.common.mcs.INetRequest;
+import com.common.mcs.INetResponse;
+import com.common.mcs.McsServiceProvider;
+import com.core.json.JsonObject;
+import com.core.json.JsonValue;
+import com.core.orm.ORMUtil;
+import com.core.util.CommonUtil;
+import com.renren.mobile.account.LoginControlCenter;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.activity.RenRenChatActivity;
+import com.renren.mobile.chat.base.BaseFragmentActivity;
+import com.renren.mobile.chat.base.GlobalValue;
+import com.renren.mobile.chat.base.util.ImagePool;
+import com.renren.mobile.chat.base.views.NotSynImageView;
+import com.renren.mobile.chat.common.RRSharedPreferences;
+import com.renren.mobile.chat.common.ResponseError;
+import com.renren.mobile.chat.crash.CrashHandler;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper_FlashEmotion;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper_Image;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper_Text;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper_Voice;
+import com.renren.mobile.chat.service.ChatService;
+import com.renren.mobile.chat.ui.account.LoginSixinActivity;
+import com.renren.mobile.chat.ui.chatsession.ChatSessionHelper;
+import com.renren.mobile.chat.ui.chatsession.ChatSessionManager;
+import com.renren.mobile.chat.ui.contact.RoomInfosData;
+import com.renren.mobile.chat.ui.contact.feed.ObserverImpl;
+import com.renren.mobile.chat.ui.guide.WelcomeActivity;
+import com.renren.mobile.chat.ui.notification.FeedNotificationManager;
+import com.renren.mobile.chat.ui.notification.MessageNotificationManager;
+import com.renren.mobile.chat.ui.setting.SettingDataManager;
+
+/**
+ * 主屏幕的分屏显示
+ * 
+ * @author eason Lee   (原：zhenning.yang)
+ * @version 1.0 Action！对于Fragment的每一个View创建时发生的网络请求没有做出预处理,
+ */
+public class MainFragmentActivity extends BaseFragmentActivity{
+	
+    View mainlayout;
+    
+	/** 自动选择展现的页面*/
+	public static final int INDEX_AUTO_CHOOSE = -1; 
+	
+	/**
+	 * Intent 传过来的 Fragment的索引
+	 */
+	private int mIndex;
+	MyAdapter mAdapter;
+	public ViewPager mPager;
+	
+	public final static int NO_UPDATE = 0; //没有更新
+	public final static int MUST_UPDATE = 1; //强制更新
+	public final static int SELECT_UPDATE = 2;//选择更新
+	public final static String UPDATE_INFO= "update_info";
+	
+	String uid ;
+
+	/**私信*/
+	private MySessionFragment mFragmentSession;
+	/**联系人 */
+	private MyContactFragment mFragmentContact;
+	/**工具 */
+	private MySeekingFragment mFragmentSetting;
+	/**特别关注 */
+	private MyFeedFragment mFragmentFeed;
+	
+	
+	
+	/**定时刷新在线联系人的定时器是否开启 */
+	private ProgressDialog emotionDbDialog = null;
+
+	private ProgressDialog dialog;
+	private Context context = RenrenChatApplication.mContext;
+	
+	public static final int RETRIEVE_FRIENDREQUEST = 0;
+	public static final int REFRESH_NEW_FRIENDS_REQUEST = 1;
+	public static final int REFRESH_NEW_MESSAGE = 2;
+	public static final int REFRESH_NEW_FEED = 3;
+	public static final int REFRESH_RED_DOT = 4;
+	public static final String REFRESH_NEW_MESSAGE_RECEIVER_ACTION ="refresh_new_message_receiver_action";
+	public static final String REFRESH_NEW_FEED_RECEIVER_ACTION ="refresh_new_feed_receiver_action";
+	public static final String REFRESH_RED_DOT_ACTION ="refresh_red_dot_action";
+	
+	//SharedPreferences 主要用在onresume
+	RRSharedPreferences mRRSP;
+	public boolean viewInit = false;
+	
+	/**
+	 * 此handler用来处理好友请求，更新底部的tab消息数量（会话与工具）以及工具栏的新好友请求数量
+	 * **/
+	public Handler mHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case REFRESH_NEW_FRIENDS_REQUEST:
+				setTabNews(REFRESH_NEW_FRIENDS_REQUEST);
+				break;
+			case REFRESH_NEW_MESSAGE:
+				setTabNews(REFRESH_NEW_MESSAGE);
+				break;
+			case REFRESH_NEW_FEED:
+				setTabNews(REFRESH_NEW_FEED);
+				break;
+			case REFRESH_RED_DOT:
+				tabs[msg.arg2].setRedDot(msg.arg1);
+			}
+		}
+	};
+	
+	@Override
+	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+		boolean ret = tabs[mPager.getCurrentItem()].fragment.getScreen().onKeyDown(keyCode, event);
+		if(mPager.getCurrentItem() == Tab.SIXIN){
+			MessageNotificationManager.getInstance().sendNotification(context);
+		}
+		if(keyCode==KeyEvent.KEYCODE_BACK){
+			RenrenChatApplication.setThird(false);
+		}
+		return super.onKeyDown(keyCode, event) || ret;
+	}
+	
+	/**
+	 * 此BroadcastReceiver用于处理新消息来的时候，更新会话tab的未读消息数
+	 * */
+	BroadcastReceiver mRefreshNewMessageReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Message message = mHandler.obtainMessage();
+			message.what = REFRESH_NEW_MESSAGE;
+			message.sendToTarget();
+		}
+	};
+	BroadcastReceiver mRefreshNewFeedReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Message message = mHandler.obtainMessage();
+			message.what = REFRESH_NEW_FEED;
+			message.sendToTarget();
+		}
+	};
+	
+	BroadcastReceiver mRefreshRedDotReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Message message = mHandler.obtainMessage();
+			message.what = REFRESH_RED_DOT;
+			message.arg1 = intent.getIntExtra("unread_count", 0);
+			message.arg2 = intent.getIntExtra("tab", -1);
+			message.sendToTarget();
+		}
+	};
+	
+	
+	
+	
+	/**
+	 * 跳转到MainFragmentActivity
+	 * 
+	 * @param index
+	 *            MainFragmentActivity中的Fragment的索引,范围 0~3
+	 */
+	public static void show(Context context, int index) {
+		Intent intent = new Intent(context, MainFragmentActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.putExtra("indexPager", index);
+		intent.putExtra("force_reflash", true);
+		context.startActivity(intent);
+	}
+
+	public static void show(Context context) {
+		show(context, Tab.SIXIN);
+		RenrenChatApplication.currentIndex = 0;
+		MessageNotificationManager.getInstance().clearAllNotification(context);
+	}
+	
+	
+	boolean flag = false;
+
+	@Override
+	protected void onStart() {
+//		if(RenrenChatApplication.isSessionLeave){
+//			RenrenChatApplication.currentIndex = 0;
+//			RenrenChatApplication.isSessionLeave = false;
+//			MessageNotificationManager.getInstance().clearAllNotification(context);
+//		}
+		GlobalValue.registorCurrentActivity(this);
+		int index = mPager.getCurrentItem();//当前pager下角标
+		if(index == Tab.SIXIN){
+			RenrenChatApplication.currentIndex = 0;
+			MessageNotificationManager.getInstance().clearAllNotification(context);//清空聊天notification
+			Log.v("aaaaa", "onStart clearAllNotification");
+			
+		}else if(index == Tab.PLUGIN){
+//			RenrenChatApplication.feedIndex = 1;
+//			FeedNotificationManager.getInstance().clearAllNotification();//清空新鲜事notification
+		}
+		
+		if(LoginManager.getInstance().getLoginInfo().mUserId==0){
+			Intent intent=new Intent(this,FirstActivity.class);
+			this.startActivity(intent);
+			this.finish();
+			return;
+		}
+		
+		super.onStart();
+	}
+	
+	@Override
+	protected void onStop() {
+		flag = false;
+		super.onStop();
+		GlobalValue.unRegistorCurrentActivity(this);
+	}
+	public static MainFragmentActivity sActivity = null;
+	//退出 重新执行
+	//切到后台不执行
+	
+	public class Tab{
+		public final static int SIXIN = 0;
+		public final static int CONTRACT = 1;
+		public final static int PLUGIN = 2;
+		public final static int SETTING = 3;
+		public final static int NUM_ITEMS = 4;
+		public int location;
+		public int unfocusIcon;
+		public int focusIcon;
+		public int textId;
+		
+		public View layout;
+		public View redDot;
+		public TextView text;
+		public ImageView icon;
+		public BaseFragment fragment;
+		public TextView unReadMessage;
+
+		public Tab(int location) {
+			super();
+			this.location = location;
+		}
+
+		public void setContent(BaseFragmentActivity v, int layoutId){
+			layout = v.findViewById(layoutId);
+			icon = (ImageView) layout.findViewById(R.id.icon);
+			text = (TextView) layout.findViewById(R.id.text);
+			redDot = layout.findViewById(R.id.red_dot);
+			unReadMessage = (TextView) layout.findViewById(R.id.new_message);
+			text.setText(textId);
+			layout.setOnClickListener(new PageOnClick(this));
+			
+			icon.setImageResource(unfocusIcon);
+			icon.setBackgroundDrawable(null);
+			layout.setBackgroundDrawable(null);
+			text.setTextColor(0xffe6e6e6);
+		}
+		
+		public void setRedDot(int count){
+			if(count >= 1){
+				redDot.setVisibility(View.VISIBLE);
+			}else{
+				redDot.setVisibility(View.GONE);
+			}
+		}
+	}
+	
+	public class PageOnClick implements View.OnClickListener{
+		public Tab tab;
+		public PageOnClick(Tab t) {
+			super();
+			this.tab = t;
+		}
+		@Override
+		public void onClick(View v) {
+			mPager.setCurrentItem(tab.location);
+		}
+	}
+	
+	public Tab[] tabs = new Tab[Tab.NUM_ITEMS];
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		savedInstanceState = null;
+		{//add by dingwei.chen
+			ORMUtil.getInstance().checkCotainORMTable(ChatMessageWarpper_Text.class);
+			ORMUtil.getInstance().checkCotainORMTable(ChatMessageWarpper_FlashEmotion.class);
+			ORMUtil.getInstance().checkCotainORMTable(ChatMessageWarpper_Image.class);
+			ORMUtil.getInstance().checkCotainORMTable(ChatMessageWarpper_Voice.class);
+		}
+		super.onCreate(savedInstanceState);
+		RoomInfosData.getInstance().loadRoomInfoListFromDB();
+		registerNewsReceiver();
+		
+		LoginControlCenter.getInstance().setIsFirstInstall(this, false);
+
+		if(LoginManager.getInstance().getLoginInfo().mUserId == 0 || RenrenChatApplication.sIsSingleLoginError){
+			LoginSixinActivity.show(this, LoginSixinActivity.LOGIN_SIXIN);
+			this.finish();
+			return;
+		}
+		
+		RenrenChatApplication.clearStack();
+		RenrenChatApplication.sIsSingleLoginError = false;
+		if(sActivity!=null){
+			RenrenChatApplication.removeActivity(sActivity);
+		}
+		sActivity = this;
+		RenrenChatApplication.pushStack(this);
+		initEmotionData();
+		//实例SharedPreferences
+		mRRSP = new RRSharedPreferences(RenrenChatApplication.mContext);
+		
+		// 是否创建桌面快捷方式
+		boolean shortcut_sign = mRRSP.getBooleanValue(RRSharedPreferences.CREATE_SHORTCUT, false);
+		if (!shortcut_sign) {
+			addShortcut();
+			mRRSP.putBooleanValue(RRSharedPreferences.CREATE_SHORTCUT, true);
+		}
+		
+		MessageNotificationManager.getInstance().initMessageNotificationModel();
+		FeedNotificationManager.getInstance();
+		
+		if(RenrenChatApplication.sNextIntent != null){
+			startActivity(RenrenChatApplication.sNextIntent);
+			RenrenChatApplication.sNextIntent = null;
+		}
+		
+		for(int i = 0; i < Tab.NUM_ITEMS; ++i)
+			tabs[i] = new Tab(i);
+		tabs[Tab.SIXIN].unfocusIcon = R.drawable.cy_sixin_unfocused;
+		tabs[Tab.SIXIN].focusIcon = R.drawable.cy_sixin_focused;
+		tabs[Tab.SIXIN].textId = R.string.y_main_layout_1;
+		tabs[Tab.CONTRACT].unfocusIcon = R.drawable.cy_contract_unfocused;
+		tabs[Tab.CONTRACT].focusIcon = R.drawable.cy_contract_focused;
+		tabs[Tab.CONTRACT].textId = R.string.y_main_layout_3;
+		tabs[Tab.PLUGIN].unfocusIcon = R.drawable.cy_plugin_unfocused;
+		tabs[Tab.PLUGIN].focusIcon = R.drawable.cy_plugin_focused;
+		tabs[Tab.PLUGIN].textId = R.string.y_main_layout_9;
+		tabs[Tab.SETTING].unfocusIcon = R.drawable.cy_setting_unfocused;
+		tabs[Tab.SETTING].focusIcon = R.drawable.cy_setting_focused;
+		tabs[Tab.SETTING].textId = R.string.F_SettingScreen_1;
+		
+		setContentView(R.layout.y_main);
+		mainlayout = findViewById(R.id.y_main_container);
+		viewInit = false;
+		
+		ChatService.start();
+		if(DBBasedPluginManager.pluginLoadedFlag){
+			new DBBasedPluginManager().updatePluginsFromServer();
+			DBBasedPluginManager.pluginLoadedFlag = false;
+		}
+		
+		// Fragment初始化
+		mFragmentSession = new MySessionFragment();
+		mFragmentContact = new MyContactFragment();
+		mFragmentSetting = new MySeekingFragment();
+		mFragmentFeed = new MyFeedFragment();
+		tabs[Tab.SIXIN].fragment = mFragmentSession;
+		tabs[Tab.CONTRACT].fragment = mFragmentContact;
+		tabs[Tab.PLUGIN].fragment = mFragmentFeed;
+		tabs[Tab.SETTING].fragment = mFragmentSetting;
+		
+		//ViewPager
+		mPager = (ViewPager)findViewById(R.id.pager);     
+		mAdapter = new MyAdapter(getSupportFragmentManager());
+		mPager.setAdapter(mAdapter);
+		mPager.setOffscreenPageLimit(2);
+		
+		tabs[Tab.SIXIN].	setContent(this, R.id.sixin);
+		tabs[Tab.CONTRACT].	setContent(this, R.id.contact);
+		tabs[Tab.PLUGIN].	setContent(this, R.id.plugin);
+		tabs[Tab.SETTING].	setContent(this, R.id.setting);
+		
+		//保证用户第一次使用时显示小红点   条件：
+		//1.设备  2.uid 3.第一次
+		//如果有小红点就不应该有条目显示
+		
+		uid = String.valueOf(LoginManager.getInstance().getLoginInfo().mUserId);
+		if (mRRSP.getBooleanValue(uid, true)) {
+			//显示小红点
+			tabs[Tab.PLUGIN].redDot.setVisibility(View.VISIBLE);
+		}else{
+			tabs[Tab.PLUGIN].redDot.setVisibility(View.GONE);
+		}
+		
+		mPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int position) {
+				initChildScreenResumeAndPauseEvent(position);
+				// 处理导航条
+				Log.i("cy", "1");
+				foucsScroll(position);
+				if (position == Tab.SIXIN)
+					MessageNotificationManager.getInstance().clearAllNotification(context);
+				else if (RenrenChatApplication.currentIndex == 0)
+					MessageNotificationManager.getInstance().sendNotification(context);
+				
+				RenrenChatApplication.currentIndex = position;
+				tabs[position].layout.performClick();
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset,
+					int positionOffsetPixels) {
+				mFragmentSetting.setRefresh();
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				if(state==ViewPager.SCROLL_STATE_DRAGGING){
+					mFragmentContact.onPageScrollStateChanged();
+				}
+			}
+		});
+		// 根据索引展示Fragment
+		context = MainFragmentActivity.this;
+		onNewIntent(getIntent());
+		
+		if(RenrenChatApplication.sToChatContactInChat!=null){
+			RenRenChatActivity.show(this, RenrenChatApplication.sToChatContactInChat);
+			RenrenChatApplication.sToChatContactInChat = null;
+		}
+		viewInit = true;
+		updateInfo();
+	}
+	
+	private void initEmotionData() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				if(DataBaseLock.isWriteToDB){
+					synchronized (DataBaseLock.dBlock) {
+						try{
+							DataBaseLock.dBlock.wait();
+						}catch(InterruptedException e){
+						
+						}finally{
+							CommonUtil.log("dia", "dismiss dialog ");
+							if(emotionDbDialog!=null){
+								emotionDbDialog.dismiss();
+							}
+						}
+					}
+				}
+				
+				/*AbstractRenrenApplication.HANDLER.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						CommonUtil.log("init", "loadview:"+EmotionPool.getInstance().getEmotion(""));
+						EmotionManager.getInstance().loadEmotionView(MainFragmentActivity.this);
+					}
+				});*/
+				
+			}
+		}).start();
+		if(DataBaseLock.isWriteToDB){
+			emotionDbDialog = ProgressDialog.show(MainFragmentActivity.this, "请稍等", "请稍等");
+		}
+		
+	}
+
+	private void needUpdate() {
+		boolean updateMust = mRRSP.getBooleanValue("update_must", false);
+		String version_update = mRRSP.getStringValue("version_update", "");
+		if( updateMust == true && !version_update.equals("")){//如果弹出过强制更新
+			if(RenrenChatApplication.versionName == null){//版本号有可能为空
+				String packageName = context.getPackageName();
+				PackageManager pm = context.getPackageManager();
+				PackageInfo info;
+				try {
+					info = pm.getPackageInfo(packageName, 0);
+					RenrenChatApplication.versionName = info.versionName;
+				} catch (NameNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			//当前版本号（可能是更新前的 也可能是更新后的）和需要强制更新时存在本地的版本号  相比较
+			int i = compareVersion(RenrenChatApplication.versionName,version_update);
+			if(i == -1 || i == 0){
+				String title = mRRSP.getStringValue("title", "");
+				String info = mRRSP.getStringValue("info", "");
+				String leftKey = mRRSP.getStringValue("leftKey", "");
+				String url = mRRSP.getStringValue("url", "");
+				
+				mustUpdate(info, url, leftKey, title);
+			}else{
+				updateInfo();
+				mRRSP.putBooleanValue("update_must", false);
+			}
+		}
+	}
+	
+	
+	public int compareVersion(String s1, String s2){
+        if( s1 == null && s2 == null )
+            return 0;
+        else if( s1 == null )
+            return -1;
+        else if( s2 == null )
+            return 1;
+        String[]
+            arr1 = s1.split("[^a-zA-Z0-9]+"),
+            arr2 = s2.split("[^a-zA-Z0-9]+");
+
+        int i1, i2, i3;
+
+        for(int ii = 0, max = Math.min(arr1.length, arr2.length); 
+        	ii <= max; ii++){
+            if( ii == arr1.length )
+                return ii == arr2.length ? 0 : -1;
+            else if( ii == arr2.length )
+                return 1;
+
+            try{
+                i1 = Integer.parseInt(arr1[ii]);
+            }
+            catch (Exception x){
+                i1 = Integer.MAX_VALUE;
+            }
+
+            try{
+                i2 = Integer.parseInt(arr2[ii]);
+            }
+            catch (Exception x){
+                i2 = Integer.MAX_VALUE;
+            }
+
+            if( i1 != i2 ){
+                return i1 - i2;
+            }
+
+            i3 = arr1[ii].compareTo(arr2[ii]);
+
+            if( i3 != 0 )
+                return i3;
+        }
+
+        return 0;
+    }
+	
+	/**
+	 * 为程序创建桌面快捷方式
+	 */
+	private void addShortcut() {
+		Intent intent = new Intent();
+		intent.setClass(getApplicationContext(), FirstActivity.class);
+		intent.setAction("android.intent.action.MAIN");
+		intent.addCategory("android.intent.category.LAUNCHER");
+
+		Intent addShortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+		Parcelable icon = Intent.ShortcutIconResource.fromContext(this, R.drawable.icon);
+		addShortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+		addShortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+		addShortcut.putExtra("duplicate", false);
+		addShortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+		sendBroadcast(addShortcut);
+	}
+
+	private boolean mFlag = false;
+	
+	/**
+	 * 注意：如果未完成资料的用户 resume需要重新进入完善资料页面而不是fragement
+	 */
+	@Override
+	protected void onResume() {
+		//考虑应用程序长时间挂在后台，数据如果被清的话，重新加载对话列表
+		if (mFragmentSession.getScreen()!= null) {
+			if(ChatSessionManager.getInstance().getSessionList().size() == 0){
+				mFragmentSession.getScreen().onShow();
+			}
+		}
+		
+		switch (mPager.getCurrentItem()) {
+		case Tab.SIXIN:
+			RenrenChatApplication.currentIndex = 0;
+			MessageNotificationManager.getInstance().clearAllNotification(context);
+			Log.v("aaaaa", "onResume clearAllNotification");
+			break;
+//		case Tab.PLUGIN:
+//			RenrenChatApplication.feedIndex = 1;
+//			FeedNotificationManager.getInstance().clearAllNotification();
+//			break;
+		}
+		
+		boolean flag = RenrenChatApplication.getThird();
+		for(Tab t:tabs){
+			t.fragment.setIsFromThird(flag);
+		}
+		
+		int index = mPager.getCurrentItem();//当前pager下角标
+		if(flag && !mFlag){
+			int length = ChatSessionHelper.getInstance().querySinglePersonHistory();
+			index = length <= 0 ? Tab.CONTRACT : Tab.SIXIN;
+			mFlag = true;
+		}
+		tabs[index].layout.performClick();
+		mPager.setCurrentItem(index);
+		
+		RenrenChatApplication.isMainFragementActivity = true;
+		setTabNews(REFRESH_NEW_MESSAGE);
+		setTabNews(REFRESH_NEW_FRIENDS_REQUEST);
+		setTabNews(REFRESH_NEW_FEED);
+		needUpdate();
+		
+		// add by xiangchao.fan 个人资料和隐私设置页面注销时上传数据失败后再上传时机
+		if(!SettingDataManager.getInstance().isSelfInfoHasUpload()){
+			SettingDataManager.getInstance().toUploadSelfInfo();
+		}
+		if(!SettingDataManager.getInstance().isPrivateInfoHasUpload()){
+			SettingDataManager.getInstance().toUploadPrivateInfo();
+		}
+		
+		if(LoginManager.getInstance().getLoginInfo().mUserId==0){
+			Intent intent=new Intent(this,FirstActivity.class);
+			this.startActivity(intent);
+			this.finish();
+			return;
+		}
+		super.onResume();
+	}
+	
+	private void initChildScreenResumeAndPauseEvent(int position){
+		for(Tab t : tabs){
+			if(t.location == position)
+				t.fragment.onViewResume();
+			else
+				t.fragment.onViewPause();
+		}
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		int length = ChatSessionHelper.getInstance().querySinglePersonHistory();
+		int index = intent.getIntExtra("indexPager",INDEX_AUTO_CHOOSE);
+		
+		mIndex = length <= 0 ? Tab.CONTRACT : Tab.SIXIN;
+		
+		if(index != INDEX_AUTO_CHOOSE){//从新鲜事触发，重置标志位
+			mIndex = index;
+		}
+		
+		try {
+			boolean sign = LocalBinderPool.getInstance().isContainBinder() && LocalBinderPool.getInstance().obtainBinder().isRecvOfflineMessage();
+			if(!sign){//如果有离线消息跳转到对话列表
+				index = Tab.SIXIN;
+			}
+		} catch (RemoteException e) {}
+		
+		switch (mIndex) {
+		case Tab.SIXIN:
+			RenrenChatApplication.currentIndex = 0;
+			MessageNotificationManager.getInstance().clearAllNotification(context);
+			break;
+//		case Tab.PLUGIN:
+//			RenrenChatApplication.feedIndex = 1;
+//			FeedNotificationManager.getInstance().clearAllNotification();
+//			break;
+		}
+		
+		mPager.setCurrentItem(mIndex);
+		foucsScroll(mIndex);
+		if(intent.getBooleanExtra("isfinish", false)){
+			finish();
+			LoginSixinActivity.show(this, LoginSixinActivity.LOGIN_SIXIN);
+		}
+		super.onNewIntent(intent);
+	}
+	
+	@Override
+	protected void onPause() {
+		RenrenChatApplication.isMainFragementActivity = false;
+		if(RenrenChatApplication.currentIndex == 0){
+			RenrenChatApplication.currentIndex = 5;
+			RenrenChatApplication.isSessionLeave = true;
+			MessageNotificationManager.getInstance().sendNotification(context);
+		}
+		
+//		if(RenrenChatApplication.feedIndex == 1){
+//			RenrenChatApplication.feedIndex = 3;
+//			RenrenChatApplication.isFeedLeave = true;
+//		}
+		tabs[mPager.getCurrentItem()].fragment.onViewPause();
+		boolean updateMust = mRRSP.getBooleanValue("update_must", false);
+		if(updateMust){
+			RenrenChatApplication.currentIndex = 0;
+			RenrenChatApplication.feedIndex = 1;
+		}
+		super.onPause();
+	}
+
+	/**
+	 * 注册新消息Receiver
+	 * */
+	private void registerNewsReceiver(){
+		IntentFilter newMessageFilter = new IntentFilter(REFRESH_NEW_MESSAGE_RECEIVER_ACTION);
+		registerReceiver(mRefreshNewMessageReceiver, newMessageFilter);
+		IntentFilter newFeedFilter = new IntentFilter(REFRESH_NEW_FEED_RECEIVER_ACTION);
+		registerReceiver(mRefreshNewFeedReceiver, newFeedFilter);
+		IntentFilter newRedDotFilter = new IntentFilter(REFRESH_RED_DOT_ACTION);
+		registerReceiver(mRefreshRedDotReceiver, newRedDotFilter);
+	}
+	
+	/**
+	 * 解决注册新消息Receiver
+	 * */
+	private void unRegisterNewsReceiver(){
+		unregisterReceiver(mRefreshNewMessageReceiver);
+		unregisterReceiver(mRefreshNewFeedReceiver);
+		unregisterReceiver(mRefreshRedDotReceiver);
+	}
+
+	private void updateInfo() {
+		dialog = new ProgressDialog(context);
+		// dialog.setMessage("正在检查更新");
+		dialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				HttpProviderWrapper.getInstance().stop();
+			}
+		});
+
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+
+				if (obj instanceof JsonObject) {
+					RenrenChatApplication.mHandler.post(new Runnable() {
+
+						public void run() {
+							dialog.dismiss();
+							JsonObject map = (JsonObject) obj;
+							Log.v("dada", "map = " + map);
+							if (ResponseError.noError(req, map,false)) {
+								int type = (int) map.getNum("type");
+								String info = map.getString("info");
+								final String url = map.getString("url");
+								String leftKey = "确定";
+								String rightKey = "取消";
+								String title = "";
+
+								JsonObject object = map.getJsonObject("configInfo");
+								if (object != null) {
+									leftKey = object.getString("leftKey");
+									if (leftKey == null || leftKey.equals("")) {
+										leftKey = "确定";
+									}
+									rightKey = object.getString("rightKey");
+									if (rightKey == null || rightKey.equals("")) {
+										rightKey = "取消";
+									}
+									title = object.getString("title");
+								}
+								switch (type) {
+								case NO_UPDATE: // 没有更新
+									Log.v("dada", "NO_UPDATE");
+									break;
+								case MUST_UPDATE: // 强制更新
+									mustUpdate(info, url, leftKey, title);
+									Log.v("dada", "MUST_UPDATE");
+									break;
+								case SELECT_UPDATE: // 选择更新
+									selectUpdate(info, url, leftKey, rightKey,
+											title);
+									Log.v("dada", "SELECT_UPDATE");
+									break;
+								}
+							}
+						}
+
+					});
+				}
+			}
+		};
+
+		McsServiceProvider.getProvider().getUpdateInfo(1, response, "", false);
+	}
+
+	private void mustUpdate(String info, final String url,
+			String leftKey, String title) {
+		mRRSP.putBooleanValue("update_must", true);
+		mRRSP.putStringValue("version_update", RenrenChatApplication.versionName);
+		mRRSP.putStringValue("title", title);
+		mRRSP.putStringValue("info", info);
+		mRRSP.putStringValue("leftKey", leftKey);
+		mRRSP.putStringValue("url", url);
+		RenrenChatApplication.currentIndex = 0;
+		RenrenChatApplication.feedIndex = 1;
+		FeedNotificationManager.getInstance().clearAllNotification();
+		FeedNotificationManager.getInstance().clearChatFeedList();
+		MessageNotificationManager.getInstance().getMessageNotificationModel().clearUnReadMessageList();
+		MessageNotificationManager.getInstance().clearAllNotification(context);
+		AlertDialog dialog = new AlertDialog.Builder(context).setTitle(title).setMessage(info).setPositiveButton(leftKey, new DialogInterface.OnClickListener() {
+		
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					MessageNotificationManager.getInstance().clearAllNotification(context);
+					FeedNotificationManager.getInstance().clearAllNotification();
+					MessageNotificationManager.getInstance().getMessageNotificationModel().clearUnReadMessageList();
+					if (url != null && !url.equals("")) {
+						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+						context.startActivity(intent);
+					}
+					RenrenChatApplication.clearStack();
+				}
+			}).show();
+			
+			dialog.setOnCancelListener(new OnCancelListener() {
+				
+				@Override
+				public void onCancel(DialogInterface dialog) {
+							// 退出程序
+						MessageNotificationManager.getInstance().clearAllNotification(context);
+						FeedNotificationManager.getInstance().clearAllNotification();
+						MessageNotificationManager.getInstance().getMessageNotificationModel().clearUnReadMessageList();
+						RenrenChatApplication.clearStack();
+				}
+			});
+	}
+	
+	
+	/**
+	 * 焦点背景滑动+图标动画
+	 */
+	private void foucsScroll(int index) {
+		for(Tab t: tabs){
+			t.icon.setImageResource(t.unfocusIcon);
+			t.icon.setBackgroundDrawable(null);
+			t.layout.setBackgroundDrawable(null);
+			t.text.setTextColor(0xffe6e6e6);
+		}
+		tabs[index].icon.setImageResource(tabs[index].focusIcon);
+		tabs[index].text.setTextColor(0xffffffff);
+		tabs[index].layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.cy_main_bottom_focused));
+	}
+
+	public class MyAdapter extends FragmentPagerAdapter {
+		public MyAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getCount() {
+			return Tab.NUM_ITEMS;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return tabs[position].fragment;
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		tabs = null;
+		CommonUtil.log("final", "onDestroy:" + getClass().getSimpleName());
+		System.gc();
+		RenrenChatApplication.popStack(this);
+		NotSynImageView.clearPool();
+		ImagePool.getInstance().recycle();
+		RoomInfosData.getInstance().recycleAllObserver();
+		
+		if(sActivity == this)
+			sActivity = null;
+		// 取消注册监听
+		unRegisterNewsReceiver();
+		new Thread(){
+			public void run() {
+				for(int i = 0; i < EmotionNameList.getPackageList().size();++i){
+					EmotionRank rank = EmotionRankManager.getInstance().getEmotionRank(EmotionNameList.getPackageList().get(i));
+					if(rank!= null){
+//						long start = System.currentTimeMillis();
+						rank.setDataToDB();
+//						CommonUtil.log("ondestory", (System.currentTimeMillis()-start )+"  has write to datebase");
+					}
+				}
+			};
+		}.start();
+		//		EmotionPool.getInstance().clearGifCache();
+//		EmotionManager.getInstance().clearEmotionView();
+		super.onDestroy();
+	}
+	
+	/**
+	 * 更新底部tab的未读消息数与工具栏中的未读好友请求
+	 * */
+	public void setTabNews(int type){
+		if(viewInit){
+			switch (type) {
+			case REFRESH_NEW_FRIENDS_REQUEST:
+				tabs[Tab.PLUGIN].setRedDot(RenrenChatApplication.mNewFriendsRequestCount);
+				mFragmentSetting.setRequestCount();
+				break;
+			case REFRESH_NEW_MESSAGE:
+				tabs[Tab.SIXIN].setRedDot(MessageNotificationManager.getInstance().getMessageNotificationModel().getUnReadMessageList().size());
+				break;
+			case REFRESH_NEW_FEED:
+				tabs[Tab.PLUGIN].setRedDot(ObserverImpl.getInstance().getFeedSize());
+				break;
+			}
+		}
+	}
+
+	private void selectUpdate(String info, final String url, String leftKey,
+			String rightKey, String title) {
+		AlertDialog dialog = new AlertDialog.Builder(context).setTitle(title).setMessage(info).setPositiveButton(leftKey, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+				if (!TextUtils.isEmpty(url)) {
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+					context.startActivity(intent);
+				}
+			}
+		}).setNegativeButton(rightKey, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		}).show();
+
+		dialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+			}
+		});
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		CommonUtil.log("final", "finalize:" + getClass().getSimpleName());
+		super.finalize();
+	}
+	
+}

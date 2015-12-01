@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:id="@+id/chat_session_linearLayout"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleSmallTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/chat_session_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           	android:textColor="@color/expression_tab_down"
+        	android:textSize="20sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/chat_session_layout_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="middle"
+        android:layout_gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/expression_tab_down"
+        android:text="@string/chat_session_list"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="22sp" />
+
+</FrameLayout>

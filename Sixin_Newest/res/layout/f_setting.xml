@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:type="http://schemas.android.com/apk/res/com.renren.mobile.chat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical" 
+    android:fadingEdge="none">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <!-- scroll begin -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dip"
+                android:orientation="vertical" >
+
+                <!-- self_setting -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/self_setting"
+                    style="@style/general_setting_layout_top"
+                    android:layout_height="@dimen/setting_layout">
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+                <!-- bind_renren -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/bind_renren"
+                    style="@style/general_setting_layout_bottom"
+                    android:layout_height="@dimen/setting_layout" >
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dip"
+                android:orientation="vertical" >
+
+                <!-- system__setting -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/system_setting"
+                    style="@style/general_setting_layout_top"
+                    android:layout_height="@dimen/setting_layout" 
+                    type:backgroundType="2">
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+
+                <!-- private_setting -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/private_setting"
+                    style="@style/general_setting_layout_middle"
+                    android:layout_height="@dimen/setting_layout" 
+                    type:backgroundType="0">
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+               
+                <!-- blacklist_setting -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/blacklist_setting"
+                    style="@style/general_setting_layout_bottom"
+                    android:layout_height="@dimen/setting_layout" 
+                    type:backgroundType="3">
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dip"
+                android:orientation="vertical" >
+
+                <!-- newuser_guide -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/newuser_guide"
+                    style="@style/general_setting_layout_top"
+                    android:layout_height="@dimen/setting_layout" >
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+                <!-- about_sixin -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/about_sixin"
+                    style="@style/general_setting_layout_middle"
+                    android:layout_height="@dimen/setting_layout" >
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+                <!-- user_feedback -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/user_feedback"
+                    style="@style/general_setting_layout_middle"
+                    android:layout_height="@dimen/setting_layout" >
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+
+                <!-- evaluate_sixin -->
+                <com.renren.mobile.chat.view.GeneralSettingLayout
+                    android:id="@+id/evaluate_sixin"
+                    style="@style/general_setting_layout_bottom"
+                    android:layout_height="@dimen/setting_layout" >
+                </com.renren.mobile.chat.view.GeneralSettingLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/setting_logout"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ykn_common_height_button"
+                android:layout_marginTop="16dip"
+                android:background="@drawable/ykn_button_background_red"
+                android:text="@string/setting_layout_9"
+                android:textColor="@color/white"
+                android:textSize="18sp" >
+            </Button>
+
+            <!-- null layout -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30dip" >
+            </LinearLayout>
+        </LinearLayout>
+        <!-- scroll end -->
+
+        <include
+            android:id="@+id/setting_logout_loading"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            layout="@layout/loading_dialog"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</ScrollView>

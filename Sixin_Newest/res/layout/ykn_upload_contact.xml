@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        >
+    </LinearLayout>
+    
+    <FrameLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        
+        <View 
+            android:layout_width="fill_parent"
+            android:layout_height="6dip"
+            android:background="@drawable/title_shadow"
+            />
+    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:paddingLeft="@dimen/ykn_common_horizontal"
+		    android:paddingRight="@dimen/ykn_common_horizontal"
+		    android:gravity="center"
+		    android:orientation="vertical" >
+		    
+	        <ImageView 
+	            android:layout_width="130dip"
+	            android:layout_height="228dip"
+	            android:layout_gravity="center"
+	            android:src="@drawable/ykn_upload_contact"
+	            />
+	        
+		    <TextView 
+		        android:id="@+id/tv_guidance"
+		        android:paddingTop="20dip"
+		        android:layout_height="wrap_content"
+		        android:layout_width="fill_parent"
+		        android:text="@string/ykn_uploadcontact_guidance"
+		        android:textSize="14sp"
+		        android:textColor="@color/Color_B"
+		        />
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="@dimen/ykn_common_height_button"
+		        android:layout_marginTop="@dimen/ykn_common_vertical"
+		        >
+		        <Button 
+			        android:id="@+id/btn_submit"
+			        android:layout_width="fill_parent"
+			        android:layout_height="fill_parent"
+			        android:background="@drawable/ykn_button_background_blue"
+			        android:text="@string/ykn_uploadcontact_button"
+			        android:textColor="@color/Color_C"
+			        android:textSize="@dimen/ykn_common_textsize_button"
+			        />
+		    </LinearLayout>
+		</LinearLayout>
+	</FrameLayout>
+</LinearLayout>

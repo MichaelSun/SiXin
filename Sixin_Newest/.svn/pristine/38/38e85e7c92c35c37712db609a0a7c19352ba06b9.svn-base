@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/has_bind_renren_account_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/f_bind_renren_account_1"
+            android:textColor="@color/Color_B"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <FrameLayout
+                android:layout_width="66dip"
+                android:layout_height="66dip"
+                android:background="@drawable/head_bg" >
+
+                <com.renren.mobile.chat.base.views.NotSynImageView
+                    android:id="@+id/renren_account_head"
+                    android:layout_width="58dip"
+                    android:layout_height="58dip"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="4dip"
+                    android:layout_marginRight="4dip"
+                    android:layout_marginTop="2dip"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dip"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/renren_account_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/Color_A"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_clear_bind"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/ykn_common_height_button"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/ykn_button_background_red"
+            android:gravity="center"
+            android:text="@string/f_bind_renren_account_2"
+            android:textColor="@color/white"
+            android:textSize="17sp" >
+        </Button>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/not_bind_renren_account_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="20dip"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ykn_common_height_edittext" >
+
+                <EditText
+                    android:id="@+id/renren_account_id"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/ykn_edittext_normal"
+                    android:hint="@string/f_bind_renren_account_4"
+                    android:paddingLeft="10dip"
+                    android:singleLine="true"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/renren_account_id_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="4dip"
+                    android:src="@drawable/ykn_input_delete"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ykn_common_height_edittext"
+                android:layout_marginTop="10dip" >
+
+                <EditText
+                    android:id="@+id/renren_account_pwd"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/ykn_edittext_normal"
+                    android:hint="@string/f_bind_renren_account_5"
+                    android:paddingLeft="10dip"
+                    android:password="true"
+                    android:singleLine="true"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/renren_account_psw_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="4dip"
+                    android:src="@drawable/ykn_input_delete"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/btn_bind_renren_account"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ykn_common_height_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/ykn_button_background_blue"
+                android:gravity="center"
+                android:text="@string/f_bind_renren_account_6"
+                android:textColor="@color/Color_C"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

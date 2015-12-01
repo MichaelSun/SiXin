@@ -1,0 +1,315 @@
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclassmembers
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-dontshrink
+-dontoptimize
+-verbose
+
+-keepclasseswithmembernames class android.support.v4.** {
+	*;
+}
+
+-keepclasseswithmembernames interface android.support.v4.** {
+	*;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.base.database.** {
+	*;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.RenrenChatApplication {
+	*;
+}
+
+-dontwarn com.common.**
+-dontwarn com.data.**
+-dontwarn com.core.**
+
+-keepattributes *Annotation*
+-keepattributes com.core.database.Column
+-keepattributes com.core.database.Table
+-keepattributes com.core.orm.ORM
+-keepattributes com.core.database.Test
+-keepattributes com.core.database.Database
+-keepattributes com.common.network.Request
+-keepattributes com.renren.mobile.chat.base.util.XMLAttributeMapping
+-keepattributes com.data.xml.XMLMapping
+
+-keep class com.common.** {
+    *;
+}
+
+
+-keepclasseswithmembernames class com.common.** {
+    *;
+}
+
+-keepclasseswithmembernames class com.common.messagecenter.base.IConnectionManager$* {
+    boolean iter(com.common.messagecenter.base.IGetConnectionState);
+}
+
+
+-keep class com.core.** {
+    *;
+}
+
+-keepclasseswithmembernames interface com.core.** {
+    *;
+}
+
+-keepclasseswithmembernames class com.core.** {
+    *;
+}
+
+-keep class com.data.** {
+    *;
+}
+
+-keepclasseswithmembernames interface com.data.**
+
+-keepclasseswithmembernames class com.data.** {
+    *;
+}
+
+-keep class plugin.** {
+    *;
+}
+
+-keep interface plugin.** {
+    *;
+}
+
+-keepclasseswithmembernames class plugin.** {
+    *;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.model.facade.** {
+    *;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.model.warpper.** {
+    *;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.publish.AbstractInputBar {
+    *;
+}
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.support.v4.**
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.view.View
+-keep public class * extends android.preference.Preference
+-keep public class com.renren.mobile.chat.base.database.**
+-keep public interface com.renren.mobile.chat.base.database.**
+-keep public class com.renren.mobile.chat.database.**
+-keep public interface com.renren.mobile.chat.database.**
+
+-keep public class com.renren.mobile.chat.ui.MainFragmentActivity
+-keep public class com.renren.mobile.chat.base.database.BaseDBTable
+-keep public interface com.renren.mobile.chat.base.annotation.**
+-keep public interface com.renren.mobile.chat.actions.requests.RequestConstructor 
+-keep public class com.renren.mobile.chat.base.annotation.**
+-keep public class com.renren.mobile.chat.base.util.XMLAttributeMapping
+-keep public class com.data.xml.XMLMapping
+-keep public class com.renren.mobile.chat.actions.requests.**
+
+-keep public class renren.mobile.chat.base.util.**
+
+-keep class com.renren.android.dualnetwork.**
+-keep class com.renren.mobile.chat.dao.**
+-keep class com.renren.mobile.chat.ui.contact.ContactData
+-keep class com.renren.mobile.chat.ui.contact.ContactModel
+-keep class com.renren.mobile.chat.ui.contact.GroupContactModel
+-keep class com.renren.mobile.chat.net.NetRequestsPool
+
+-keepclassmembers class com.renren.mobile.chat.actions.requests.**{
+	*;
+}
+
+-keepclassmembers class com.renren.mobile.chat.ui.contact.ContactModel{	
+	*;
+}
+
+ -keepclassmembers public class com.renren.mobile.chat.ui.contact.GroupContactModel{
+ 	*;
+ }
+
+
+-keepclasseswithmembers public class com.renren.mobile.chat.base.**{
+	*;
+}
+
+
+-keepclasseswithmembers public class com.renren.mobile.chat.actions.requests.**{
+	*;
+}
+
+-keepclasseswithmembers public class com.renren.mobile.chat.actions.**{
+	*;
+}
+-keepclasseswithmembers public class com.renren.mobile.chat.dao.**{
+	*;
+}
+
+-keepclasseswithmembers public class com.renren.mobile.chat.dao.** {
+	*;
+}
+
+
+
+ -keepclassmembers public class  com.renren.mobile.chat.net.NetRequestsPool{
+ 	*;
+ }
+ 
+
+-keepclassmembers public class com.renren.mobile.chat.dao.ContactDao{
+ 	<methods>;
+ 	<fields>;
+ }
+ 
+ -keepclassmembers public class  com.renren.mobile.chat.ui.groupchat.SelectGroupChatContactActivity{
+ 	*;
+ }
+
+-keep class com.renren.mobile.chat.activity.RenRenChatActivity {
+    *;
+}
+
+-keep class com.renren.mobile.chat.activity.RenRenChatActivity$* {
+    *;
+}
+
+ 
+-keepclassmembers public class com.renren.mobile.chat.dao.AccountDAO{
+ 	<methods>;
+ 	<fields>;
+ }
+ 
+
+  
+-keepclassmembers public class com.renren.mobile.chat.dao.ChatHistoryDAO{
+ 	<methods>;
+ 	<fields>;
+ }
+   
+-keepclassmembers public class com.renren.mobile.chat.dao.NewsFeedDAO{
+ 	<methods>;
+ 	<fields>;
+ }
+ 
+ 
+
+-keepclasseswithmembers public class com.renren.mobile.chat.base.database.**{
+	*;
+}
+
+
+-keepclasseswithmembers public interface com.renren.mobile.chat.database.**{
+	*;
+}
+
+
+-keepclasseswithmembers public class com.renren.mobile.chat.database.**{
+	*;
+}
+
+-keepclassmembers public class com.renren.mobile.chat.ui.contact.ContactData {
+	*;
+}
+
+-keepclasseswithmembers public class com.renren.android.dualnetwork.** {
+	*;
+}
+
+-keep public class com.renren.mobile.chat.service.PollBinder
+
+-keep class com.renren.mobile.chat.activity.DataPool {
+    *;
+}
+
+-keep class com.renren.mobile.chat.activity.DataPool$* {
+    *;
+}
+
+-keep interface com.renren.mobile.chat.activity.IDataPool {
+    *;
+}
+
+# For XML inflating, keep views' constructor
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keep public class net.afpro.**
+-keepclassmembers class net.afpro.**{
+   	*;
+}
+
+-keep  public class com.data.**
+
+-keepclassmembers class com.data.**{
+   	*;
+}
+
+-keepclassmembers class com.renren.mobile.chat.base.annotation.** {
+   	*;
+}
+
+-keepclassmembers class com.renren.mobile.chat.database.** {
+   	*;
+}
+
+-keepclassmembers class **.R$* {
+   	*;
+}
+
+-keepclasseswithmembernames class com.renren.mobile.chat.provider.** {
+    *;
+}
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembernames class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
+
+-keep class com.renren.mobile.chat.ui.plugins.** {
+    *;
+}
+
+-keepclasseswithmembers class com.renren.mobile.chat.ui.plugindemo.** {
+    *;
+}

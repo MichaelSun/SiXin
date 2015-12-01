@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Color_I"
+    android:orientation="vertical"
+    android:paddingLeft="20dip"
+    android:paddingRight="20dip" >
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lc_feed_noattention_info"
+        android:paddingTop="20dip"
+        android:paddingBottom="20dip"/>
+
+    <Button
+        android:id="@+id/lc_feed_noattention_btn"
+        android:layout_width="match_parent"
+        android:layout_height="36dip"
+        android:background="@drawable/lc_feed_noattention_btn"
+        android:text="@string/lc_feed_noattention_layout_1"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

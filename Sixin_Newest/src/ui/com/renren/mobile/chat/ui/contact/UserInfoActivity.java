@@ -1,0 +1,976 @@
+package com.renren.mobile.chat.ui.contact;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.common.manager.BindInfo;
+import com.common.manager.LoginManager;
+import com.common.manager.LoginManager.LoginInfo;
+import com.common.mcs.INetRequest;
+import com.common.mcs.INetResponse;
+import com.common.mcs.McsServiceProvider;
+import com.common.network.DomainUrl;
+import com.core.json.JsonObject;
+import com.core.json.JsonValue;
+import com.core.util.ViewMapUtil;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.activity.RenRenChatActivity;
+import com.renren.mobile.chat.base.util.SystemUtil;
+import com.renren.mobile.chat.common.ResponseError;
+import com.renren.mobile.chat.ui.BaseActivity;
+import com.renren.mobile.chat.ui.chatsession.ChatSessionManager;
+import com.renren.mobile.chat.ui.contact.C_ContactsData.NewContactsDataObserver;
+import com.renren.mobile.chat.ui.imageviewer.ImageViewActivity;
+import com.renren.mobile.chat.view.BaseTitleLayout;
+import com.renren.mobile.chat.view.BaseTitleLayout.FUNCTION_BUTTON_TYPE;
+import com.renren.mobile.chat.webview.RenRenWebView;
+public final class UserInfoActivity extends BaseActivity{
+	
+    ContactBaseModel mModel = null;
+	UserInfoHolder mHolder = new UserInfoHolder();
+	//private boolean mIsLoading = false;
+	//private boolean mIsShowStartChatButton = true;
+	//private DataSubject mDataSubject = null;
+	BaseTitleLayout mBaseTitle;
+	Button rightButton;
+	LinearLayout bindRenRenLayout;
+
+	public static final int ERROR_CODE_VERIFY = 20207; 
+	
+	private long mUserId;
+	private String mDomain;
+	private long nativeId;
+	
+	BindInfo bindInfo = new BindInfo();
+	
+	private static final String USER_ID = "user_id";
+	private static final String DOMAIN = "domain";
+	private static final String TYPE = "type";
+	private static final String NATIVEID = "nativeid";
+	
+	private byte mtype = 0;
+	private static final byte type_renren = 1;
+	private static final byte type_sixin = 2;
+
+	
+	private ProgressDialog dialog;   //正在添加的提示
+	
+	IDownloadContactListener listener = new IDownloadContactListener() {
+		@Override
+		public void onSussess(final ContactBaseModel model) {
+			RenrenChatApplication.sHandler.post(new Runnable() {
+				public void run() {
+					mModel = model;
+					initViews();
+					initEvent();
+				}
+			});
+		}
+		@Override
+		public void onError() {
+		}
+		@Override
+		public void onDowloadOver() {
+		}
+	};
+	
+	public static enum LargeImageState{
+		NOT_EXIST,
+		IS_LOADING,
+		LOADING_SUCCESS,
+		LOADING_ERROR
+	}
+	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);  
+		this.setContentView(R.layout.contact_userinfo);
+		ViewMapUtil.getUtil().viewMapping(mHolder, this.getWindow().getDecorView());
+		initTitle();
+		this.initData();
+		this.initViews();
+		this.initEvent();
+	}
+	
+	
+	public static void show(Context context,long uid,String mDomain){
+		Intent intent = new Intent(context,UserInfoActivity.class);
+		intent.putExtra(USER_ID, uid);
+		byte type = type_sixin;
+//		if(mDomain != null && (mDomain.equals(DomainUrl.SIXIN_DOMAIN) || mDomain.equals(DomainUrl.SIXIN_OLD_DOMAIN) || mDomain.equals(DomainUrl.SIXIN_RECOMMENDATION_DOMAIN))){
+//			type = type_sixin;
+//		}else{
+//			type = type_renren;  renren.sixin.com
+		                       //renren.sixin.com
+//		}
+		
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("mDomain="+mDomain);
+			SystemUtil.traces();
+		}
+		
+		if(mDomain != null && (mDomain.equals(DomainUrl.SIXIN_DOMAIN)|| mDomain.equals(DomainUrl.SIXIN_OLD_DOMAIN) || mDomain.equals(DomainUrl.SIXIN_RECOMMENDATION_DOMAIN)||mDomain.endsWith(DomainUrl.SIXIN_DOMAIN))){
+			if(SystemUtil.mDebug){
+				SystemUtil.logd("不是来自人人");
+			}
+		}else{
+			type = type_renren;
+			if(SystemUtil.mDebug){
+				SystemUtil.logd("来自人人");
+			}
+			
+		}
+		intent.putExtra(TYPE, type);
+		intent.putExtra(DOMAIN, mDomain);
+		
+		context.startActivity(intent);
+	}
+	
+	
+	public static void show(Context context,long nativeId){
+		Intent intent = new Intent(context,UserInfoActivity.class);
+		intent.putExtra(TYPE, type_sixin);
+		intent.putExtra(NATIVEID, nativeId);
+		context.startActivity(intent);
+	}
+	
+	private void initData(){
+		
+		dialog = new ProgressDialog(this);
+		
+		Intent intent = getIntent(); 
+		mUserId = intent.getLongExtra(USER_ID, 0L);
+		mtype = intent.getByteExtra(TYPE,type_sixin);
+		mDomain = intent.getStringExtra(DOMAIN);
+		nativeId = intent.getLongExtra(NATIVEID,0l);
+				
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("mDomain="+mDomain+"#type="+mtype+"#uid="+mUserId+"#nativeId="+nativeId);
+		}
+		if(mUserId == LoginManager.getInstance().getLoginInfo().mUserId){
+		    mModel = new ContactModel(mUserId);
+		    LoginInfo logininfo = LoginManager.getInstance().getLoginInfo();
+		    mModel.setmContactName(logininfo.mUserName);
+		    mModel.setmSmallHeadUrl(logininfo.mMediumUrl);
+		    mModel.setmLargeHeadUrl(logininfo.mLargeUrl);
+		    mModel.setmGender(logininfo.mGender);
+		    mModel.setmUserId(logininfo.mUserId);
+		    mModel.setmSchool(logininfo.mSchool);
+		    mModel.setmBirth(logininfo.mBirthday);
+		    if(logininfo.mBindInfoRenren!=null){
+		    	bindInfo.createBindInfo(logininfo.mBindInfoRenren);
+		    }
+			
+		}else if(mtype == type_renren){
+			if(mUserId!=0){
+				mModel = C_ContactsData.getInstance().getRenRenContactBySiXinID(mUserId, listener);
+				if(mModel !=null){//人人
+					ThirdContactModel tmp = (ThirdContactModel)mModel;
+					bindInfo.setmBindId(String.valueOf(tmp.getmRenRenId()));
+					bindInfo.setmBindPage(tmp.getmPage());
+					bindInfo.setmBindName(tmp.getmContactName());
+				}
+			}
+			if(mModel==null){
+				mModel = new ThirdContactModel();
+				mModel.setmUserId(mUserId);
+				mModel.setmDomain(mDomain);
+			}
+		}else{
+			if(nativeId!=0){
+				ContactMessageModel cmm = ContactMessageData.getInstance().getModelByNativeId(nativeId);
+				if(cmm!=null){
+					mModel =  C_ContactsData.getInstance().getWholeSiXinContact(cmm.getGid(), listener);
+					if(mModel==null){
+						mModel = new ContactModel();
+						mModel.setmUserId(cmm.getGid());
+						mModel.setName(cmm.getName());
+						mModel.setmContactName(cmm.getName());
+						mModel.setmSmallHeadUrl(cmm.getHead_url());
+						mModel.setmDomain(cmm.getDomain());
+						mModel.setmRelation(ContactBaseModel.Relationship.CONTACT);
+						mUserId = cmm.getGid();
+						mDomain = cmm.getDomain();
+						 if(SystemUtil.mDebug){
+			                	SystemUtil.logd("生成数据");
+						  }
+					}else{
+						 if(SystemUtil.mDebug){
+			                	SystemUtil.logd("本地有数据");
+						  }
+						ContactModel cmContactModel= (ContactModel)mModel;
+						mUserId = cmContactModel.getmUserId();
+						mDomain = cmContactModel.getDomain();
+						BindInfo info = cmContactModel.getBindInfo(ContactModel.BIND_TYPE_RENREN);
+						if(info!=null){
+							bindInfo.createBindInfo(info);
+			                if(SystemUtil.mDebug){
+			                	SystemUtil.logd(bindInfo.toString());
+							}
+						}else{
+			                if(SystemUtil.mDebug){
+			                	SystemUtil.logd("bind info is null");
+							}
+						}
+					}
+				}else{
+					mModel = new ContactModel();
+				}
+			}else{
+				mModel=  C_ContactsData.getInstance().getWholeSiXinContact(mUserId, listener);
+				if(mModel==null){
+					mModel = new ContactModel();
+					mModel.setmUserId(mUserId);
+					mModel.setmDomain(mDomain);
+				}else{
+					ContactModel cmContactModel= (ContactModel)mModel;
+					BindInfo info = cmContactModel.getBindInfo(ContactModel.BIND_TYPE_RENREN);
+					if(info!=null){
+						bindInfo.createBindInfo(info);
+		                if(SystemUtil.mDebug){
+		                	SystemUtil.logd(bindInfo.toString());
+						}
+					}else{
+		                if(SystemUtil.mDebug){
+		                	SystemUtil.logd("bind info is null");
+						}
+					}
+				}
+			}
+		}		
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("mDomain="+mDomain+"#mUserId="+mUserId+"#type="+mtype+"#relationship="+mModel.getmRelation());
+		}
+	}
+	
+   private void initViews(){
+		
+		mHolder.mUserNameView.setText(mModel.getmContactName());
+		if( -1!= mModel.mGender){
+			if(mModel.mGender==1){
+				mHolder.mGender.setBackgroundResource(R.drawable.contact_male);
+			}else{
+				mHolder.mGender.setBackgroundResource(R.drawable.contact_female);
+			}
+		}else {
+			mHolder.mGender.setVisibility(View.INVISIBLE);
+		}
+		
+		if(mtype==type_renren){
+			ThirdContactModel tmpContactModel =(ThirdContactModel)mModel;
+			if((tmpContactModel.getmRelation()&ContactBaseModel.Relationship.IS_SI_XIN)==ContactBaseModel.Relationship.IS_SI_XIN){
+				mHolder.mUserIdView.setText(tmpContactModel.getmUserId()+"");	
+				mHolder.mShoID.setVisibility(View.VISIBLE);
+			}else{
+				mHolder.mUserIdView.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_13));	//UserInfoActivity_java_13
+				mHolder.mShoID.setVisibility(View.GONE);
+			}
+		}else{
+			mHolder.mUserIdView.setText(mModel.getmUserId()+"");
+		}
+		
+		
+		if(mUserId == LoginManager.getInstance().getLoginInfo().mUserId){
+			mHolder.mAddContact.setVisibility(View.GONE);
+			mHolder.msendMessage.setVisibility(View.GONE);
+			mHolder.mBlackListImg.setVisibility(View.GONE);
+		}else{
+			//mBaseTitle.setTitleFunctionButtonBackground(FUNCTION_BUTTON_TYPE.ADDCONTACT);
+			if(mtype == type_renren){//人人用户
+				mHolder.mAddContact.setVisibility(View.GONE);
+				mHolder.mBlackListImg.setVisibility(View.GONE);
+				if(mUserId==0 || TextUtils.isEmpty(mDomain)){
+					mHolder.msendMessage.setVisibility(View.GONE);
+				}else{
+					mHolder.msendMessage.setVisibility(View.VISIBLE);	
+				}
+			}else{//私信用户
+				mBaseTitle.setTitleFunctionButtonBackground(FUNCTION_BUTTON_TYPE.MORE);
+				if(mModel.mRelation == ContactModel.Relationship.CONTACT){//普通联系人
+					mHolder.mAddContact.setVisibility(View.GONE);
+					mHolder.mBlackListImg.setVisibility(View.GONE);
+					//mHolder.msendMessage.setVisibility(View.VISIBLE);
+				}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//是联系人 但在黑名单中
+					mHolder.mAddContact.setVisibility(View.GONE);
+				//	mHolder.msendMessage.setVisibility(View.VISIBLE);
+					mHolder.mBlackListImg.setVisibility(View.VISIBLE);
+				}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){//陌生人在黑名单中
+					mHolder.mAddContact.setVisibility(View.VISIBLE);
+				//	mHolder.msendMessage.setVisibility(View.VISIBLE);
+					mHolder.mBlackListImg.setVisibility(View.VISIBLE);
+				}else{//陌生人
+					mHolder.mBlackListImg.setVisibility(View.GONE);
+					mHolder.mAddContact.setVisibility(View.VISIBLE);
+					//mHolder.msendMessage.setVisibility(View.VISIBLE);
+				}
+				if(mUserId==0 || TextUtils.isEmpty(mDomain)){
+					mHolder.msendMessage.setVisibility(View.GONE);
+				}else{
+					mHolder.msendMessage.setVisibility(View.VISIBLE);	
+				}
+			}
+		}
+		
+		String birth = mModel.getmBirth();
+		if(!TextUtils.isEmpty(birth)){
+			mHolder.mBirthView.setText(birth);
+		}else{
+			if(mUserId == LoginManager.getInstance().getLoginInfo().mUserId || mtype == type_renren  ){
+				mHolder.mBirthView.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.ContactModel_java_9));		//ContactModel_java_9=暂无; 
+			}else{
+				if(mModel.mRelation == ContactModel.Relationship.CONTACT){
+					mHolder.mBirthView.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.C_UserInfoActivity_java_3));		//C_UserInfoActivity_java_3=保密; 
+				}else{
+					mHolder.mBirthView.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.ContactModel_java_9));		//ContactModel_java_9=暂无; 
+				}
+			}
+		}
+		
+		String school = mModel.getmSchool();
+		if(!TextUtils.isEmpty(school)){
+			mHolder.mSchool.setText(school);
+		}
+		
+		
+		if(!TextUtils.isEmpty(bindInfo.getmBindId())&&!TextUtils.isEmpty(bindInfo.getmBindPage())){
+			mHolder.mUserMainUrlView.setVisibility(View.VISIBLE);
+			if(!TextUtils.isEmpty(bindInfo.getmBindName())){
+				mHolder.mUserMainUrlText.setText(bindInfo.getmBindName());
+			}
+		}else{
+			mHolder.mUserMainUrlView.setVisibility(View.GONE);
+		}
+		
+		
+		mHolder.mHeadImageView.clear();
+		mHolder.mHeadImageView.addUrl(mModel.getmHeadUrl());
+		
+	}
+	
+	private void initEvent(){
+		
+		mHolder.msendMessage.setOnClickListener(new OnClickListener() {//发消息
+			public void onClick(View v) {
+			   //SystemUtil.errord("mModel.mRelation="+mModel.mRelation);
+				RenRenChatActivity.show(UserInfoActivity.this,mModel);
+			}
+		});
+		
+		mHolder.mAddContact.setOnClickListener(new OnClickListener() {//加为联系人
+			public void onClick(View v) {
+				if(SystemUtil.mDebug){
+					SystemUtil.errord("mModel.mRelation="+mModel.mRelation);
+				}
+			    makeFriendRequest(mUserId);
+			}
+		});
+		
+		mHolder.mHeadImageView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(TextUtils.isEmpty(mModel.mLargeHeadUrl)){
+					SystemUtil.toast(RenrenChatApplication.getmContext().getResources().getString(R.string.C_UserInfoActivity_java_2));		//C_UserInfoActivity_java_2=预览失败,请稍候再试; 
+					return ;
+				}
+				Intent i = new Intent(UserInfoActivity.this, ImageViewActivity.class);
+				i.putExtra(ImageViewActivity.NEED_PARAM.REQUEST_CODE, ImageViewActivity.VIEW_LARGE_HEAD);
+				i.putExtra(ImageViewActivity.NEED_PARAM.SMALL_PORTRAIT_URL, mModel.getmHeadUrl());
+				i.putExtra(ImageViewActivity.NEED_PARAM.LARGE_PORTRAIT_URL,mModel.getmOriginalHeadUrl());
+				UserInfoActivity.this.startActivityForResult(i, ImageViewActivity.VIEW_LARGE_HEAD);
+			}
+		});
+		
+		mHolder.mUserMainUrlView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if(SystemUtil.mDebug){
+					SystemUtil.logd("打开人人主页 uid="+Long.parseLong(bindInfo.mBindId)+"#page="+bindInfo.getmBindPage());
+				}
+//				RenRenWebView.show(
+//						UserInfoActivity.this, 
+//						Long.parseLong(bindInfo.mBindId),
+//						"", RenrenChatApplication.getmContext().getResources().getString(R.string.C_UserInfoActivity_java_1),		//C_UserInfoActivity_java_1=人人网; 
+//						RenRenWapUrlFactory.URL_TYPE.PEESONEL_FEED);
+				if(!TextUtils.isEmpty(bindInfo.getmBindPage())){
+					RenRenWebView.show(UserInfoActivity.this,"",getText(R.string.C_UserInfoActivity_java_1).toString(),bindInfo.getmBindPage());
+				}
+				
+			}
+		});
+		
+//		mHolder.mUserMainUrlView.setOnTouchListener(new OnTouchListener() {
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				switch (event.getAction()) {
+//				case MotionEvent.ACTION_DOWN: 
+//					mHolder.mUserMainUrlText.setTextColor(Color.parseColor("#FFFFFF"));
+//					mHolder.mUserMainUrlImage.setImageResource(R.drawable.d_next_page_selected);
+//					mHolder.mUserMainUrlView.setBackgroundResource(R.drawable.single_background_selected);
+//					break;
+//				case MotionEvent.ACTION_UP:
+//					mHolder.mUserMainUrlText.setTextColor(Color.parseColor("#ff969696"));
+//					mHolder.mUserMainUrlImage.setImageResource(R.drawable.d_next_page_default);
+//					mHolder.mUserMainUrlView.setBackgroundResource(R.drawable.single_background_default);
+//					break;
+//				case MotionEvent.ACTION_MOVE:
+//					Rect r = new Rect();
+//					mHolder.mUserMainUrlView.getFocusedRect(r);
+//					if(r.contains((int)event.getX(), (int)event.getY())){						
+//						mHolder.mUserMainUrlText.setTextColor(Color.parseColor("#FFFFFF"));
+//						mHolder.mUserMainUrlImage.setImageResource(R.drawable.d_next_page_selected);
+//						mHolder.mUserMainUrlView.setBackgroundResource(R.drawable.single_background_selected);
+//					}else{
+//						mHolder.mUserMainUrlView.setBackgroundResource(R.drawable.single_background_default);
+//						mHolder.mUserMainUrlText.setTextColor(Color.parseColor("#ff969696"));
+//						mHolder.mUserMainUrlImage.setImageResource(R.drawable.d_next_page_default);
+//					}
+//					break;
+//				}
+//				return false;
+//			}
+//		});
+		
+		rightButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String [] menu=null;
+				if(mtype != type_renren){	//私信用户
+					if(mModel.mRelation == ContactModel.Relationship.CONTACT){//普通联系人
+						menu = new String [3];
+						//加入黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_4);
+						//删除联系人
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_11);
+						//取消
+						menu[2] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//是联系人 但在黑名单中
+						menu = new String [3];
+						//移除黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_12);
+						//删除联系人
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_11);
+						//取消
+						menu[2] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){//陌生人在黑名单中
+						menu = new String [2];
+						//移除黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_12);
+						//取消
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}else{//陌生人
+						menu = new String [2];
+						//加入黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_4);
+						//取消
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}
+				}else {
+					if((mModel.mRelation&ContactModel.Relationship.IS_BLACK_LIST)==ContactModel.Relationship.IS_BLACK_LIST){
+						menu = new String [2];
+						//移除黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_12);
+						//取消
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}else{
+						menu = new String [2];
+						//加入黑名单
+						menu[0] = RenrenChatApplication.getmContext().getResources().getString(R.string.UserInfoActivity_java_4);
+						//取消
+						menu[1] = RenrenChatApplication.getmContext().getResources().getString(R.string.ChatMessageWarpper_FlashEmotion_java_4);
+					}
+				}
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(UserInfoActivity.this);
+				builder.setItems(menu, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+							case 0:
+								if(mtype != type_renren){
+									if(mModel.mRelation == ContactModel.Relationship.CONTACT){//普通联系人
+										addBlacklistTip();
+										//加入黑名单
+									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//是联系人 但在黑名单中
+										//移除黑名单
+										removeBlacklist(mUserId);
+									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){//陌生人在黑名单中
+										//移除黑名单
+										removeBlacklist(mUserId);
+									}else{//陌生人
+										//加入黑名单
+										//addBlacklist(mUserId);
+										addBlacklistTip();
+									}
+								}else {//人人用户
+									if((mModel.mRelation&ContactModel.Relationship.IS_BLACK_LIST)==ContactModel.Relationship.IS_BLACK_LIST){
+										//移除黑名单
+										removeBlacklist(mUserId);
+									}else{
+										//加入黑名单
+										//addBlacklist(mUserId);
+										addBlacklistTip();
+									}
+								}
+								break;
+							case 1:
+								if(mtype != type_renren){
+									if(mModel.mRelation == ContactModel.Relationship.CONTACT){//普通联系人
+										deleteFriendRequest(mUserId);
+										//删除联系人
+									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//是联系人 但在黑名单中
+										deleteFriendRequest(mUserId);
+										//删除联系人
+									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){//陌生人在黑名单中
+										//取消
+									}else{//陌生人
+										//取消
+									}
+								}else {//人人用户
+									
+								}
+								break;
+							case 2:
+//								if(mComfrom == COMEFROM_SIXIN){
+//									if(mModel.mRelation == ContactModel.Relationship.CONTACT){//普通联系人
+//									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//是联系人 但在黑名单中
+//									}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){//陌生人在黑名单中
+//									}else{//陌生人
+//									}
+//								}else {//人人用户
+//									
+//								}
+								break;
+						}
+					}
+				});
+				builder.show();
+			}
+		});
+		/* ******************************************************************/
+	}
+	
+
+	
+	
+	private void initTitle() {
+		FrameLayout mLinearLayout = (FrameLayout) this.findViewById(R.id.title_layout);
+		mBaseTitle = new BaseTitleLayout(UserInfoActivity.this,mLinearLayout);
+		TextView mTextView = mBaseTitle.getTitleMiddle();
+		mBaseTitle.getTitleLeft().setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		mTextView.setText(RenrenChatApplication.getmContext().getResources().getString(R.string.cdw_userinfo_layout_1));
+		
+		rightButton = mBaseTitle.getTitleRightFunctionButton();
+		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		//mModel.unregitor();
+	};
+	
+	
+
+//	@Override
+//	public void notifyUpdate(String columnName,boolean isSuccess) {
+//		if(columnName==Renren_Contact_Column.IS_ATTENTION){
+//			if(isSuccess){
+//				RenrenChatApplication.sHandler.post(new Runnable() {
+//					public void run() {
+//						initViews();
+//					//	initEvent();
+//					}
+//				});
+//			}else{
+////				RenrenChatApplication.sHandler.post(new Runnable() {
+////					public void run() {
+////						resetButton();
+////					}
+////				});
+//			}
+//		}else{
+//		}
+//	}
+//	@Override
+//	public void registorSubject(DataSubject subject) {
+//		if(this.mDataSubject!=null){
+//			this.mDataSubject.unregitor();
+//		}
+//		this.mDataSubject =subject;
+//	}
+	
+	public void showAlertDialog(int stringId){
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("showAlertDialog");
+		}
+		if(dialog!=null){
+            if(dialog.isShowing()){
+            	dialog.dismiss();
+			}
+			dialog.setMessage(this.getText(stringId));
+			dialog.show();
+		}
+	}
+	
+	public void closeAlertDialog(){
+		if(SystemUtil.mDebug){
+			SystemUtil.logd("closeAlertDialog");
+		}
+		if(dialog!=null){
+			 if(dialog.isShowing()){
+				 dialog.dismiss();
+			 }
+		}
+	}
+	
+	private void makeFriendRequest(final Long uid) {
+		showAlertDialog(R.string.contact_adding);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+                if(SystemUtil.mDebug){
+                	SystemUtil.logd("添加好友="+obj.toJsonString());
+				}
+			    UserInfoActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.checkError(map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加成功");
+								}
+								SystemUtil.toast(getText(R.string.contact_added).toString());
+								makeFriendSuccess();
+							}
+						}else{ //出错
+							int error_code = (int) map.getNum("error_code");
+							String error_msg = map.getString("error_msg");
+							if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加失败 error_code = "+error_code+"#msg="+error_msg);
+							}
+							if(error_code == ERROR_CODE_VERIFY){//对方验证开  填写验证信息
+								LayoutInflater inflater = getLayoutInflater();
+								View layout = inflater.inflate(R.layout.contact_add_verify_dialog,(ViewGroup) findViewById(R.id.contact_add_dialog));
+								final EditText et = (EditText)layout.findViewById(R.id.contact_verify_text);
+								String str= getText(R.string.contact_verify_string).toString();
+								String nameString = LoginManager.getInstance().mLoginInfo.mUserName;
+								if(!TextUtils.isEmpty(nameString)){
+									str = str.replace("XXX",nameString);
+									et.setText(str);
+								}else{
+									et.setText("");
+								}
+								
+								Builder dialog =new AlertDialog.Builder(UserInfoActivity.this).setView(layout);
+								dialog.setNegativeButton(getText(R.string.selectphoto_preview_layout_2), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.cancel(); 
+									}
+								});
+								dialog.setPositiveButton(getString(R.string.takephoto_preview_layout_1), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if(TextUtils.isEmpty(et.getText().toString())){
+											SystemUtil.toast(UserInfoActivity.this.getText(R.string.contact_verify_notnull).toString());
+										}else{
+											SendVerifyMessage(mUserId,et.getText().toString());	
+										}
+									}
+								});
+								dialog.setCancelable(false);
+								dialog.show();
+							}else{
+								SystemUtil.toast(error_msg);
+							}
+			               
+							
+						}
+					}
+				});
+			}
+
+		};
+		//SystemUtil.toast("添加成功");
+		//makeFriendSuccess();
+		McsServiceProvider.getProvider().addContact(response, String.valueOf(uid), 0,"");
+	}
+	
+	private void SendVerifyMessage(final Long uid,String message) {
+		showAlertDialog(R.string.contact_sending);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+                if(SystemUtil.mDebug){
+                	SystemUtil.logd("验证信息="+obj.toJsonString());
+				}
+			    UserInfoActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.checkError(map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("发送验证成功");
+								}
+				                SystemUtil.toast(R.string.contact_send_ok);
+							}
+						}else{ //出错
+							int error_code = (int) map.getNum("error_code");
+							String error_msg = map.getString("error_msg");
+							if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加失败 error_code = "+error_code+"#msg="+error_msg);
+							}
+							SystemUtil.toast(error_msg);
+						}
+					}
+				});
+			}
+
+		};
+		//SystemUtil.toast("添加成功");
+		//makeFriendSuccess();
+		McsServiceProvider.getProvider().addContact(response, String.valueOf(uid), 1,message);
+	}
+	
+	private void addBlacklistTip() {
+		Builder dialog =new AlertDialog.Builder(UserInfoActivity.this);
+		dialog.setMessage(R.string.contact_verify_tip);
+		//dialog.setMessage();
+		dialog.setNegativeButton(getText(R.string.selectphoto_preview_layout_2), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel(); 
+			}
+		});
+		dialog.setPositiveButton(getString(R.string.f_popup_sex_2), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				addBlacklist(mUserId);
+			}
+		});
+		dialog.setCancelable(false);
+		dialog.show();
+	}
+	
+	protected void addBlacklist(final long uid) {
+		showAlertDialog(R.string.contact_blacklist_adding);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+                if(SystemUtil.mDebug){
+                	SystemUtil.logd("黑名单="+obj.toJsonString());
+				}
+			    UserInfoActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.noError(req, map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加成功");
+								}
+				                SystemUtil.toast(R.string.contact_blacklist_add_sucess);
+								if(mModel.mRelation == ContactModel.Relationship.CONTACT){//联系人加黑名单
+					                if(SystemUtil.mDebug){
+					                	SystemUtil.logd("联系人加黑名单");	
+									}
+									C_ContactsData.getInstance().addBlackList(uid,mModel.mRelation);
+									mModel.mRelation = ContactModel.Relationship.BLACK_LIST_CONTACT;
+									//contactModel.mRelation = ContactModel.Relationship.BLACK_LIST_CONTACT;
+								}else if (mModel.mRelation == ContactModel.Relationship.STRANGER){//陌生人加黑名单
+					                if(SystemUtil.mDebug){
+					                	SystemUtil.logd("陌生人加黑名单");	
+									}
+									C_ContactsData.getInstance().addBlackList(uid,mModel.mRelation);
+									mModel.mRelation = ContactModel.Relationship.BLACK_LIST_STRANGER;
+								}	
+								initViews();
+								initEvent();
+								ChatSessionManager.getInstance().refreshChatSessionList();
+							}else {
+								int error_code = (int) map.getNum("error_code");
+								String error_msg = map.getString("error_msg");
+				                if(SystemUtil.mDebug){
+				                	SystemUtil.logd("添加失败 error_code = "+error_code+"#msg="+error_msg);
+								}
+								SystemUtil.toast(error_msg);
+							}
+						}
+					}
+				});
+			}
+		};
+		McsServiceProvider.getProvider().optBlacklist(response, String.valueOf(uid), true);
+	}
+	
+	protected void removeBlacklist(long uid) {
+		showAlertDialog(R.string.contact_removing);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+		        if(SystemUtil.mDebug){
+		        	SystemUtil.logd("黑名单="+obj.toJsonString());
+				}
+			    UserInfoActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.noError(req, map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+						        if(SystemUtil.mDebug){
+						        	SystemUtil.logd("解除成功");
+								}
+								SystemUtil.toast(R.string.contact_blacklist_remove_sucess);
+								if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){
+									C_ContactsData.getInstance().removeBalckList(mUserId, mModel.mRelation);
+									mModel.mRelation = ContactModel.Relationship.CONTACT;
+								}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_STRANGER){
+									C_ContactsData.getInstance().removeBalckList(mUserId, mModel.mRelation);
+									mModel.mRelation = ContactModel.Relationship.STRANGER;
+								}
+								initViews();
+								initEvent();
+								ChatSessionManager.getInstance().refreshChatSessionList();
+							}else {
+								int error_code = (int) map.getNum("error_code");
+								String error_msg = map.getString("error_msg");
+						        if(SystemUtil.mDebug){
+						        	SystemUtil.logd("解除失败 error_code = "+error_code+"#msg="+error_msg);
+								}
+								SystemUtil.toast(error_msg);
+							}
+						}
+					}
+				});
+			}
+		};
+		McsServiceProvider.getProvider().optBlacklist(response, String.valueOf(uid), false);
+	}
+	
+	/**
+	 * 将此联系人从好友列表中删除
+	 * @param uid 联系人的ID
+	 * */
+	private void deleteFriendRequest(final Long uid) {
+		//deleteFriendSuccess();
+		showAlertDialog(R.string.contact_deleting);
+		INetResponse response = new INetResponse() {
+			@Override
+			public void response(final INetRequest req, final JsonValue obj) {
+				UserInfoActivity.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						closeAlertDialog();
+						JsonObject map = (JsonObject) obj;
+						if (ResponseError.noError(req, map)) {
+							int result = (int) map.getNum("result");
+							if(result == 1){
+								SystemUtil.toast(getText(R.string.UserInfoActivity_java_16).toString());
+								deleteFriendSuccess();
+							}else {
+								int error_code = (int) map.getNum("error_code");
+								String error_msg = map.getString("error_msg");
+								if(SystemUtil.mDebug){
+						        	SystemUtil.logd("解除失败 error_code = "+error_code+"#msg="+error_msg);
+								}
+								SystemUtil.toast(error_msg);
+							}
+						}else{
+							
+						}
+					}
+				});
+			}
+		};
+		McsServiceProvider.getProvider().delContact(response, String.valueOf(uid));
+	}
+	
+	/**
+	 * 删除好友成功之后改变界面布局及文案
+	 * */
+	private void deleteFriendSuccess() {
+//		mRelation = ContactModel.Relationship.NOT_FRIEND;
+//		mContactType = ContactModel.CONTACT_TYPE.STRANGER;
+//		mModel.mRelation = mRelation;
+//		mModel.mContactType = mContactType;
+		if(mModel.mRelation == ContactModel.Relationship.CONTACT){ //如果是联系人就变成陌生人
+	        if(SystemUtil.mDebug){
+	        	SystemUtil.logd("如果是联系人就变成陌生人");
+			}
+			mModel.mRelation = ContactModel.Relationship.STRANGER;
+			C_ContactsData.getInstance().updateIsFriend(mUserId,ContactModel.Relationship.STRANGER);
+			//C_ContactsData.getInstance().notifyNewObserver(NewContactsDataObserver.DATA_STATE_OK, NewContactsDataObserver.TYPE_SIXIN);
+		}else if(mModel.mRelation == ContactModel.Relationship.BLACK_LIST_CONTACT){//如果是黑名单中的联系人 就变成黑名单陌生人
+	        if(SystemUtil.mDebug){
+	        	SystemUtil.logd("黑名单中的联系人就变成黑名单陌生人");
+			}
+			mModel.mRelation = ContactModel.Relationship.BLACK_LIST_STRANGER;
+			C_ContactsData.getInstance().updateIsFriend(mUserId,ContactModel.Relationship.BLACK_LIST_STRANGER);
+		}else{
+			if(SystemUtil.mDebug){
+	        	SystemUtil.errord("-----------------------------------------------");
+			}
+			
+		}
+		initViews();
+		initEvent();
+	}
+	
+	private void makeFriendSuccess() {
+		if(nativeId!=0){
+			ContactMessageData.getInstance().addSucessd(nativeId);	
+		}
+		//mModel.mRelation = ContactModel.Relationship.CONTACT;
+		mModel.mRelation = mModel.mRelation|ContactBaseModel.Relationship.IS_CONTACT ;
+		C_ContactsData.getInstance().notifyNewObserver(NewContactsDataObserver.DATA_STATE_OK, NewContactsDataObserver.TYPE_FIND);
+		C_ContactsData.getInstance().addContact((ContactModel)mModel);
+		//C_ContactsData.getInstance().refreshAllContacts(null);
+		initViews();
+		this.initEvent();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			this.finish();
+		} else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+			return super.onKeyDown(keyCode, event);
+		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return super.onKeyDown(keyCode, event);
+		}
+		return true;
+	}
+}

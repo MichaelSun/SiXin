@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/multi_chat_forward_create_new_chat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/title_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/base_title_layout" />
+    
+      <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:scaleType="fitXY"
+        android:src="@drawable/common_title_driver" />
+
+    <FrameLayout
+        android:id="@+id/multi_chat_forward_contact_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0" >
+
+        <com.renren.mobile.chat.ui.contact.C_ContactsListView
+            android:id="@+id/select_group_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <include
+            android:id="@+id/select_group_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            layout="@layout/chat_no_data"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

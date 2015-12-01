@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="renren_Sixin"
+         basedir="./">
+
+    <!--builder for RenRenChat r20 说明
+        基于官方SDK提供的build.xml扩展的Ant打包脚本。
+        需求：
+            apache-ant 1.8.2
+            android sdk r20
+    -->
+
+    <!-- r20 changelog
+        1. 支持jenkins持续集成。
+        2. 删除了所有的渠道定义，现在在jenkins进行打包的时候配置。 
+        3. 删除了keystore的相关属性定义，在ant打包的时候通过 -D 参数指定。
+        4. 支持android sdk r20版本。
+        5. 删除了过去大部分的自定义target，尽量使用系统提供的默认设置。
+    -->
+
+    <!-- 读入属性 -->
+    <loadproperties srcFile="local.properties"/>
+    <loadproperties srcFile="project.properties"/>
+
+    <import file="${sdk.dir}/tools/ant/build.xml"/>
+
+    <property name="manifest"
+              value="AndroidManifest.xml"/>
+    <!-- 版本号 -->
+    <xpath input="${manifest}"
+           expression="/manifest/@android:versionName"
+           output="versionName"
+           default="Unknown"/>
+    <!-- 输出目录 -->
+    <property name="products"
+              location="products"/>
+    <property name="products.dir"
+              location="products"/>
+
+
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
+          unless="sdk.dir"/>
+
+
+    <!-- custom properties -->
+    <tstamp>
+        <format property="today"
+                pattern="yyyyMMdd"/>
+        <format property="time"
+                pattern="yyyyMMdd_HHmmss"/>
+    </tstamp>
+
+    <!-- 修改fromdid -->
+    <target name="-replace-fromid"
+            if="fromid">
+        <echo>Replace fromid: ${fromid}</echo>
+        <replaceregexp encoding="utf-8"
+                       file="${resource.absolute.dir}/values/strings.xml">
+            <regexp pattern="from&quot;&gt;(\s{0,100}\d*\s{0,100})"/>
+            <substitution expression="from&quot;&gt;${fromid}"/>
+        </replaceregexp>
+    </target>
+
+    <target name="-pre-compile"
+            depends="-replace-fromid"/>
+
+    <target name="debug"
+            depends="-set-debug-files, -do-debug, -post-build"
+            description="Builds the application and signs it with a debug key.">
+        <record-build-info/>
+        <condition property="device.name"
+                   value="Debug">
+            <isset property="device.name"/>
+        </condition>
+        <property name="productFilename"
+                  value="Renren_Sixin_${versionName}_${fromid}.apk"/>
+        <echo>Copy final apk to ./products/${productFilename}</echo>
+        <copy file="${out.final.file}"
+              todir="${products.dir}/${productFilename}"/>
+    </target>
+
+    <target name="release"
+            depends="-set-release-mode, -release-obfuscation-check, -package, -post-package, -release-prompt-for-password, -release-nosign, -release-sign, -post-build"
+            if="has.keystore"
+            description="Builds the application. The generated apk file must be signed before
+                            it is published.">
+        <property name="productFilename"
+                  value="Renren_Sixin_${versionName}_${device.name}_${fromid}.apk"/>
+        <echo>Copy final apk to ./products/${productFilename}</echo>
+        <copy file="${out.final.file}"
+              tofile="${products.dir}/${productFilename}"/>
+    </target>
+
+    <target name="cleanapk">
+        <delete dir="${products.dir}"/>
+    </target>
+</project>

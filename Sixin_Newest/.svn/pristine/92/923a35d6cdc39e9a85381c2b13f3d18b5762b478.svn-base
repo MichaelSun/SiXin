@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical" >
+
+        <!-- scroll begin -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="10dip"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <FrameLayout 
+                    android:layout_width="66dip"
+                    android:layout_height="66dip"
+                    android:background="@drawable/head_bg">
+                    <com.renren.mobile.chat.base.views.NotSynImageView
+	                    android:id="@+id/self_head"
+	                    android:layout_width="58dip"
+	                    android:layout_height="58dip"
+	                    android:scaleType="centerCrop" 
+	                    android:layout_gravity="top"
+                        android:layout_marginLeft="4dip"
+                        android:layout_marginRight="4dip"
+                        android:layout_marginTop="2dip"/>
+                </FrameLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dip"
+                    android:orientation="vertical" >
+
+                    <LinearLayout 
+                        android:layout_width="wrap_content"
+                    	android:layout_height="wrap_content">
+                    	<TextView
+	                        android:id="@+id/self_name"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:textColor="@color/Color_A"
+	                        android:text="名字"
+	                        android:textSize="18sp"/>
+                    	<ImageView 
+                    	    android:id="@+id/iv_self_sex"
+                    	    android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_gravity="center_vertical"
+	                        android:background="@drawable/contact_male"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/self_sixin_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/Color_B"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content"
+	    		android:layout_marginTop="16dip"
+	    		android:orientation="vertical">
+		    	<!-- bind mobile num -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/bind_mobile_num"
+	                style="@style/general_setting_layout_top"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>
+	           
+	            <!-- bind_email -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/bind_email"
+	                style="@style/general_setting_layout_middle"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>
+	           
+	            <!-- change_pwd -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/change_pwd"
+	                style="@style/general_setting_layout_bottom"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>	
+                    
+		    </LinearLayout>
+            
+
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content"
+	    		android:layout_marginTop="16dip"
+	    		android:orientation="vertical">
+		    	<!-- self_sex -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/self_sex"
+	                style="@style/general_setting_layout_top"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>
+	           
+	            <!-- self_birthday -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/self_birthday"
+	                style="@style/general_setting_layout_middle"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>
+	           
+	             <!-- self_college -->
+	            <com.renren.mobile.chat.view.GeneralSettingLayout
+	                android:id="@+id/self_college"
+	                style="@style/general_setting_layout_bottom"
+	                android:layout_height="@dimen/setting_layout">
+	            </com.renren.mobile.chat.view.GeneralSettingLayout>
+                    
+		    </LinearLayout>
+           
+            <!-- null layout -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30dip" >
+            </LinearLayout>
+           
+        </LinearLayout>
+
+    </ScrollView>
+    <!-- scroll end -->
+
+</FrameLayout>

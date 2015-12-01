@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="fill_parent">
+  <FrameLayout android:id="@+id/frameLayout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginBottom="3dip" android:layout_marginTop="6dip" android:background="@drawable/groupchat_contact_head_bg">
+    <com.renren.mobile.chat.base.views.NotSynImageView android:id="@+id/select_contact_head" android:layout_width="40dip" android:layout_height="40dip" android:layout_gravity="center" android:scaleType="centerCrop" android:src="@drawable/widget_default_head"/>
+    <ImageView android:id="@+id/select_contact_head_click" android:layout_width="40dip" android:layout_height="40dip" android:layout_gravity="center" android:background="@drawable/member_head_selector"/>
+  </FrameLayout>
+</FrameLayout>

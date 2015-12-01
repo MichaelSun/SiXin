@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 从远端发送过来的文本消息 start -->
+<com.renren.mobile.chat.views.VoiceLinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/chat_voice_voicemessage_linearlayout" 
+     android:layout_width="wrap_content" 
+     android:layout_height="wrap_content">
+  <RelativeLayout 
+      android:layout_width="wrap_content" 
+      android:layout_height="wrap_content">
+    <com.renren.mobile.chat.base.views.SwitchImageView 
+        android:id="@+id/chat_voice_voicemessage_imageview" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_alignParentLeft="true" 
+        android:layout_centerVertical="true" 
+        android:src="@drawable/cdw_chat_voice_item_left_3"/>
+    <TextView android:id="@+id/chat_voice_voicemessage_textview" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:paddingRight="2dip" android:text="@string/cdw_listview_item_from_voice_layout_1" android:textColor="#000000" android:textSize="16sp"/>
+  </RelativeLayout>
+</com.renren.mobile.chat.views.VoiceLinearLayout>

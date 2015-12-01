@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+    </LinearLayout>
+
+    <FrameLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        
+        <View 
+            android:layout_width="fill_parent"
+            android:layout_height="6dip"
+            android:background="@drawable/title_shadow"
+            />
+        
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:paddingLeft="@dimen/ykn_common_horizontal"
+		    android:paddingRight="@dimen/ykn_common_horizontal"
+	        android:orientation="vertical"
+	        >
+	        
+	        <TextView 
+	            android:id="@+id/text"
+	            android:paddingTop="@dimen/ykn_common_vertical"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/ykn_renren_authorize_text"
+	            android:textSize="16sp"
+		        android:textColor="@color/Color_B"
+	            />
+	        
+	        <LinearLayout 
+	            android:paddingTop="@dimen/ykn_common_vertical"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            >
+	            <FrameLayout 
+                    android:layout_width="66dip"
+                    android:layout_height="66dip"
+                    android:background="@drawable/head_bg">
+                    <com.renren.mobile.chat.base.views.NotSynImageView
+	                    android:id="@+id/avatar"
+	                    android:layout_width="58dip"
+	                    android:layout_height="58dip"
+	                    android:scaleType="centerCrop" 
+	                    android:layout_gravity="top"
+                        android:layout_marginLeft="4dip"
+                        android:layout_marginRight="4dip"
+                        android:layout_marginTop="2dip"/>
+                </FrameLayout>
+	            <TextView 
+	                android:id="@+id/user_info"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:paddingLeft="3dip"
+	                android:text=""
+	                android:textColor="@color/Color_A"
+	                android:textSize="18sp"
+	                android:layout_gravity="center_vertical"
+	                android:gravity="center_vertical"
+	                />
+	        </LinearLayout>
+	        
+	        <Button 
+	            android:id="@+id/login_authorize"
+	            android:layout_marginTop="@dimen/ykn_common_vertical"
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="@dimen/ykn_common_height_button"
+	        	android:background="@drawable/ykn_button_background_blue"
+	        	android:text="@string/ykn_renren_authorize_button_login"
+	        	android:textColor="@color/Color_C"
+	        	android:textSize="@dimen/ykn_common_textsize_button"
+	            />
+	        
+	        <Button 
+	            android:id="@+id/login_other"
+	            android:layout_marginTop="@dimen/ykn_common_vertical"
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="@dimen/ykn_common_height_button"
+	        	android:background="@drawable/ykn_button_background_grey"
+	            android:text="@string/ykn_renren_authorize_button_login_other"
+	            android:textColor="@color/Color_A"
+	        	android:textSize="@dimen/ykn_common_textsize_button"
+	            />
+	        
+	    </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

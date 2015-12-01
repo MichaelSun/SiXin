@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- add by xiangchao.fan start -->
+    <style name="general_setting_layout_single">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/single_bg_selector</item>
+    </style>
+    
+    <style name="general_setting_layout_top">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/top_bg_selector</item>
+    </style>
+    
+    <style name="general_setting_layout_middle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/middle_bg_selector</item>
+    </style>
+    
+    <style name="general_setting_layout_bottom">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/bottom_bg_selector</item>
+    </style>
+    
+    
+    <!-- add by xiangchao.fan end -->
+    
+    <style name="title_set">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="function_set">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="translucent">
+        <item name="android:windowBackground">@color/translucent_background</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+         <item name="android:windowNoTitle">true</item>  
+    </style>
+    <!-- login dialog -->
+    <style name="logindialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:background">@color/translucent_background</item>
+        <item name="android:windowBackground">@color/translucent_background</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    
+    <!-- sunnyykn dialog -->
+    <style name="sendRequestDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:background">@color/translucent_background</item>
+        <item name="android:windowBackground">@color/translucent_background</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="expression_radio_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@drawable/expression_radio_color</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+
+    <!-- 以下为老代码使用的Style，发版前将会删除，如果新版本中要使用，请移至此注释之前 -->
+    <style name="name">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="content">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="comment_button">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/navy_blue2</item>
+    </style>
+
+    <style name="reply_count">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="time">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="from">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#828282</item>
+    </style>
+
+    <style name="whisper">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/purple</item>
+    </style>
+
+    <style name="password_protected">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="rapid_pub">
+        <item name="android:textSize">14dip</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="rapid_pub_counter">
+        <item name="android:textSize">14dip</item>
+        <item name="android:textColor">@color/number</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.CustomDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/trans</item>
+
+        <!-- <item name="android:layout_height">100dip</item> -->
+    </style>
+
+    <style name="fangle_name">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="desktop_name">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/desktop_name_bg</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="desktop_counter">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+        <!-- <item name="android:textStyle">bold</item> -->
+    </style>
+
+    <style name="about_and_help">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="notification">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <!-- PopDownMenu -->
+    <style name="Animations.PopDownMenu" />
+
+    <style name="Animations.PopDownMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <style name="Animations" />
+    <!-- PopUpMenu -->
+    <style name="Animations.PopUpMenu" />
+
+    <style name="Animations.PopUpMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+    <!-- add by xiangchao.fan -->
+    <style name="GeneralDialog" parent="@android:style/Theme.Dialog"> 
+		<item name="android:windowFrame">@null</item> 
+		<item name="android:windowIsFloating">true</item> 
+		<item name="android:windowIsTranslucent">true</item> 
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:backgroundDimEnabled">true</item>
+		<item name="android:windowFullscreen">true</item>  
+		<!-- <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item> -->
+	</style> 
+	
+    <style name="general_submit_button">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="changePwd_EditText_Style">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/Color_D</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/ykn_common_height_edittext</item>
+        <item name="android:layout_marginTop">16dip</item>
+        <item name="android:background">@drawable/ykn_edittext_normal</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:password">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+    
+    <style name="inputbar_record_btn_style">
+        <item name="android:textColor">@drawable/inputbar_record_botton_text_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    
+    <style name="voice_pop_message_style">
+        
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/voice_pop_message</item>
+    </style>
+    
+    <style name="voice_time_style">
+         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">36sp</item>
+        
+    </style>
+    
+    <style name="associate_setting_content">
+         <item name="android:textColor">@color/general_setting_associate_content_color_selector</item>
+        <item name="android:textSize">18sp</item>
+        
+    </style>
+    
+</resources>

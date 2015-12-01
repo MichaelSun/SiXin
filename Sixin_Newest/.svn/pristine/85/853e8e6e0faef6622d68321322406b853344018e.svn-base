@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:duplicateParentState="true">
+    
+    <!-- 1 start-->
+    <LinearLayout
+        android:id="@+id/left_layout" 
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:layout_centerVertical="true"
+    	android:duplicateParentState="true"
+    	android:layout_marginLeft="14dip"
+    	android:paddingRight="60dip">
+        <LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:gravity="center_vertical"
+    	    android:layout_gravity="center_vertical" 
+    	    android:duplicateParentState="true">
+
+            <!-- 设置icon -->
+            <ImageView 
+                android:id="@+id/setting_icon"
+                android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:layout_gravity="center_vertical"
+    	        android:layout_marginLeft="-10dip"
+    	        android:visibility="gone"/>
+            
+            <!-- 设置名称 -->
+    	    <TextView
+    	        android:id="@+id/setting_name"
+    	        android:layout_width="84dip"
+    	        android:layout_height="wrap_content"
+    	        android:text="setting_name"
+    	        android:gravity="center_vertical"
+    	        android:layout_gravity="center_vertical"
+    	        android:textColor="@color/general_setting_name_color_selector"
+    	        android:textSize="18sp"
+    	        android:singleLine="true"
+    	        android:duplicateParentState="true">
+    	    </TextView>
+
+    	    <!-- 设置内容-->
+    	    <TextView
+    	        android:id="@+id/setting_content"
+    	        android:layout_width="wrap_content"
+    	        android:singleLine="true"
+    	        android:layout_height="wrap_content"
+    	        android:text="setting_content"
+    	        android:gravity="center_vertical"
+    	        android:layout_gravity="center_vertical"
+    	        android:textSize="18sp"
+    	        android:textColor="@color/general_setting_content_color_selector"
+    	        android:visibility="gone" 
+    	        android:duplicateParentState="true"/>
+    	</LinearLayout>
+    	
+        <!-- 设置介绍-->
+        <TextView
+            android:id="@+id/setting_description" 
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="setting_description"
+    		android:textSize="14sp"
+    		android:lineSpacingExtra="8dip"
+    		android:textColor="@color/setting_description"
+    		android:layout_marginLeft="14dip"
+    		android:layout_marginTop="8dip"
+    		android:visibility="gone"
+    		android:duplicateParentState="true">
+        </TextView>
+    </LinearLayout>
+	<!-- 1 end-->
+    
+    <!-- 2 start 功能区-->
+    <LinearLayout
+        android:id="@+id/right_layout"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" 
+    	android:duplicateParentState="true">
+
+        <FrameLayout 
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_gravity="center_vertical"
+    		android:duplicateParentState="true">
+    	    
+            <!-- 右边的associate content -->
+            <TextView
+                style="@style/associate_setting_content"
+                android:id="@+id/associate_content"
+                android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_marginRight="4dip"
+    			android:gravity="center_vertical"
+    			android:layout_gravity="center_vertical"
+    			android:visibility="gone"
+    			android:duplicateParentState="true">
+            </TextView>
+            
+            <!-- 头像 -->
+            <com.renren.mobile.chat.base.views.NotSynImageView
+            	android:id="@+id/setting_head"
+           	 	android:layout_width="36dip"
+            	android:layout_height="36dip"
+            	android:scaleType="centerCrop" 
+            	android:layout_marginTop="2dip"
+            	android:layout_marginBottom="2dip"
+            	android:layout_marginRight="5dip"
+            	android:visibility="gone"/>
+            
+            <!-- 开关按钮 -->
+            <LinearLayout 
+                android:id="@+id/state_layout"
+                android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_gravity="center_vertical"
+    			android:visibility="gone">
+    			<TextView 
+    			    android:id="@+id/tv_state"
+    			    android:layout_width="wrap_content"
+    				android:layout_height="wrap_content"
+    				android:layout_gravity="center_vertical"
+    				android:gravity="center"
+    				android:text="@string/f_setting_item_2"
+    				android:textColor="@color/Color_B"
+    				android:textSize="14sp"
+    				android:layout_marginRight="2dip"/>
+                <ImageView 
+                    android:id="@+id/setting_switch"
+    			    android:layout_width="wrap_content"
+    				android:layout_height="wrap_content"
+    				android:background="@drawable/switch_closed"/>
+            </LinearLayout>
+
+            <!-- language选择icon -->
+            <ImageView 
+                android:id="@+id/setting_select"
+           	 	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:scaleType="center" 
+            	android:background="@drawable/language_select"
+            	android:visibility="gone"/>
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/next_page_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:background="@drawable/next_page_selector"
+    		android:duplicateParentState="true">
+        </ImageView>
+    </LinearLayout>
+    <!-- 2 end-->
+</RelativeLayout>

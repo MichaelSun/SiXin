@@ -1,0 +1,266 @@
+package com.renren.mobile.chat.ui.contact.feed;
+
+import java.util.ArrayList;
+
+import plugin.ui.PluginSettingActivity;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+
+import com.common.utils.Methods;
+import com.common.utils.RRSharedPreferences;
+import com.core.util.SystemService;
+import com.renren.mobile.chat.R;
+import com.renren.mobile.chat.RenrenChatApplication;
+import com.renren.mobile.chat.base.util.ImagePool;
+import com.renren.mobile.chat.ui.BaseScreen;
+import com.renren.mobile.chat.ui.MainFragmentActivity;
+import com.renren.mobile.chat.ui.PullUpdateTouchListener;
+import com.renren.mobile.chat.ui.notification.FeedNotificationManager;
+import com.renren.mobile.chat.view.BaseTitleLayout;
+import com.renren.mobile.chat.view.BaseTitleLayout.FUNCTION_BUTTON_TYPE;
+
+public class ChatFeedScreen extends BaseScreen {
+
+	public Context context;
+
+	public ChatFeedEventManager mChatFeedEventManager;
+
+	public ChatFeedAdapter mAdapter;
+
+	public ChatFeedScreenHolder mChatFeedHolder;
+
+	public ChatFeedDataManager mChatFeedDataManager;
+
+	public RRSharedPreferences preferences;
+
+	public Animation mImgScaleBiggerAnimation;
+
+	public Animation mImgScaleSmallerAnination;
+
+	public static final int REFRESH_LIST = 0;
+
+	public static final int REFRESH_MORE = 1;
+	
+	//单图的最大高度，用于截取图片~
+	public static int FEED_SINGLE_PHOTO_HEIGHT_PX;
+
+	public final boolean REFRESH = true;
+
+	public boolean firstCome = false;
+
+	private Handler handler = new Handler() {
+
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case REFRESH_LIST:
+				mChatFeedDataManager.getFeedList(REFRESH);
+				break;
+			case REFRESH_MORE:
+				mChatFeedDataManager.getFeedList(!REFRESH);
+				break;
+			default:
+				break;
+			}
+		};
+	};
+
+	public ChatFeedScreen(Activity activity) {
+		super(activity);
+		FEED_SINGLE_PHOTO_HEIGHT_PX = Methods.dip2px(activity, ImagePool.IMAGE_MAX_HEIGHT_DIP);
+		context = activity;
+		preferences = new RRSharedPreferences(context);
+		initView();
+	}
+
+	public ChatFeedScreen(Activity activity, boolean needRefresh) {
+		super(activity);
+		FEED_SINGLE_PHOTO_HEIGHT_PX = Methods.dip2px(activity, ImagePool.IMAGE_MAX_HEIGHT_DIP);
+		context = activity;
+		preferences = new RRSharedPreferences(context);
+		if (!needRefresh) {
+			initViewNotRefresh();
+		} else {
+			initView();
+		}
+	}
+
+	private void initViewNotRefresh() {
+		mChatFeedHolder = new ChatFeedScreenHolder(context);
+		mChatFeedEventManager = new ChatFeedEventManager(this);
+		mChatFeedDataManager = new ChatFeedDataManager(this);
+		initTitle();
+		FrameLayout frameLayout = new FrameLayout(mActivity);
+		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.MATCH_PARENT);
+		FrameLayout.LayoutParams layoutParams2 = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.WRAP_CONTENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams layoutParams3 = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT);
+		FrameLayout.LayoutParams layoutParams4 = new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.MATCH_PARENT);
+		layoutParams4.gravity = Gravity.CENTER;
+		layoutParams4.rightMargin = ChatFeedActivity.FEED_LIST_LEFT_PADDING;
+		layoutParams4.leftMargin = ChatFeedActivity.FEED_LIST_LEFT_PADDING;
+		layoutParams2.gravity = Gravity.CENTER;
+		layoutParams.gravity = Gravity.CENTER;
+		mAdapter = new ChatFeedAdapter(null,
+				mChatFeedHolder.mBaseHeaderLayout.getView(),
+				mChatFeedHolder.mBaseFooterLayout.getView(),
+				mChatFeedHolder.mFeedListView, this);
+		mChatFeedHolder.mFeedListView.setAdapter(mAdapter);
+		mChatFeedHolder.mFeedListView.setOnScrollListener(mAdapter);
+		// 下拉刷新
+		ChatFeedScreenHolder.mTouchListener = new PullUpdateTouchListener(
+				SystemService.sInflaterManager) {
+			@Override
+			public void refresh() {
+				Log.i("cy", "refresh");
+				ChatFeedScreen.this.refresh();
+			}
+
+			@Override
+			public boolean isHead() {
+				ListView listview = mChatFeedHolder.mFeedListView;
+				return (!firstCome) && listview.getFirstVisiblePosition() == 0
+						&& Math.abs(listview.getChildAt(0).getTop()) <= 10;
+			}
+
+			@Override
+			public void afterDo() {
+				Log.i("cy", "afterDo");
+				mAdapter.notifyDataSetChanged();
+				LastUpdateTime = System.currentTimeMillis();
+			}
+		};
+		frameLayout.setBackgroundResource(R.color.Color_R);
+		frameLayout.addView(mChatFeedHolder.mFeedListView, layoutParams4);
+		frameLayout.addView(mChatFeedHolder.mFeedNoAttention, layoutParams);
+		frameLayout
+				.addView(mChatFeedHolder.mFeedNoData.getView(), layoutParams);
+		frameLayout.addView(mChatFeedHolder.mNoNetWorkView.getView(),
+				layoutParams);
+		frameLayout.addView(mChatFeedHolder.mLoading, layoutParams2);
+		frameLayout.addView(
+				ChatFeedScreenHolder.mTouchListener.getPullUpdateView(),
+				layoutParams3);
+		ChatFeedScreenHolder.mTouchListener.initView(
+				mChatFeedHolder.mFeedListView, frameLayout);
+		ChatFeedScreenHolder.mTouchListener.LastUpdateTime = preferences
+				.getLongValue("LastUpdateTime", 0l);
+		mImgScaleBiggerAnimation = AnimationUtils.loadAnimation(mActivity,
+				R.anim.lc_feed_loading_bigger);
+		mImgScaleBiggerAnimation = AnimationUtils.loadAnimation(mActivity,
+				R.anim.lc_feed_loading_bigger);
+		this.setContent(frameLayout);
+	}
+
+	private void initView() {
+		initViewNotRefresh();
+		if (mAdapter.getCount() == 0) {
+			mChatFeedHolder.mLoading.setVisibility(View.VISIBLE);
+			firstCome = true;
+			refresh();
+		}
+	}
+
+	private void initTitle() {
+		BaseTitleLayout titleBar = getTitle();
+		// titleBar.setTitleBackButtonBackground(R.drawable.title_setting_bg);
+		titleBar.setTitleFunctionButtonBackground(FUNCTION_BUTTON_TYPE.ADDCONTACT);
+		titleBar.setTitleMiddle(mActivity.getResources().getString(
+				R.string.lc_feed_title));
+		titleBar.setTitleRefreshButtonVisibility(false);
+		titleBar.setTitleFunctionButtonBackground(BaseTitleLayout.FUNCTION_BUTTON_TYPE.SETTING);
+		titleBar.setTitleFunctionButtonListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				/**
+				long[] data = new long[2]; data[0] = 19299294734L;
+				data[1] = 19299282511L;
+				ObserverImpl.getInstance().update(null, data);
+				 */
+				if (ChatFeedActivity.mPluginId != -1) {
+					PluginSettingActivity.show(context,
+							ChatFeedActivity.mPluginId);
+				}
+			}
+		});
+		titleBar.setTitleButtonLeftBackListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+	}
+
+	public void refresh() {
+		handler.sendEmptyMessage(REFRESH_LIST);
+		mChatFeedDataManager.clearNewFeedNotice();
+	}
+
+	/**
+	 * 用于好友关注列表变了以后重新刷新数据
+	 */
+	public static void updateUIAfterFriendsChange() {
+
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		ImagePool.getInstance().recycle();
+		preferences.putLongValue("LastUpdateTime",
+				ChatFeedScreenHolder.mTouchListener.LastUpdateTime);
+	}
+
+	@Override
+	public void onResume() {
+		if (ChatFeedActivity.needRefresh) {
+			ChatFeedScreenHolder.mTouchListener.beginRefresh();
+			ChatFeedActivity.needRefresh = false;
+			return;
+		}
+		ArrayList<ChatFeedModel> temp = mChatFeedDataManager.mFeedSource
+				.getAllFeed();
+		int size = temp.size();
+		if (size > ChatFeedDataManager.CHAT_FEED_NODATA) {
+			mAdapter.addListFront(temp);
+			mChatFeedDataManager.mFeedSource.clearFeedList();
+		}
+		// 显示刷新bar(假如内存中没有数据[比如开机启动]，假如通过通知栏进入新鲜事，此时数据大小和列表一样多时要显示刷新并且根据列表的数目调整刷新逻辑)
+		if (size != 0 && mAdapter.getCount() == size
+				&& size < ChatFeedDataManager.CHAT_FEED_MAX_NUM) {
+			mChatFeedHolder.mBaseFooterLayout.setVisibility(true);
+			ChatFeedDataManager.CHAT_FEED_CURRENT_PAGE = mAdapter.getCount()
+					/ ChatFeedDataManager.CHAT_FEED_PAGESIZE + 1;
+		}
+		// 是否继续显示更多bar
+		if (ChatFeedDataManager.hasMoreData && mAdapter.getCount() != 0) {
+			mChatFeedHolder.mBaseFooterLayout.setVisibility(true);
+		} else {
+			mChatFeedHolder.mBaseFooterLayout.setVisibility(false);
+		}
+		RenrenChatApplication.mFeedUnReadCount = ChatFeedDataManager.CHAT_FEED_NODATA;
+		if (RenrenChatApplication.isMainFragementActivity == true) {
+			Intent intent = new Intent(
+					MainFragmentActivity.REFRESH_NEW_FEED_RECEIVER_ACTION);
+			RenrenChatApplication.mContext.sendBroadcast(intent);
+		}
+		RenrenChatApplication.feedIndex = 1;
+		FeedNotificationManager.getInstance().clearAllNotification();
+	}
+}

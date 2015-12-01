@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" 
+        android:paddingBottom="40dip">
+
+        <ImageView
+            android:id="@+id/d_chat_logo"
+            android:layout_width="112dip"
+            android:layout_height="112dip"
+            android:background="@drawable/d_chat_logo" />
+
+        <TextView
+            android:id="@+id/version_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dip"
+            android:text="@string/about_chat_layout_4"
+            android:textColor="@color/Color_B"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/version_button"
+            android:layout_width="166dip"
+            android:layout_height="@dimen/ykn_common_height_button"
+            android:layout_marginTop="40dip"
+            android:background="@drawable/ykn_button_background_grey"
+            android:text="@string/about_chat_layout_3"
+            android:textColor="@color/Color_A"
+            android:textSize="18sp" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="26dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/about_chat_layout_1"
+            android:textColor="@color/Color_B"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/about_chat_layout_2"
+            android:textColor="@color/Color_B"
+            android:textSize="12sp" 
+            android:layout_marginTop="4dip"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="browsing_choices">
+        <item>保存</item>
+        <item>分享到人人网</item>
+        <item>转发</item>
+        <item>取消</item>
+    </string-array>
+</resources>

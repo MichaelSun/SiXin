@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contact_linearLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/select_contact_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/title_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        layout="@layout/base_title_layout" />
+    
+
+    <FrameLayout
+        android:id="@+id/main_frame"
+        android:layout_weight="1.0"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffffff"
+            android:orientation="vertical" >
+
+            <com.renren.mobile.chat.ui.contact.C_ContactsListView
+                android:id="@+id/contacts_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            
+              <TextView
+                android:id="@+id/no_search_data"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="20dip"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="@string/select_contacts_layout_2"
+                android:textColor="#ffB8B8B8"
+                android:textSize="20sp"
+                android:visibility="gone" />
+        </LinearLayout>
+         <include
+	            android:id="@+id/contacts_nodata"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center"
+	            layout="@layout/chat_no_data"
+	            android:gravity="center"
+	            android:layout_weight="1.0" 
+	            android:visibility="gone" />
+	
+	        <include
+	            android:id="@+id/contacts_loaddata"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center"
+	            layout="@layout/loading_dialog"
+	            android:layout_weight="1.0" 
+	            android:gravity="center"
+	            android:visibility="gone" />
+
+       <View
+         android:layout_width="fill_parent"
+         android:layout_height="4dip"
+         android:background="@drawable/title_shadow">
+       </View>
+    </FrameLayout>
+
+</LinearLayout>

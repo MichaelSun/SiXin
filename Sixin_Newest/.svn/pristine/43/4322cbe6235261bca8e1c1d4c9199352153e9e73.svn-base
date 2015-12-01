@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/sms_item_selector">
+    
+    <TextView 
+        android:id="@+id/college_name"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_width="fill_parent"
+    	android:layout_height="40dip"
+    	android:layout_marginLeft="10dip"
+    	android:layout_marginTop="5dip"
+    	android:layout_marginBottom="5dip"
+    	android:gravity="center_vertical">
+        
+    </TextView>
+</LinearLayout>

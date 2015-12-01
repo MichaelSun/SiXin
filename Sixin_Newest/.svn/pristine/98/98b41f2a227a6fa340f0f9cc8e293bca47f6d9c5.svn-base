@@ -1,0 +1,135 @@
+package com.renren.mobile.chat.ui.contact.attention.setting;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.core.json.JsonArray;
+import com.core.json.JsonObject;
+import com.renren.mobile.chat.dao.ContactsDAO;
+import com.renren.mobile.chat.dao.DAOFactoryImpl;
+import com.renren.mobile.chat.ui.contact.ContactModel;
+import com.renren.mobile.chat.ui.contact.ThirdContactModel;
+/**
+ * 
+ * @author eason Lee
+ * @version v2.0
+ *
+ */
+public class AttentionSettingModel extends ContactModel {
+	private long mCount;
+	public static final int ATTENTION_MODEL_TYPE_NORMAL = 0;
+	public static final int ATTENTION_MODEL_TYPE_ADD = 1;
+	public static final int ATTENTION_MODEL_TYPE_REDUCE = 2;
+	private int mGridViewType = ATTENTION_MODEL_TYPE_NORMAL;
+	public AttentionSettingModel(String name) {
+		super();
+		this.mContactName = name;
+	}
+	
+	public AttentionSettingModel(long userId,String userName,String headUrl,long count){
+		this.mUserId = userId;
+		this.mContactName = userName;
+		this.mHeadUrl = headUrl;
+		this.mCount = count;
+	}
+	
+	public AttentionSettingModel(long userId,String userName,String headUrl){
+		this.mUserId = userId;
+		this.mContactName = userName;
+		this.mHeadUrl = headUrl;
+	}
+	
+	public AttentionSettingModel(ThirdContactModel thirdContactModel){
+		this.mUserId = thirdContactModel.mUserId;
+		this.mContactName = thirdContactModel.mContactName;
+		this.mHeadUrl = thirdContactModel.mHeadUrl;
+		this.mLargeHeadUrl = thirdContactModel.mLargeHeadUrl;
+	}
+	
+	public static AttentionSettingModel parseFriendFoucs(ThirdContactModel thirdContactModel){
+		return new AttentionSettingModel(thirdContactModel);
+	}
+	
+	public static List<AttentionSettingModel> parseFriendsFoucs(List<ThirdContactModel> thirdContactModels){
+		List<AttentionSettingModel> attentionSettingModels = new LinkedList<AttentionSettingModel>();
+		for(ThirdContactModel thirdContactModel:thirdContactModels){
+			attentionSettingModels.add(parseFriendFoucs(thirdContactModel));
+		}
+		return attentionSettingModels;
+	}
+	
+	/**
+     * 解析特别关注设置中的好友
+     * {"count":100, "friend_list":
+             [{"user_id":100022, 
+               "user_name":"刘德华",
+               "head_url":"", 
+               "is_online":0}]}
+     * 
+     */
+	public static ArrayList<AttentionSettingModel> parseFriendsFoucs(JsonObject obj) {
+//		Log.i("attention","obj:"+obj.toJsonString());
+//		Log.i("attention","obj:"+obj.toString());
+		ArrayList<AttentionSettingModel> friendsFoucs = new ArrayList<AttentionSettingModel>();
+		long count = obj.getNum("count");
+		JsonArray array = obj.getJsonArray("friend_list");
+		if (array != null) {
+			JsonObject[] objs = new JsonObject[array.size()];
+			array.copyInto(objs);
+			try {
+				for (JsonObject o : objs) {
+					AttentionSettingModel c = AttentionSettingModel.parseSingleFriendsFoucs(o,count);
+					if (c != null) {
+						friendsFoucs.add(c);
+					} 
+				}
+			} catch (Exception e) {
+			}
+			
+		}
+		return friendsFoucs;
+	}
+	public static AttentionSettingModel parseSingleFriendsFoucs(JsonObject obj,long count) {
+		if (obj != null) {
+			long user_id = obj.getNum("user_id");
+			String friendsFoucsName = obj.getString("user_name");
+			String headUrl = obj.getString("head_url");
+			int isOnline = (int)obj.getNum("is_online");
+			AttentionSettingModel result= new AttentionSettingModel(user_id,friendsFoucsName,headUrl,count);
+			updateAttentionInfomation(user_id , 1);
+			return result;
+		} else {
+			return null;
+		}
+	}
+	
+	//TODO 方法封装
+	public static void updateAttentionInfomation(long userId,int isAttention){
+		ContactsDAO contactDao = DAOFactoryImpl.getInstance().buildDAO(ContactsDAO.class);
+//		contactDao.update_Contact_Attention(userId, isAttention);
+	}
+	
+	
+	public long getmCount() {
+		return mCount;
+	}
+	public void setmCount(long mCount) {
+		this.mCount = mCount;
+	}
+	public void setGridViewType(int viewType) {
+		this.mGridViewType = viewType;
+	}
+
+	public int getGridViewType() {
+		return mGridViewType;
+	}
+	@Override
+	public String toString() {
+		return "AttentionSettingModel [mCount="
+				+ mCount + ", mUserId=" + mUserId + ", mContactName="
+				+ mContactName + ", mHeadUrl=" + mHeadUrl + "]"+"\n";
+	}
+	
+	
+}

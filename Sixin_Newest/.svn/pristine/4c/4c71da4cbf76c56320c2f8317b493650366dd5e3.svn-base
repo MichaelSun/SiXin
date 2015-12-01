@@ -1,0 +1,650 @@
+package com.renren.mobile.chat.ui.contact;
+import java.util.ArrayList;
+import java.util.List;
+import android.text.TextUtils;
+import com.common.manager.BindInfo;
+import com.common.network.DomainUrl;
+import com.common.utils.SearchAble;
+import com.core.json.JsonArray;
+import com.core.json.JsonObject;
+import com.core.json.JsonParser;
+import com.core.orm.ORM;
+import com.renren.mobile.chat.base.util.SystemUtil;
+import com.renren.mobile.chat.base.views.NotSynImageView;
+import com.renren.mobile.chat.common.PinyinUtils;
+import com.renren.mobile.chat.dao.ContactsDAO.DataObserver;
+import com.renren.mobile.chat.dao.ContactsDAO.DataSubject;
+import com.renren.mobile.chat.database.Contact_Column;
+import com.renren.mobile.chat.model.warpper.ChatMessageWarpper;
+import com.renren.mobile.chat.ui.contact.utils.ContactResrouceUtils;
+/**
+ * 联系人的数据模型
+ * */
+public class ContactModel extends ContactBaseModel implements DataSubject,Cloneable{
+	
+	
+	@ORM(mappingColumn = Contact_Column.ATTACH_GROUP_NUMBER)
+	public int mAttachGroupNumber=0;
+	@ORM(mappingColumn = Contact_Column.BIND_INFO)
+	public String bind_info  = "";
+	@ORM(mappingColumn = Contact_Column.COMPLETE)
+	public int mComplete = COMPLETE_YES;
+	
+//	@ORM(mappingColumn = Contact_Column.COMPLETE)
+//	public int mCommon = COMMON_NO;
+//	
+	public static final byte COMPLETE_YES = 1;
+	public static final byte COMPLETE_NO = 0;
+	
+//	public static final byte COMMON_YES = 1;
+//	public static final byte COMMON_NO = 0;
+	
+	private static final long serialVersionUID = 1L;
+	
+	public static interface Contact_View_Type {
+		public final int TYPE_ITEM = 0;
+		public final int TYPE_SEPARATOR = 1;
+	}
+	
+	public boolean mSelected;
+	public boolean mLastView;
+	public boolean mGroupMessageAddContactView;
+    public boolean mGroupMessageDelContactView;
+	public boolean mGroupMessageLastView;
+	
+	
+	
+	/*视图类型*/
+	public int mViewType = 0;
+	public long mLastRefreshStatusTime;
+	/**
+	 * 推荐来源:1,来自我上传的通讯录;2,来自我被别人上传的通讯录;3.来自彼此互相上传的通讯录
+	 * @author add by xiangchao.fan
+	 */
+	public static interface ORIGIN_TYPE{
+		public final int FROM_MY_CONTACT = 1;
+		public final int FROM_OTHER_CONTACT = 2;
+		public final int FROM_EACH_OTHER_CONTACT = 3;
+	}
+	
+	//绑定的账户
+	public static final byte BIND_TYPE_MOBILE = 0;
+	public static final byte BIND_TYPE_RENREN = 1;
+	public static final byte BIND_TYPE_EMIAI = 2;
+	private static final byte BIND_TYPE_NUM =3;
+	private BindInfo bindInfoAry [];
+	
+	/**
+	 * 通讯录匹配来源
+	 * @author add by xiangchao.fan
+	 */
+	public int mOrigin = 0;
+	public void setOrigin(int origin){
+		this.mOrigin = origin;
+	}
+	
+	/**
+	 * 构造器们
+	 */
+	public ContactModel(byte type) {
+		this.setGroupType(type);
+		this.setmDomain(DomainUrl.SIXIN_DOMAIN);
+	}
+	
+	public ContactModel(long uid) {
+		this();
+		this.mUserId = uid;
+	}
+	
+	public ContactModel() {
+		this.setGroupType(Contact_group_type.SINGLE);
+		this.setmDomain(DomainUrl.SIXIN_DOMAIN);
+	}
+
+	
+
+	/**
+	 * "contact_list": [
+        {  
+        },
+        {
+        }
+    ]
+	 * @param array
+	 * @return
+	 */
+	public static ArrayList<ContactModel> newParseContactModels(JsonArray array) {
+        if(SystemUtil.mDebug){
+        	SystemUtil.logd("-------------------------------------------------------");
+		}
+		ArrayList<ContactModel> contacts = new ArrayList<ContactModel>();
+		if (array != null && array.size()>0) {
+			JsonObject[] objs = new JsonObject[array.size()];
+			array.copyInto(objs);
+			for (JsonObject o : objs) {
+				ContactModel c = ContactModel.newParseContactModel(o);
+				if (c != null) {
+					contacts.add(c);
+				}
+			}
+		}
+		return contacts;
+	}
+	
+	
+	/**
+	 *  {
+            "profile_info": {
+                "user_id": 100001392, 
+                "domain_name": "talk.sixin.com",
+                "name": "1822中文", 
+                "first_name": "", 
+                "last_name": "", 
+                "gender": 1, 
+                "birth_display": "0-0-0", 
+                "birth_day": {
+                    "year": 0, 
+                    "month": 0, 
+                    "day": 0
+                }, 
+                "profile_image": {
+                    "medium_url": "http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg", 
+                    "large_url": "http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg", 
+                    "original_url": "http://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg"
+                }, 
+                "school": [
+                    {
+                        "name": ""
+                    }
+                ], 
+                "employer": [
+                    {
+                        "name": ""
+                    }
+                ]
+                "relationship_type":5
+            }, 
+            "bind_info": [
+                {
+                    "bind_id": "18233333333", 
+                    "type": "mobile", 
+                    "name": "", 
+                    "page": ""
+                }
+            ]
+        }
+	 * @param obj
+	 * @return
+	 */
+	public static ContactModel newParseContactModel(JsonObject mainObj) {
+	  if (mainObj != null) {
+//	        if(SystemUtil.mDebug){
+//	        	 SystemUtil.logd("contact="+mainObj.toJsonString());
+//			}
+		    ContactModel result = new ContactModel();
+		    
+		    JsonObject profile_info = mainObj.getJsonObject(PROFILE_INFO);
+		    
+		    long user_id = profile_info.getNum(USER_ID);
+		    result.setmUserId(user_id);
+		    
+		    
+		    String domain = profile_info.getString(DOMAIN_NAME);
+		    if(!TextUtils.isEmpty(domain)){
+		    	result.setmDomain(domain);	
+		    }
+		    
+		    String contactName = profile_info.getString(NAME);
+		    result.setmContactName(contactName);
+			result.setName(contactName);
+			char aleph = PinyinUtils.getAleph(contactName);
+			if(aleph == PinyinUtils.default_aleph){
+				aleph=C_LetterBar.CHAR_OTHER;
+			}
+			result.setAleph(aleph);
+			int nameLength = PinyinUtils.nameLength(contactName);
+			result.initDye(nameLength);
+			ContactResrouceUtils.setPinyinIntoItem(result, null, null, nameLength);
+		    
+		    //String firstName = profile_info.getString(USER_NAME_FIRST);
+			//String lastName = profile_info.getString(USER_NAME_LAST);
+			
+			
+			int genderInt = (int) profile_info.getNum(GENDER, -1);
+			result.setmGender(genderInt);
+			
+			String birth="";
+			JsonObject birthObj = profile_info.getJsonObject(BIRTHDAY);
+			if (birthObj != null) {
+				birth = birthObj.getNum(YEAR) + LINE_IN + birthObj.getNum(MONTH) + LINE_IN + birthObj.getNum(DAY);
+			}
+			result.setmBirth(birth);
+			
+			JsonObject headUrlObj = profile_info.getJsonObject(PROFILE_IMAGE);
+			if(headUrlObj!=null){
+				String largeHeadUrl = headUrlObj.getString(HEAD_LARGE_URL);
+				String headUrl = headUrlObj.getString(HEAD_MEDIUM_URL);
+				String original= headUrlObj.getString(HEAD_ORIGINAL_URL);
+				result.setmLargeHeadUrl(largeHeadUrl);
+				result.setmHeadUrl(headUrl);
+				result.setmOriginalHeadUrl(original);	
+			}
+			
+			String school="";
+			JsonArray schoolArray = profile_info.getJsonArray(SCHOOL);
+			if (schoolArray != null) {
+				JsonObject[] objs = new JsonObject[schoolArray.size()];
+				schoolArray.copyInto(objs);
+				school = objs[0].getString(NAME);
+			}
+			result.setmSchool(school);
+			
+			String employer="";
+			JsonArray employerArray = profile_info.getJsonArray(EMPLOYER);
+			if (employerArray != null) {
+				JsonObject[] objs = new JsonObject[employerArray.size()];
+				employerArray.copyInto(objs);
+				employer = objs[0].getString(NAME);
+			}
+			result.setmEmployer(employer);
+			
+			int reationShip = (int) profile_info.getNum(RELATIONSHIP, ContactModel.Relationship.CONTACT);
+			result.setmRelation(reationShip);
+			
+			JsonArray array = mainObj.getJsonArray(BIND_INFO);
+			String bindInfo="";
+			if(array!=null){
+				bindInfo = BIND_INFO_TMP +array.toJsonString()+"}";
+//		        if(SystemUtil.mDebug){
+//		        	SystemUtil.logd("bindInfo="+bindInfo);
+//				}
+				result.setBind_info(bindInfo);
+			}
+			return result;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * {
+    "user_id": 100000019,
+    "domain_name": "talk.sixin.com",
+    "name": "name",
+    "first_name": "yan",
+    "last_name": "yongshuai",
+    "gender": 0,
+    "birth_display": "2008-1-12",
+    "birth_day": {
+        "year": 2008,
+        "month": 1,
+        "day": 12
+    },
+    "profile_image": {
+        "medium_url": "http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg",
+        "large_url": "http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg",
+        "original_url": "http://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg"
+    },
+    "school": [
+        {
+            "name": "北"
+        }
+    ],
+    "employer": [
+        {
+            "name": "renren"
+        }
+    ]
+}
+	 */
+	
+//	public static ContactModel parseBaseContactModel(JsonObject profile_info) {
+//		if(profile_info != null){
+//			if(SystemUtil.mDebug){
+//				SystemUtil.logd("obj="+profile_info.toJsonString());
+//			}
+//		    ContactModel result = new ContactModel();
+//		    long user_id = profile_info.getNum(USER_ID);
+//		    result.setmUserId(user_id);
+//		    
+//		    String domain = profile_info.getString(DOMAIN_NAME);
+//		    if(!TextUtils.isEmpty(domain)){
+//		    	 result.setmDomain(domain);
+//		    }
+//		    String contactName = profile_info.getString(NAME);
+//		    result.setmContactName(contactName);
+//			result.setName(contactName);
+//			char aleph = PinyinUtils.getAleph(contactName);
+//			if(aleph == PinyinUtils.default_aleph){
+//				aleph=C_LetterBar.CHAR_OTHER;
+//			}
+//			result.setAleph(aleph);
+//			int nameLength = PinyinUtils.nameLength(contactName);
+//			result.initDye(nameLength);
+//			ContactResrouceUtils.setPinyinIntoItem(result, null, null, nameLength);
+//		    
+//		    //String firstName = profile_info.getString(USER_NAME_FIRST);
+//			//String lastName = profile_info.getString(USER_NAME_LAST);
+//			
+//			
+//			int genderInt = (int) profile_info.getNum(GENDER, -1);
+//			result.setmGender(genderInt);
+//			
+//			String birth="";
+//			JsonObject birthObj = profile_info.getJsonObject(BIRTHDAY);
+//			if (birthObj != null) {
+//				birth = birthObj.getNum(YEAR) + LINE_IN + birthObj.getNum(MONTH) + LINE_IN + birthObj.getNum(DAY);
+//			}
+//			result.setmBirth(birth);
+//			
+//			JsonObject headUrlObj = profile_info.getJsonObject(PROFILE_IMAGE);
+//			if(headUrlObj!=null){
+//				String largeHeadUrl = headUrlObj.getString(HEAD_LARGE_URL);
+//				String headUrl = headUrlObj.getString(HEAD_MEDIUM_URL);
+//				String original= headUrlObj.getString(HEAD_ORIGINAL_URL);
+//				result.setmLargeHeadUrl(largeHeadUrl);
+//				result.setmHeadUrl(headUrl);
+//				result.setmOriginalHeadUrl(original);	
+//			}
+//			
+//			String school="";
+//			JsonArray schoolArray = profile_info.getJsonArray(SCHOOL);
+//			if (schoolArray != null) {
+//				JsonObject[] objs = new JsonObject[schoolArray.size()];
+//				schoolArray.copyInto(objs);
+//				school = objs[0].getString(NAME);
+//			}
+//			result.setmSchool(school);
+//			
+//			String employer="";
+//			JsonArray employerArray = profile_info.getJsonArray(EMPLOYER);
+//			if (employerArray != null) {
+//				JsonObject[] objs = new JsonObject[employerArray.size()];
+//				employerArray.copyInto(objs);
+//				employer = objs[0].getString(NAME);
+//			}
+//			result.setmEmployer(employer);
+//			
+//			int reationShip = (int) profile_info.getNum(RELATIONSHIP, ContactModel.Relationship.CONTACT);
+//			result.setmRelation(reationShip);
+//			//TODO 测试数据
+//			if(reationShip == 0){
+//				result.setmRelation(4);
+//			}
+//			
+//			return result;
+//		} else 
+//		{
+//			return null;
+//		}
+//	}
+//	
+	
+	public boolean isCompleted() {
+		return (mComplete==COMPLETE_YES);
+	}
+
+	public void setmComplete(int mComplete) {
+		this.mComplete = mComplete;
+	}
+	
+	public void setmHeadUrl(NotSynImageView nsiv){
+		nsiv.addUrl(mHeadUrl);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof ContactModel) {
+			if (((ContactModel) o).mUserId == this.mUserId) {
+				return true;
+			}
+		}
+		return super.equals(o);
+	}
+	
+	public void parseFieldToTheChatMessage(ChatMessageWarpper message){
+    	message.mHeadUrl = mHeadUrl;
+    	message.mUserName = mContactName;
+    	message.mLargeHeadUrl = mLargeHeadUrl;
+    }
+	
+	transient DataObserver mObserver = null;
+	public void registorObserver(DataObserver observer){
+		this.mObserver = observer;
+		this.mObserver.registorSubject(this);
+	}
+	public void notifyDataChange(String columnName,boolean isSuccess){
+		if(this.mObserver!=null){
+			mObserver.notifyUpdate(columnName,isSuccess);
+		}
+	}
+	@Override
+	public void unregitor() {
+		this.mObserver = null;
+	}
+
+	/**
+	 * add by xiangchao.fan
+	 * @return ContactModel
+	 */
+	public ContactModel createNewContactModel(){
+		ContactModel newModel = null;
+		try {
+			newModel = (ContactModel) this.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return newModel;
+	}
+	
+	public static void bleachList(List<SearchAble> contactList) {
+		if (contactList != null && contactList.size() != 0) {
+			ContactModel tmp;
+			for (SearchAble item : contactList) {
+				tmp=(ContactModel) item;
+				tmp.setMatched(false);
+				if (tmp.isHaveDyed())
+					tmp.bleach();
+			}
+		}
+	}
+
+	
+//	/**
+//	 * 对获取的联系人数据进行解析，获取基本数据
+//	 * {"first_name":"",
+//"school":[{"name":""}],
+//"profile_image":{"medium_url":"http:\/\/www.qiqu5.com\/wp-content\/uploads\/2010\/03\/119.jpg",
+//"original_url":"http:\/\/t3.baidu.com\/it\/u=295144277,3149792241&fm=51&gp=0.jpg",
+//"large_url":"http:\/\/t2.baidu.com\/it\/u=3925358291,1529856573&fm=52&gp=0.jpg"},
+//
+//"name":"sixintest1",
+//"employer":[{"name":""}],
+//"birth_day":{"month":0,"year":0,"day":0},"last_name":"",
+//"birth_display":"0-0-0",
+//"gender":1,
+//"user_id":100001444}
+//	 * */
+//	public static ContactModel parseBaseContactModel(JsonObject obj) {
+//        if(SystemUtil.mDebug){
+//        	SystemUtil.logd("parseBaseContactModel!!! obj = "+obj.toJsonString());
+//		}
+//		if (obj != null) {
+//			ContactModel result = new ContactModel();
+//			long user_id = obj.getNum(USER_ID);
+//			 result.setmUserId(user_id);
+//			 String contactName = obj.getString(NAME);
+//			 result.setmContactName(contactName);
+//		     result.setName(contactName);
+//			char aleph = PinyinUtils.getAleph(contactName);
+//			if(aleph == PinyinUtils.default_aleph){
+//				aleph=C_LetterBar.CHAR_OTHER;
+//			}
+//			result.setAleph(aleph);
+//			int nameLength = PinyinUtils.nameLength(contactName);
+//			ContactResrouceUtils.setPinyinIntoItem(result, null, null, nameLength);
+//			    
+//		    //String firstName = profile_info.getString(USER_NAME_FIRST);
+//			//String lastName = profile_info.getString(USER_NAME_LAST);
+//				
+//			int genderInt = (int) obj.getNum(GENDER, -1);
+//			result.setmGender(genderInt);
+//				
+//			String birth="";
+//			JsonObject birthObj = obj.getJsonObject(BIRTHDAY);
+//			if (birthObj != null) {
+//				birth = birthObj.getNum(YEAR) + LINE_IN + birthObj.getNum(MONTH) + LINE_IN + birthObj.getNum(DAY);
+//			}
+//			result.setmBirth(birth);
+//				
+//			JsonObject headUrlObj = obj.getJsonObject(PROFILE_IMAGE);
+//			String largeHeadUrl = headUrlObj.getString(HEAD_LARGE_URL);
+//			String headUrl = headUrlObj.getString(HEAD_MEDIUM_URL);
+//			String original= headUrlObj.getString(HEAD_ORIGINAL_URL);
+//			result.setmLargeHeadUrl(largeHeadUrl);
+//			result.setmHeadUrl(headUrl);
+//			result.setmOriginalHeadUrl(original);
+//				
+//			String school="";
+//			JsonArray schoolArray = obj.getJsonArray(SCHOOL);
+//			if (schoolArray != null) {
+//				JsonObject[] objs = new JsonObject[schoolArray.size()];
+//				schoolArray.copyInto(objs);
+//				school = objs[0].getString(NAME);
+//			}
+//			result.setmSchool(school);
+//				
+//			String employer="";
+//			JsonArray employerArray = obj.getJsonArray(EMPLOYER);
+//			if (employerArray != null) {
+//				JsonObject[] objs = new JsonObject[employerArray.size()];
+//				employerArray.copyInto(objs);
+//				employer = objs[0].getString(NAME);
+//			}
+//			result.setmEmployer(employer);
+//				
+//				
+////			JsonArray array = obj.getJsonArray(BIND_INFO);
+////			String bindInfo = "{\"bind_info\":"+array.toJsonString()+"}";
+////			SystemUtil.logd("bindInfo="+bindInfo);
+////			result.setBind_info(bindInfo);
+//			result.mIsFriend = ContactModel.Relationship.STRANGER; //<cf TODO>
+//			return result;
+//		} else {
+//			Log.v("wyy4", "return null!!!!");
+//			return null;
+//		}
+//	}
+	
+	
+	
+	
+	public BindInfo getBindInfo(byte type) {
+		if(bindInfoAry==null){
+			bindInfoAry = new BindInfo[BIND_TYPE_NUM];
+			if (!TextUtils.isEmpty(bind_info)) {
+		        if(SystemUtil.mDebug){
+		        	SystemUtil.logd("ssss="+bind_info);
+					SystemUtil.logd("tttt="+JsonParser.parse(bind_info).toJsonString());
+				}
+				JsonObject joo = (JsonObject) JsonParser.parse(bind_info);
+				if(joo!=null){
+					JsonArray mja = joo.getJsonArray("bind_info");
+					if(mja!=null)
+					for (int i = 0; i < mja.size(); i ++) {
+						JsonObject jo = (JsonObject) mja.get(i);
+						BindInfo bind = new BindInfo();
+						bind.setmBindId(jo.getString("bind_id"));
+						bind.setmBindType(jo.getString("type"));
+						bind.setmBindName(jo.getString("name"));
+						bind.setmBindPage(jo.getString("page"));
+				        if(SystemUtil.mDebug){
+				        	SystemUtil.logd(i+"#account="+bind.getmBindId()+"#bind.type="+bind.getmBindType()+"#bind.name="+bind.getmBindName()+"#bind.page="+bind.getmBindPage());
+						}
+						if(bind.mBindType!=null){
+							if (bind.mBindType.equals(BindInfo.BIND_TYPE_RENREN)) {
+								bindInfoAry[BIND_TYPE_RENREN] = bind;
+							} else if (bind.mBindType.equals(BindInfo.BIND_TYPE_MOBILE)) {
+								bindInfoAry[BIND_TYPE_MOBILE] = bind;
+							} else if (bind.mBindType.equals(BindInfo.BIND_TYPE_EMAIL)) {
+								bindInfoAry[BIND_TYPE_EMIAI] = bind;
+							}
+						}
+					}
+				}
+			}
+		}
+		if(type<BIND_TYPE_NUM){
+			return bindInfoAry[type];	
+		}
+		return null;
+	}
+	public void setBind_info(String bind_info) {
+		this.bind_info = bind_info;
+	}
+	
+	
+//	static String [] nameStrings = {"鲍晓敏","蔡芝玉","曹赫","曹孝玉","柴敏","车倩","陈佃鹏","陈刚","陈辉","陈健","陈茂凤",
+//		"杜笑","段美艳","段元存","段元强","樊祥超","范中培","方佳灵","冯磊 ","冯思源","高冬","栾义宏","栾庆波","左光敏","邰国娇",
+//		"郜旭东","?王河?"};
+//	public static List<ContactModel> CreatefalseData() {
+//		List<ContactModel> tmpContactModels =new ArrayList<ContactModel>();
+//		tmpContactModels.add(createContact(100001392,"1822中文",1,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100001393,"1824中文",0,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100001444,"sixintest1",0,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100001448,"1822中文",1,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100006087,"1822中文",1,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100006098,"1822中文",1,"1986-06-03",Relationship.CONTACT));
+//		tmpContactModels.add(createContact(100006101,"1822中文",1,"1986-06-03",Relationship.CONTACT));
+//		
+//		tmpContactModels.add(createContact(100006101,"啊黑名单联系人",1,"1986-06-03",Relationship.BLACK_LIST_CONTACT));
+//		tmpContactModels.add(createContact(100006101,"啊黑名单陌生人",1,"1986-06-03",Relationship.BLACK_LIST_STRANGER));
+//		tmpContactModels.add(createContact(RenrenChatApplication.USER_ID,"啊联系人自己",1,"1986-06-03",Relationship.BLACK_LIST_STRANGER));
+//		tmpContactModels.add(createContact(100006101,"啊陌生人",1,"1986-06-03",Relationship.STRANGER));
+//		
+//		for (int i = 0; i < nameStrings.length; i++) {
+//			tmpContactModels.add(createContact(new Random().nextLong(),nameStrings[i],new Random().nextInt(2),"1986-06-03",Relationship.CONTACT));
+//		}
+//		return tmpContactModels;
+//	}
+//	
+//	private static ContactModel createContact(long id,String contactName,int genderInt,String birth,byte friend){
+//
+//        if(SystemUtil.mDebug){
+//			
+//		}
+//	    SystemUtil.mark();
+//	    ContactModel result = new ContactModel();
+//	    result.setmUserId(id);
+//	    
+//	    result.setmContactName(contactName);
+//		result.setName(contactName);
+//		char aleph = PinyinUtils.getAleph(contactName);
+//		if(aleph == PinyinUtils.default_aleph){
+//			aleph=C_LetterBar.CHAR_OTHER;
+//		}
+//		result.setAleph(aleph);
+//		int nameLength = PinyinUtils.nameLength(contactName);
+//		ContactResrouceUtils.setPinyinIntoItem(result, null, null, nameLength);
+//	    
+//		result.setmGender(genderInt);
+//		
+//		result.setmBirth(birth);
+//		
+//		result.setmLargeHeadUrl("http://t2.baidu.com/it/u=3925358291,1529856573&fm=52&gp=0.jpg");
+//		result.setmHeadUrl("http://www.qiqu5.com/wp-content/uploads/2010/03/119.jpg");
+//		result.setmOriginalHeadUrl("ttp://t3.baidu.com/it/u=295144277,3149792241&fm=51&gp=0.jpg");
+//		
+//		result.setmSchool("北京大学");
+//		
+//		result.setmEmployer("人人网");
+//		
+//		
+//		result.setBind_info("{\"bind_info\":[{\"type\":\"renren\",\"page\":\"\",\"name\":\"\",\"bind_id\":\"sixintest2@sina.com\"}]}");
+//		
+//		result.mRelation = friend;
+//		return result;
+//	
+//	}
+	
+}

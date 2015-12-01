@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contact_title"
+    android:layout_width="match_parent"
+    android:layout_height="48dip"
+    android:background="@color/background"
+    android:orientation="horizontal" >
+
+    <FrameLayout
+        android:id="@+id/cy_left"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@+id/cy_left_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/expression_tab_color"
+            android:text="@string/C_ContactScreen_java_1"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/cy_left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/cy_title_arrow"
+            android:maxHeight="12dip"
+            android:maxWidth="26dip" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="22dip"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/cy_right"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@+id/cy_right_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/expression_tab_color"
+            android:text="@string/C_ContactScreen_java_2"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/cy_right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/cy_title_arrow"
+            android:maxHeight="12dip"
+            android:maxWidth="26dip" />
+    </FrameLayout>
+
+</LinearLayout>

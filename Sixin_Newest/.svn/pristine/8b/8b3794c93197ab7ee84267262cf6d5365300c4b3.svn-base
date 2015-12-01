@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 从本地發送的文本消息 start -->
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:sixin="http://schemas.android.com/apk/res/com.renren.mobile.chat" 
+    android:id="@+id/chat_voice_to_linearlayout" 
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:gravity="right" 
+    android:orientation="horizontal" 
+    android:paddingRight="8dip"
+    android:layout_marginBottom="24dip">
+  <!-- 内容区域 -->
+  <LinearLayout  
+      	android:layout_width="wrap_content" 
+      	android:layout_height="wrap_content" 
+      	android:layout_gravity="right|top" 
+      	android:layout_weight="1.0" 
+      	android:gravity="right|top" 
+      	android:orientation="horizontal">
+    <com.renren.mobile.chat.views.ListItemLayout 
+        android:orientation="horizontal"
+        android:id="@+id/chat_voice_content_linearlayout" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content">
+		<view.list.AttachLayout
+			android:id="@+id/cdw_chat_listview_item_voice_attach" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            sixin:attach_loading="@+id/cdw_chat_listview_item_loading"
+            sixin:loading_width="20dip"
+            sixin:loading_height="20dip"
+            sixin:attach_error="@+id/cdw_chat_listview_item_send_error_imageview"
+            sixin:attach_error_src="@drawable/cdw_chat_listview_item_send_error"
+		/>
+        <view.list.ListViewContentLayout
+            android:id="@+id/chat_listview_item_content_viewgroup" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:background="@drawable/cdw_chat_listview_item_right"  
+            android:gravity="center" 
+            android:minWidth="42dip"
+            android:orientation="vertical">
+	          <!-- 新鲜事模块 -->
+	          <com.renren.mobile.chat.views.ChatFeedView 
+	              android:id="@+id/cdw_feed_view" 
+	              android:layout_width="235dip" 
+	              android:layout_height="wrap_content" 
+	              android:layout_gravity="center_vertical" 
+	              android:orientation="vertical" 
+	              android:visibility="gone"
+	              android:layout_marginBottom="14dip"/>
+	          <!-- 文本 -->
+	          <include android:layout_width="wrap_content" android:layout_height="wrap_content" layout="@layout/cdw_listview_item_to_text"/>
+	          <!-- 语音 -->
+	          <include android:layout_width="fill_parent" android:layout_height="wrap_content" layout="@layout/cdw_listview_item_to_voice"/>
+	          <!-- 图片 -->
+	          <include android:layout_width="wrap_content" android:layout_height="wrap_content" layout="@layout/cdw_listview_item_to_image"/>
+	          <!-- flash 消息 -->
+	          <include android:layout_width="150dip" android:layout_height="150dip" layout="@layout/cdw_listview_item_to_flash"/>
+        </view.list.ListViewContentLayout>
+         <ImageView
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:id="@+id/feed_delete"
+        	android:src="@drawable/feed_delete_btn"
+        />
+    </com.renren.mobile.chat.views.ListItemLayout>
+  </LinearLayout>
+ 
+  
+  
+  
+  <!-- 头像 -->
+  <LinearLayout android:id="@+id/chat_voice_head_linearlayout" 
+      android:layout_width="wrap_content" 
+      android:layout_height="wrap_content" 
+      android:layout_gravity="bottom" 
+      android:gravity="center" 
+      android:orientation="vertical"
+      android:paddingLeft="10dip">
+    <com.renren.mobile.chat.base.views.NotSynImageView 
+        android:id="@+id/chat_voice_head_imageview" 
+        android:layout_width="42dip" 
+        android:layout_height="42dip" 
+        android:gravity="center"/>
+      <TextView 
+	      android:id="@+id/chat_voice_user_name" 
+	      android:layout_width="fill_parent" 
+	      android:gravity="center" 
+	      android:layout_height="wrap_content" 
+	      android:text="@string/cdw_listview_item_to_layout_1" 
+	      android:textSize="10dip" 
+	      android:textColor="#000000" 
+	      android:visibility="gone"/>
+  </LinearLayout>
+
+</LinearLayout>
