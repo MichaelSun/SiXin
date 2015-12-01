@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#eaeaea"
+    android:orientation="vertical" >
+
+    <!-- 表情页面的 附加的布局 -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="40dip"
+         >
+       <LinearLayout 
+        android:layout_width= "fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#00000000"
+        >
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/emotion_additional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/emotion_waiting"
+             />
+        <TextView  android:id="@+id/emotion_additional_text"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/emotion_more_ch"
+              android:textSize="12sp"
+              android:paddingTop="6dip"
+              android:layout_below="@id/emotion_additional"
+              android:gravity="center_horizontal"
+              android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="plugin_tuya_clear">清空</string>
+    <string name="plugin_tuya_save">保存</string>
+    <string name="plugin_tuya_mykey">中文key</string>
+    <string name="writing_brush">毛笔字</string>
+    <string name="brush_size">大小</string>
+     <string name="send">发送</string>
+    <string name="shadow">阴影</string>
+    <string name="dry_ink">干墨</string>
+    <string name="empty_string">请你写点什么吧。</string>
+    <string name="isfull_string">写不下了，亲O(∩_∩)O~</string>
+</resources>

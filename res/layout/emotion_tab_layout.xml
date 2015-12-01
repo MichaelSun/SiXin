@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <!-- 纵向二级tab和内容的容器 -->
+
+
+    <!-- 纵向二级tab -->
+
+    <com.common.emotion.view.VerticalIconContainer
+        android:id="@+id/emotion_secondtab_container"
+        android:layout_width="32dip"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:background="#eaeaea"
+        android:orientation="vertical" >
+    </com.common.emotion.view.VerticalIconContainer>
+
+    <!--
+        android:gravity="center"
+      -->
+    <!-- 内容 -->
+
+    <com.common.emotion.view.EmotionViewFlipper
+        android:id="@+id/emotion_flipper_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.1"
+        android:background="#eaeaea"
+        android:orientation="vertical" >
+    </com.common.emotion.view.EmotionViewFlipper>
+
+</LinearLayout>

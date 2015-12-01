@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <!-- pager容器 -->
+    <LinearLayout
+        android:id="@+id/x_emotion_pagers"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        />
+	<!-- TAB选择区域 -->
+    <com.common.emotion.view.EmotionCheckGroup
+        android:id="@+id/x_emotion_tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" />
+</LinearLayout>

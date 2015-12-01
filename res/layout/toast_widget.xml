@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.sixin.widgets.layout.awesome.AwesomeFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:sixin="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        sixin:top_offset="0dp">
+    <TextView
+            android:id="@+id/text"
+            android:text="@string/toast_help"
+            android:gravity="center"
+            android:background="#FF932812"
+            android:minHeight="48dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+</com.sixin.widgets.layout.awesome.AwesomeFrameLayout>

@@ -1,0 +1,17 @@
+package com.common.binder;
+import com.common.binder.MessageState;
+
+interface PollBinder{
+	void connect();
+	void send(long key,String message);
+	String read();
+	MessageState getSendState();
+	boolean isConnect();
+	void disConnect();
+	void notifyGetSendStateFromOtherApplication();
+	void notifyPollFromOtherApplication();
+	boolean isRecvOfflineMessage();
+	boolean isServiceRunning();
+	void changeURL(String masURI, String host, int httpPort, int socketPort);
+	void changeAppGround(boolean isForeGround);
+}

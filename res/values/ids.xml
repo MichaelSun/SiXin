@@ -1,0 +1,6 @@
+<resources>
+    <item type="id"
+          name="fake_chrome_indicator"/>
+    <item type="id"
+          name="use_animation"/>
+</resources>

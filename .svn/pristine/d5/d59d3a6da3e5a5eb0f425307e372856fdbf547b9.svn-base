@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="color_a">#222222</color>
+	<color name="color_b">#7c7c7c</color>
+	<color name="color_c">#ffffff</color>
+	<!-- 背景色 color I -->
+	<color name="background">#fdfdfe</color>
+	
+    <color name="expression_tab_up">#737C85</color>
+    <color name="expression_tab_down">#BFC7CD</color>
+    <color name="y_supply_user_info_color">#0fbbef</color>
+    <color name="translucent_background">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="light_gray">#333333</color>
+    <color name="chat_session_head_text">#E7F2F5</color>
+    <color name="chat_session_normal_time">#838383</color>
+    <color name="chat_session_name">#2B2B2B</color>
+    <color name="chat_session_content">#838383</color>
+    <color name="expression_radio_down">#BFC7CD</color>
+    <color name="expression_radio_up">#737C85</color>
+    <color name="blue">#2285da</color>
+    <color name="desktop_name_bg">#313131</color>
+    <color name="purple">#671c98</color>
+    <color name="red">#ff0000</color>
+    <color name="gray">#888888</color>
+    <color name="number">#005eac</color>
+    <color name="trans">#00000000</color>
+    <color name="navy_blue2">#033E8F</color>
+    <color name="contact_radio_selected">#DDDDDD</color>
+    <color name="contact_radio_unselected">#4D4D4D</color>
+    <color name="base_title_text_state">#5f5f5f</color>
+	<color name="title_text">#1c1c1c</color>
+	<color name="emotion_unpressed_bg">#eaeaea</color>
+</resources>

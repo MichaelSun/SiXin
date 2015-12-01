@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--     <string name="from">110</string> -->
+<!--     <string name="pubdate">20120627</string> -->
+<!--     <string name="softid">100001</string> -->
+    <!-- <string name="apikey">f1541f73bed34e54a7ca6efc485c5d71</string>
+	<string name="secretkey">c9fdb799d1f048fa8d01b20ec34f5aba</string> -->
+<!--     <string name="subproperty">0</string> -->
+<!--     <string name="app_name">私信</string> -->
+<!--     <string name="version">1.0</string> -->
+    <string name="expression_radio_common">普通表情</string>
+    <string name="expression_radio_cool">炫酷表情</string>
+    <string name="cdw_chat_main_input_text_send_btn_text">发送</string>
+    <string name="cdw_chat_main_input_text_length">最多输入240字</string>
+
+    <!-- 设置 -->
+    <string name="vibrate">Vibrate</string>
+    <string name="vibrate_summ_off">Off</string>
+    <string name="loading">数据加载中...</string>
+
+    <string name="no_internet_tip">无法连接网络，请检查您的手机网络设置...</string>
+    
+    <!-- 听筒——扬声器（语音播放切换） -->
+    <string name="turn_to_speaker">扬声器模式</string>
+    <string name="turned_to_ear_phone">已切换到听筒模式</string>
+    <string name="turned_to_speaker">已切换到扬声器模式</string>
+
+    <string name="open_single_image_failure">打开图片失败！</string>
+    <string name="sdcard_unmounted_download_disabled">SD卡使用中，请加载SD卡后重试</string>
+    <string name="toast_help">Toast here</string>
+    
+    <!-- 表情更多的中英文文案 -->
+    <string name="emotion_more_ch">  更多功能，敬請期待</string>
+    <string name="emotion_more_en"> 更多功能，敬請期待</string>
+    <string name="emotion_more_emo_ch">  更多表情，敬請期待</string>
+    <string name="emotion_more_emo_en"> 更多表情，敬請期待</string>
+    <string name="emotion_emoji_en">基本</string>
+    <string name="emotion_sticker_en">炫酷</string>
+    <string name="emotion_magic_en">互動</string>
+    <!-- 插件设置 -->
+    <string name="plugin_notify">插件消息提示</string>
+    <string name="plugin_notify_on">已开启</string>
+	<string name="plugin_notify_off">未开启</string>
+	<string name="plugin_clear_history">清除历史数据</string>
+	<string name="plugin_install">安装插件</string>
+	<string name="plugin_uninstall">卸载插件</string>
+	<string name="plugin_setting">正在设置...</string>
+	<string name="plugin_installed">已安装</string>
+	<string name="plugin_notinstalled">未安装</string>
+	<string name="plugin_confirm_uninstall">确定卸载该插件？</string>
+	<string name="plugin_installing">正在安装...</string>
+	<string name="plugin_confirm_clear">确定清除该插件的历史数据？</string>
+	<string name="plugin_install_failed">安装失败</string>
+	<string name="plugin_uninstall_failed">卸载失败</string>
+	<string name="plugin_sure">确认</string>
+	<string name="plugin_cancel">取消</string>
+	<string name="plugin_uninstalling">正在卸载...</string>
+	<string name="plugin_clearing">正在清除...</string>
+	<string name="plugin_unknow">未知的插件</string>
+	<string name="plugin_push_success">插件消息提示配置成功</string>
+	<string name="plugin_push_failed">插件消息提示配置失败,请稍后重试</string>
+	<string name="plugin_connect_failed">请检查您的网络,稍后进行重试</string>
+	<string name="plugin_setting_title">插件设置</string>
+</resources>
